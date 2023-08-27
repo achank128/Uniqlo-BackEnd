@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Uniqlo.Models.EntityModels
+namespace Uniqlo.Models.ResponseModels
 {
-    public class Color
+    public class ColorResponse
     {
-        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string? NameEn { get; set; }
@@ -17,11 +15,7 @@ namespace Uniqlo.Models.EntityModels
         public string Code { get; set; }
         public string? Image { get; set; }
         public string? ImageUrl { get; set; }
-        public DateTime? CreatedDate { get; set; } = DateTime.Now;
-        public DateTime? UpdatedDate { get; set; } = DateTime.Now;
-
-        public virtual ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
-
-
+        public DateTime? CreatedDate { get; set; } 
+        public DateTime? UpdatedDate { get; set; }
     }
 }

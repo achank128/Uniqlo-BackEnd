@@ -67,6 +67,8 @@ namespace Uniqlo.BusinessLogic.Services.Implements
         public async Task<ApiResponse<UnitResponse>> GetById(int id)
         {
             var unit = await _unitRepository.GetByIdAsync(id);
+            if (unit == null) throw new NotFoundException(Common.NotFound);
+
             var response = _mapper.Map<UnitResponse>(unit);
             return ApiResponse<UnitResponse>.Success(response);
         }

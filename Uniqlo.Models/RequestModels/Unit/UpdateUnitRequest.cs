@@ -10,7 +10,8 @@ namespace Uniqlo.Models.RequestModels.Unit
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string? NameEn { get; set; }
+        public string? NameVi { get; set; }
         public string? Description { get; set; }
-        public DateTime? UpdatedDate { get; set; } = DateTime.Now;
     }
 }
