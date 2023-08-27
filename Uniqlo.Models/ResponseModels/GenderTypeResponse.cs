@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Uniqlo.Models.EntityModels;
+
+namespace Uniqlo.Models.ResponseModels
+{
+    public class GenderTypeResponse
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+
+        public virtual ICollection<Category> Categories { get; set; }
+    }
+}

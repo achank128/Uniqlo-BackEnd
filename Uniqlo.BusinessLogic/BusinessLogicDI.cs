@@ -23,8 +23,10 @@ namespace Uniqlo.BusinessLogic
 
         private static void AddServices(this IServiceCollection services)
         {
-            services.AddScoped<IUnitsService, UnitsService>();
-            services.AddScoped<ICollectionsService, CollectionsService>();
+            services.AddScoped<IUnitService, UnitService>();
+            services.AddScoped<ICollectionService, CollectionService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IGenderTypeService, GenderTypeService>();
         }
 
         private static void RegisterAutoMapper(this IServiceCollection services)

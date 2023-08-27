@@ -15,12 +15,12 @@ using Uniqlo.Models.ResponseModels;
 
 namespace Uniqlo.BusinessLogic.Services.Implements
 {
-    public class UnitsService : IUnitsService
+    public class UnitService : IUnitService
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryBase<Unit> _unitRepository;
 
-        public UnitsService(IRepositoryBase<Unit> unitRepository, IMapper mapper)
+        public UnitService(IRepositoryBase<Unit> unitRepository, IMapper mapper)
         {
             _unitRepository = unitRepository;
             _mapper = mapper;
@@ -74,6 +74,7 @@ namespace Uniqlo.BusinessLogic.Services.Implements
         public async Task<ApiResponse<UnitResponse>> Update(UpdateUnitRequest request)
         {
             var unit = _mapper.Map<Unit>(request);
+            unit.UpdatedDate = DateTime.Now;
             _unitRepository.Update(unit);
             if (await _unitRepository.SaveAsync())
             {

@@ -15,12 +15,12 @@ using Uniqlo.Models.ResponseModels;
 
 namespace Uniqlo.BusinessLogic.Services.Implements
 {
-    public class CollectionsService : ICollectionsService
+    public class CollectionService : ICollectionService
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryBase<Collection> _collectionRepository;
 
-        public CollectionsService(IRepositoryBase<Collection> collectionRepository, IMapper mapper)
+        public CollectionService(IRepositoryBase<Collection> collectionRepository, IMapper mapper)
         {
             _collectionRepository = collectionRepository;
             _mapper = mapper;
@@ -43,8 +43,8 @@ namespace Uniqlo.BusinessLogic.Services.Implements
 
         public async Task<ApiResponse<CollectionResponse>> Delete(Guid id)
         {
-            var unit = await _collectionRepository.GetByIdAsync(id);
-            if (unit == null) throw new NotFoundException(Common.NotFound);
+            var collection = await _collectionRepository.GetByIdAsync(id);
+            if (collection == null) throw new NotFoundException(Common.NotFound);
 
             _collectionRepository.DeleteBy(id);
             if (await _collectionRepository.SaveAsync())
@@ -68,6 +68,8 @@ namespace Uniqlo.BusinessLogic.Services.Implements
         public async Task<ApiResponse<CollectionResponse>> GetById(Guid id)
         {
             var collection = await _collectionRepository.GetByIdAsync(id);
+            if (collection == null) throw new NotFoundException(Common.NotFound);
+
             var response = _mapper.Map<CollectionResponse>(collection);
             return ApiResponse<CollectionResponse>.Success(response);
         }
@@ -75,6 +77,7 @@ namespace Uniqlo.BusinessLogic.Services.Implements
         public async Task<ApiResponse<CollectionResponse>> Update(UpdateCollectionRequest request)
         {
             var collection = _mapper.Map<Collection>(request);
+            collection.UpdatedDate= DateTime.Now;
             _collectionRepository.Update(collection);
             if (await _collectionRepository.SaveAsync())
             {

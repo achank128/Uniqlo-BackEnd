@@ -2,53 +2,54 @@
 using Microsoft.AspNetCore.Mvc;
 using Uniqlo.BusinessLogic.Services.Interfaces;
 using Uniqlo.Models.Models;
+using Uniqlo.Models.RequestModels.GenderType;
 using Uniqlo.Models.RequestModels.Unit;
 
 namespace Uniqlo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UnitsController : ControllerBase
+    public class GenderTypesController : ControllerBase
     {
-        private readonly IUnitService _unitService;
+        private readonly IGenderTypeService _genderService;
 
-        public UnitsController(IUnitService unitService)
+        public GenderTypesController(IGenderTypeService genderService)
         {
-            _unitService = unitService;
+            _genderService = genderService;
         }
 
         [HttpPost("all")]
         public async Task<IActionResult> GetAll(FilterBaseRequest request)
         {
-            var response = await _unitService.GetAll(request);
+            var response = await _genderService.GetAll(request);
             return Ok(response);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var response = await _unitService.GetById(id);
+            var response = await _genderService.GetById(id);
             return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateUnitRequest request)
+        public async Task<IActionResult> Create(CreateGenderTypeRequest request)
         {
-            var response = await _unitService.Create(request);
+            var response = await _genderService.Create(request);
             return Ok(response);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateUnitRequest request)
+        public async Task<IActionResult> Update(UpdateGenderTypeRequest request)
         {
-            var response = await _unitService.Update(request);
+            var response = await _genderService.Update(request);
             return Ok(response);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _unitService.Delete(id);
+            var response = await _genderService.Delete(id);
             return Ok(response);
         }
     }

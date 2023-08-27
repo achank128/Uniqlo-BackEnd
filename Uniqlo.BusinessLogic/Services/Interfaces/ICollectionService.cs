@@ -10,7 +10,7 @@ using Uniqlo.Models.ResponseModels;
 
 namespace Uniqlo.BusinessLogic.Services.Interfaces
 {
-    public interface ICollectionsService
+    public interface ICollectionService
     {
         Task<ApiResponse<CollectionResponse>> Create(CreateCollectionRequest request);
         Task<PagedResponse<CollectionResponse>> GetAll(FilterBaseRequest request);
