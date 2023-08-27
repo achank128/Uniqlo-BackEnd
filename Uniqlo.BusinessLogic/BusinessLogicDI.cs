@@ -29,6 +29,7 @@ namespace Uniqlo.BusinessLogic
             services.AddScoped<IGenderTypeService, GenderTypeService>();
             services.AddScoped<ISizeService, SizeService>();
             services.AddScoped<IColorService, ColorService>();
+            services.AddScoped<ICouponService, CouponService>();
         }
 
         private static void RegisterAutoMapper(this IServiceCollection services)

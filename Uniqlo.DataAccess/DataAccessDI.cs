@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.DataAccess.Repositories.CategoryRepository;
+using Uniqlo.DataAccess.Repositories.CouponRepository;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.Context;
 
@@ -27,6 +28,7 @@ namespace Uniqlo.DataAccess
         {
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICouponRepository, CouponRepository>();
         }
 
         private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
