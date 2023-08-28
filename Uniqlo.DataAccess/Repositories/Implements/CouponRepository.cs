@@ -12,8 +12,20 @@ namespace Uniqlo.DataAccess.Repositories.Implements
 {
     internal class CouponRepository : RepositoryBase<Coupon>, ICouponRepository
     {
+        private readonly UniqloContext _context;
+
         public CouponRepository(UniqloContext context) : base(context)
         {
+            _context = context;
+        }
+
+        public IQueryable<Coupon> GetUserCoupons(Guid userId)
+        {
+            var coupons = from c in _context.Coupons
+                          join uc in _context.UserCoupons on c.Id equals uc.CouponId
+                          where uc.UserId == userId
+                          select c;
+            return coupons;
         }
     }
 }

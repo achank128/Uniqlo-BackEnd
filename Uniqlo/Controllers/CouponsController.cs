@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Uniqlo.BusinessLogic.Services.CouponService;
 using Uniqlo.Models.Models;
 using Uniqlo.Models.RequestModels.Coupon;
@@ -31,10 +32,40 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        [HttpGet("usercoupon/{userId}")]
+        public async Task<IActionResult> GetUserCoupons(Guid userId)
+        {
+            var response = await _couponService.GetUserCoupons(userId);
+            return Ok(response);
+        }
+
+        [HttpGet("mycoupons")]
+        public async Task<IActionResult> GetMyCoupons()
+        {
+            Guid userId = new Guid(User.FindFirstValue(ClaimTypes.Sid));
+            var response = await _couponService.GetUserCoupons(userId);
+            return Ok(response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateCouponRequest request)
         {
             var response = await _couponService.Create(request);
+            return Ok(response);
+        }
+
+        [HttpPost("usercoupon")]
+        public async Task<IActionResult> CreateUserCoupon(CreateUserCouponRequest request)
+        {
+            var response = await _couponService.CreateUserCoupon(request);
+            return Ok(response);
+        }
+
+        [HttpPost("usercoupon/{couponId}")]
+        public async Task<IActionResult> AddUserCoupon(Guid couponId)
+        {
+            Guid userId = new Guid(User.FindFirstValue(ClaimTypes.Sid));
+            var response = await _couponService.AddUserCoupon(userId, couponId);
             return Ok(response);
         }
 
@@ -49,6 +80,13 @@ namespace Uniqlo.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var response = await _couponService.Delete(id);
+            return Ok(response);
+        }
+
+        [HttpDelete("usercoupon/{id}")]
+        public async Task<IActionResult> DeleteUserCoupon(Guid id)
+        {
+            var response = await _couponService.DeleteUserCoupon(id);
             return Ok(response);
         }
     }

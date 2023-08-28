@@ -19,6 +19,10 @@ namespace Uniqlo.BusinessLogic.MappingProfiles
             CreateMap<UpdateCouponRequest, Coupon>();
             CreateMap<Coupon, CouponResponse>();
             CreateMap<PagedResponse<Coupon>, PagedResponse<CouponResponse>>();
+
+            CreateMap<CreateUserCouponRequest, UserCoupon>();
+            CreateMap<UserCoupon, UserCouponResponse>();
+
         }
     }
 }

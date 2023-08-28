@@ -8,11 +8,11 @@ namespace Uniqlo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductDetailController : ControllerBase
+    public class ProductDetailsController : ControllerBase
     {
         private readonly IProductDetailService _productDetailService;
 
-        public ProductDetailController(IProductDetailService productDetailService)
+        public ProductDetailsController(IProductDetailService productDetailService)
         {
             _productDetailService = productDetailService;
         }

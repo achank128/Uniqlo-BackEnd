@@ -16,5 +16,9 @@ namespace Uniqlo.BusinessLogic.Services.CouponService
         Task<ApiResponse<CouponResponse>> GetById(Guid id);
         Task<ApiResponse<CouponResponse>> Update(UpdateCouponRequest request);
         Task<ApiResponse<CouponResponse>> Delete(Guid id);
+        Task<ApiResponse<UserCouponResponse>> CreateUserCoupon(CreateUserCouponRequest request);
+        Task<ApiResponse<UserCouponResponse>> AddUserCoupon(Guid userId, Guid couponId);
+        Task<ApiResponse<List<CouponResponse>>> GetUserCoupons(Guid userId);
+        Task<ApiResponse<UserCouponResponse>> DeleteUserCoupon(Guid id);
     }
 }
