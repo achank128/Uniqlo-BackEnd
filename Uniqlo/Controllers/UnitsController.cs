@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Uniqlo.BusinessLogic.Services.Interfaces;
+using Uniqlo.BusinessLogic.Services.UnitService;
 using Uniqlo.Models.Models;
 using Uniqlo.Models.RequestModels.Unit;
 

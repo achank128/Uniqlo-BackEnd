@@ -5,8 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Uniqlo.BusinessLogic.Services.Implements;
-using Uniqlo.BusinessLogic.Services.Interfaces;
+using Uniqlo.BusinessLogic.Services.CategoryService;
+using Uniqlo.BusinessLogic.Services.CollectionService;
+using Uniqlo.BusinessLogic.Services.ColorService;
+using Uniqlo.BusinessLogic.Services.CouponService;
+using Uniqlo.BusinessLogic.Services.GenderTypeService;
+using Uniqlo.BusinessLogic.Services.ProductDetailService;
+using Uniqlo.BusinessLogic.Services.ProductService;
+using Uniqlo.BusinessLogic.Services.SizeService;
+using Uniqlo.BusinessLogic.Services.UnitService;
 
 namespace Uniqlo.BusinessLogic
 {
@@ -30,6 +37,8 @@ namespace Uniqlo.BusinessLogic
             services.AddScoped<ISizeService, SizeService>();
             services.AddScoped<IColorService, ColorService>();
             services.AddScoped<ICouponService, CouponService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IProductDetailService, ProductDetailService>();
         }
 
         private static void RegisterAutoMapper(this IServiceCollection services)
