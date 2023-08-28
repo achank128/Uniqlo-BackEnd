@@ -31,6 +31,7 @@ namespace Uniqlo.DataAccess
             services.AddScoped<ICouponRepository, CouponRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
