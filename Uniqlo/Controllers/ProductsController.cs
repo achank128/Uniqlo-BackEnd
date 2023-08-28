@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Uniqlo.BusinessLogic.Services.ProductService;
 using Uniqlo.Models.Models;
+using Uniqlo.Models.RequestModels;
 using Uniqlo.Models.RequestModels.Product;
 
 namespace Uniqlo.Controllers
@@ -17,10 +18,27 @@ namespace Uniqlo.Controllers
             _productService = productService;
         }
 
+        /// <summary>
+        /// Lấy tất cả sản phẩm
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("all")]
         public async Task<IActionResult> GetAll(FilterBaseRequest request)
         {
             var response = await _productService.GetAll(request);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Lọc sản phẩm
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("filter")]
+        public async Task<IActionResult> GetFilter(FilterProductRequest request)
+        {
+            var response = await _productService.Filter(request);
             return Ok(response);
         }
 
@@ -31,10 +49,27 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Thêm sản phẩm
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("create")]
         public async Task<IActionResult> Create(CreateProductRequest request)
         {
             var response = await _productService.Create(request);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Thêm sản phẩm gồm cả chi tiết sp
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("createFull")]
+        public async Task<IActionResult> CreateFull(CreateProductFullRequest request)
+        {
+            var response = await _productService.CreateFull(request);
             return Ok(response);
         }
 
@@ -46,9 +81,9 @@ namespace Uniqlo.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id, DeleteRequest request)
         {
-            var response = await _productService.Delete(id);
+            var response = await _productService.Delete(id, request);
             return Ok(response);
         }
     }

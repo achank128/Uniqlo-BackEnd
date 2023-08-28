@@ -12,6 +12,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductDetailService
     public interface IProductDetailService
     {
         Task<ApiResponse<ProductDetailResponse>> Create(CreateProductDetailRequest request);
+        Task<ApiResponse<ProductDetailResponse>> CreateList(CreateListProductDetailRequest request);
         Task<PagedResponse<ProductDetailResponse>> GetAll(FilterBaseRequest request);
         Task<ApiResponse<ProductDetailResponse>> GetById(Guid id);
         Task<ApiResponse<ProductDetailResponse>> Update(UpdateProductDetailRequest request);

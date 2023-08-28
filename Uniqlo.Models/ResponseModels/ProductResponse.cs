@@ -22,7 +22,9 @@ namespace Uniqlo.Models.ResponseModels
         public string? Materials { get; set; }
         public string? MaterialsEn { get; set; }
         public string? MaterialsVi { get; set; }
-        public bool IsSale { get; set; } = false;
+        public bool IsSale { get; set; }
+        public bool IsOnlineOnly { get; set; }
+        public bool IsLimited { get; set; }
         public int UnitId { get; set; }
         public int GenderTypeId { get; set; }
         public Guid ProductPriceId { get; set; }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
 using Uniqlo.Core.Keywords;
 using Uniqlo.DataAccess.Repositories.Interfaces;
+using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
 using Uniqlo.Models.Models;
 using Uniqlo.Models.RequestModels.ProductDetail;
@@ -18,18 +19,69 @@ namespace Uniqlo.BusinessLogic.Services.ProductDetailService
     {
         private readonly IMapper _mapper;
         private readonly IProductDetailRepository _productDetailRepository;
+        private readonly IRepositoryBase<ProductSize> _productSizeRepository;
 
-        public ProductDetailService(IProductDetailRepository productDetailRepository, IMapper mapper)
+        public ProductDetailService(
+            IMapper mapper, 
+            IProductDetailRepository productDetailRepository, 
+            IRepositoryBase<ProductSize> productSizeRepository)
         {
             _productDetailRepository = productDetailRepository;
             _mapper = mapper;
+            _productSizeRepository = productSizeRepository;
         }
 
         public async Task<ApiResponse<ProductDetailResponse>> Create(CreateProductDetailRequest request)
         {
-            var category = _mapper.Map<ProductDetail>(request);
-            _productDetailRepository.Add(category);
+            var productDetail = _mapper.Map<ProductDetail>(request);
+            _productDetailRepository.Add(productDetail);
 
+            if (await _productDetailRepository.SaveAsync())
+            {
+                return ApiResponse<ProductDetailResponse>.Success(Common.CreateSuccess);
+            }
+            else
+            {
+                throw new BadRequestException(Common.CreateFailure);
+            }
+        }
+
+        public async Task<ApiResponse<ProductDetailResponse>> CreateList(CreateListProductDetailRequest request)
+        {
+            //Add product sizes
+            foreach (int sizeId in request.Sizes)
+            {
+                ProductSize productSize = new ProductSize
+                {
+                    Id = Guid.NewGuid(),
+                    SizeId = sizeId,
+                    ProductId = request.ProductId,
+                };
+                _productSizeRepository.Add(productSize);
+            }
+
+            List<ProductDetail> productDetails = new List<ProductDetail>();
+
+            //Add product details
+            foreach (int colorId in request.Colors)
+            {
+                foreach (int sizeId in request.Sizes)
+                {
+
+                    ProductDetail productDetail = new ProductDetail
+                    {
+                        Id = Guid.NewGuid(),
+                        SizeId = sizeId,
+                        ColorId = colorId,
+                        ProductId = request.ProductId,
+                        InStock = request.InStock,
+                        StockStatus = request.InStock > 0
+                    };
+                    productDetails.Add(productDetail);
+                }
+            }
+
+            _productDetailRepository.AddRange(productDetails);
             if (await _productDetailRepository.SaveAsync())
             {
                 return ApiResponse<ProductDetailResponse>.Success(Common.CreateSuccess);
@@ -42,10 +94,11 @@ namespace Uniqlo.BusinessLogic.Services.ProductDetailService
 
         public async Task<ApiResponse<ProductDetailResponse>> Delete(Guid id)
         {
-            var category = await _productDetailRepository.GetByIdAsync(id);
-            if (category == null) throw new NotFoundException(Common.NotFound);
+            var productDetail = await _productDetailRepository.GetByIdAsync(id);
+            if (productDetail == null) throw new NotFoundException(Common.NotFound);
 
-            _productDetailRepository.DeleteBy(id);
+            productDetail.DeleteStatus = true;
+            _productDetailRepository.Update(productDetail);
             if (await _productDetailRepository.SaveAsync())
             {
                 return ApiResponse<ProductDetailResponse>.Success(Common.DeleteSuccess);
@@ -58,26 +111,26 @@ namespace Uniqlo.BusinessLogic.Services.ProductDetailService
 
         public async Task<PagedResponse<ProductDetailResponse>> GetAll(FilterBaseRequest request)
         {
-            var categories = _productDetailRepository.GetQueryable();
-            var paged = await PagedResponse<ProductDetail>.CreateAsync(categories, request.PageIndex, request.PageSize);
+            var productDetails = _productDetailRepository.GetQueryable();
+            var paged = await PagedResponse<ProductDetail>.CreateAsync(productDetails, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<ProductDetailResponse>>(paged);
             return response;
         }
 
         public async Task<ApiResponse<ProductDetailResponse>> GetById(Guid id)
         {
-            var category = await _productDetailRepository.GetByIdAsync(id);
-            if (category == null) throw new NotFoundException(Common.NotFound);
+            var productDetail = await _productDetailRepository.GetByIdAsync(id);
+            if (productDetail == null) throw new NotFoundException(Common.NotFound);
 
-            var response = _mapper.Map<ProductDetailResponse>(category);
+            var response = _mapper.Map<ProductDetailResponse>(productDetail);
             return ApiResponse<ProductDetailResponse>.Success(response);
         }
 
         public async Task<ApiResponse<ProductDetailResponse>> Update(UpdateProductDetailRequest request)
         {
-            var category = _mapper.Map<ProductDetail>(request);
-            category.UpdatedDate = DateTime.Now;
-            _productDetailRepository.Update(category);
+            var productDetail = _mapper.Map<ProductDetail>(request);
+            productDetail.UpdatedDate = DateTime.Now;
+            _productDetailRepository.Update(productDetail);
             if (await _productDetailRepository.SaveAsync())
             {
                 return ApiResponse<ProductDetailResponse>.Success(Common.UpdateSuccess);

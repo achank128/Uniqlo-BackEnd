@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
@@ -11,6 +12,7 @@ using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
 using Uniqlo.Models.Models;
+using Uniqlo.Models.RequestModels;
 using Uniqlo.Models.RequestModels.Product;
 using Uniqlo.Models.ResponseModels;
 
@@ -45,6 +47,45 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
         }
 
         public async Task<ApiResponse<ProductResponse>> Create(CreateProductRequest request)
+        {
+            var product = _mapper.Map<Product>(request);
+            product.Id = Guid.NewGuid();
+
+            //Add product review
+            ProductReview productReview = new ProductReview
+            {
+                Id = Guid.NewGuid(),
+                Star = 0,
+                Amount = 0,
+            };
+            _productReviewRepository.Add(productReview);
+            product.ProductReviewId = productReview.Id;
+
+            //Add product price
+            ProductPrice productPrice = new ProductPrice
+            {
+                Id = Guid.NewGuid(),
+                Price = request.Price,
+                PromoPrice = request.PromoPrice,
+                ImportPrice = request.ImportPrice,
+                VAT = request.VAT,
+            };
+            _productPriceRepository.Add(productPrice);
+            product.ProductPriceId = productPrice.Id;
+
+            _productRepository.Add(product);
+
+            if (await _productRepository.SaveAsync())
+            {
+                return ApiResponse<ProductResponse>.Success(Common.CreateSuccess);
+            }
+            else
+            {
+                throw new BadRequestException(Common.CreateFailure);
+            }
+        }
+
+        public async Task<ApiResponse<ProductResponse>> CreateFull(CreateProductFullRequest request)
         {
             var product = _mapper.Map<Product>(request);
             product.Id = Guid.NewGuid();
@@ -124,11 +165,11 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             }
         }
 
-        public async Task<ApiResponse<ProductResponse>> Delete(Guid id)
+        public async Task<ApiResponse<ProductResponse>> Delete(Guid id, DeleteRequest request)
         {
-            var category = await _productRepository.GetByIdAsync(id);
-            if (category == null) throw new NotFoundException(Common.NotFound);
-            category.DeleteStatus = true;
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product == null) throw new NotFoundException(Common.NotFound);
+            product.DeleteStatus = request.DeleteStatus;
             if (await _productRepository.SaveAsync())
             {
                 return ApiResponse<ProductResponse>.Success(Common.DeleteSuccess);
@@ -139,12 +180,39 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             }
         }
 
+        public async Task<PagedResponse<ProductResponse>> Filter(FilterProductRequest request)
+        {
+            var products = _productRepository.FilterProducts(request);
+
+            if (!string.IsNullOrEmpty(request.SortBy))
+            {
+                products = _productRepository.SortProducts(products, request.SortBy);
+            }
+
+            products = products.Include(p => p.ProductPrice).Include(p => p.ProductReview);
+
+            var paged = await PagedResponse<Product>.CreateAsync(products, request.PageIndex, request.PageSize);
+            var response = _mapper.Map<PagedResponse<ProductResponse>>(paged);
+            return response;
+        }
+
         public async Task<PagedResponse<ProductResponse>> GetAll(FilterBaseRequest request)
         {
-            var categories = _productRepository.GetQueryable()
-                .Include(p => p.ProductPrice)
-                .Include(p => p.ProductReview);
-            var paged = await PagedResponse<Product>.CreateAsync(categories, request.PageIndex, request.PageSize);
+            var products = _productRepository.GetBy(p =>
+                (string.IsNullOrEmpty(request.KeyWord) 
+                || p.Name.Contains(request.KeyWord) 
+                || p.NameEn!.Contains(request.KeyWord) 
+                || p.NameVi!.Contains(request.KeyWord))
+            );
+
+            if (!string.IsNullOrEmpty(request.SortBy))
+            {
+                products = _productRepository.SortProducts(products, request.SortBy);
+            }
+
+            products = products.Include(p => p.ProductPrice).Include(p => p.ProductReview);
+
+            var paged = await PagedResponse<Product>.CreateAsync(products, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<ProductResponse>>(paged);
             return response;
         }
@@ -172,5 +240,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
                 throw new BadRequestException(Common.UpdateFailure);
             }
         }
+
+
     }
 }

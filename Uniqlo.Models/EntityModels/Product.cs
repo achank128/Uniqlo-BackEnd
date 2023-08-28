@@ -25,6 +25,8 @@ namespace Uniqlo.Models.EntityModels
         public string? MaterialsEn { get; set; }
         public string? MaterialsVi { get; set; }
         public bool IsSale { get; set; } = false;
+        public bool IsOnlineOnly { get; set; } = false;
+        public bool IsLimited { get; set; } = false;
         public int UnitId { get; set; }
         public int GenderTypeId { get; set; }
         public Guid ProductPriceId { get; set; }
@@ -43,6 +45,7 @@ namespace Uniqlo.Models.EntityModels
         public virtual Collection? Collection { get; set; }
 
         public virtual ICollection<ProductSize> ProductSizes { get; set; } = new List<ProductSize>();
+        public virtual ICollection<ProductColor> ProductColors { get; set; } = new List<ProductColor>();
         public virtual ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
         public virtual ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
         public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();

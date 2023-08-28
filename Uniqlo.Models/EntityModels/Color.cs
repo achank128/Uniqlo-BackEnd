@@ -21,6 +21,8 @@ namespace Uniqlo.Models.EntityModels
         public DateTime? UpdatedDate { get; set; } = DateTime.Now;
 
         public virtual ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
+        public virtual ICollection<ProductColor> ProductColors { get; set; } = new List<ProductColor>();
+
 
 
     }

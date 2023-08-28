@@ -16,6 +16,7 @@ namespace Uniqlo.BusinessLogic.MappingProfiles
         public ProductDetailProfile()
         {
             CreateMap<CreateProductDetailRequest, ProductDetail>();
+            CreateMap<CreateListProductDetailRequest, ProductDetail>();
             CreateMap<UpdateProductDetailRequest, ProductDetail>();
             CreateMap<ProductDetail, ProductDetailResponse>();
             CreateMap<PagedResponse<ProductDetail>, PagedResponse<ProductDetailResponse>>();

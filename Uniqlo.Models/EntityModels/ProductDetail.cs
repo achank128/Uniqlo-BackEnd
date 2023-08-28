@@ -19,6 +19,7 @@ namespace Uniqlo.Models.EntityModels
         public bool StockStatus { get; set; } = false;
         public int InStock { get; set; }
         public string? Description { get; set; }
+        public bool? DeleteStatus { get; set; } = false;
         public DateTime? CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdatedDate { get; set; } = DateTime.Now;
 

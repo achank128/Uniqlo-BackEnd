@@ -30,6 +30,7 @@ namespace Uniqlo.Models.Context
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+        public virtual DbSet<ProductColor> ProductColors { get; set; }
         public virtual DbSet<ProductDetail> ProductDetails { get; set; }
         public virtual DbSet<ProductPrice> ProductPrices { get; set; }
         public virtual DbSet<ProductReview> ProductReviews { get; set; }
@@ -109,6 +110,12 @@ namespace Uniqlo.Models.Context
             {
                 entity.HasOne(d => d.Product).WithMany(p => p.ProductCategories).HasForeignKey(d => d.ProductId).OnDelete(DeleteBehavior.ClientSetNull);
                 entity.HasOne(d => d.Category).WithMany(p => p.ProductCategories).HasForeignKey(d => d.CategoryId).OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<ProductColor>(entity =>
+            {
+                entity.HasOne(d => d.Product).WithMany(p => p.ProductColors).HasForeignKey(d => d.ProductId).OnDelete(DeleteBehavior.ClientSetNull);
+                entity.HasOne(d => d.Color).WithMany(p => p.ProductColors).HasForeignKey(d => d.ColorId).OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<ProductDetail>(entity =>
