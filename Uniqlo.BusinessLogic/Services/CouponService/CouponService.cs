@@ -19,7 +19,6 @@ namespace Uniqlo.BusinessLogic.Services.CouponService
     {
         private readonly IMapper _mapper;
         private readonly ICouponRepository _couponRepository;
-        private readonly IRepositoryBase<UserCoupon> _userCouponRepository;
 
         public CouponService(
             IMapper mapper, 
@@ -29,27 +28,6 @@ namespace Uniqlo.BusinessLogic.Services.CouponService
         {
             _mapper = mapper;
             _couponRepository = couponRepository;
-            _userCouponRepository = userCouponRepository;
-        }
-
-        public async Task<ApiResponse<UserCouponResponse>> AddUserCoupon(Guid userId, Guid couponId)
-        {
-            UserCoupon userCoupon = new UserCoupon
-            {
-                Id = Guid.NewGuid(),
-                UserId = userId,
-                CouponId = couponId
-            };
-            _userCouponRepository.Add(userCoupon);
-
-            if (await _userCouponRepository.SaveAsync())
-            {
-                return ApiResponse<UserCouponResponse>.Success(Common.CreateSuccess);
-            }
-            else
-            {
-                throw new BadRequestException(Common.CreateFailure);
-            }
         }
 
         public async Task<ApiResponse<CouponResponse>> Create(CreateCouponRequest request)
@@ -65,22 +43,7 @@ namespace Uniqlo.BusinessLogic.Services.CouponService
             {
                 throw new BadRequestException(Common.CreateFailure);
             }
-        }
-
-        public async Task<ApiResponse<UserCouponResponse>> CreateUserCoupon(CreateUserCouponRequest request)
-        {
-            var userCoupon = _mapper.Map<UserCoupon>(request);
-            _userCouponRepository.Add(userCoupon);
-
-            if (await _userCouponRepository.SaveAsync())
-            {
-                return ApiResponse<UserCouponResponse>.Success(Common.CreateSuccess);
-            }
-            else
-            {
-                throw new BadRequestException(Common.CreateFailure);
-            }
-        }
+        } 
 
         public async Task<ApiResponse<CouponResponse>> Delete(Guid id)
         {
@@ -91,22 +54,6 @@ namespace Uniqlo.BusinessLogic.Services.CouponService
             if (await _couponRepository.SaveAsync())
             {
                 return ApiResponse<CouponResponse>.Success(Common.DeleteSuccess);
-            }
-            else
-            {
-                throw new BadRequestException(Common.DeleteFailure);
-            }
-        }
-
-        public async Task<ApiResponse<UserCouponResponse>> DeleteUserCoupon(Guid id)
-        {
-            var userCoupon = await _userCouponRepository.GetByIdAsync(id);
-            if (userCoupon == null) throw new NotFoundException(Common.NotFound);
-
-            _userCouponRepository.Delete(userCoupon);
-            if (await _userCouponRepository.SaveAsync())
-            {
-                return ApiResponse<UserCouponResponse>.Success(Common.DeleteSuccess);
             }
             else
             {
@@ -129,13 +76,6 @@ namespace Uniqlo.BusinessLogic.Services.CouponService
 
             var response = _mapper.Map<CouponResponse>(coupon);
             return ApiResponse<CouponResponse>.Success(response);
-        }
-
-        public async Task<ApiResponse<List<CouponResponse>>> GetUserCoupons(Guid userId)
-        {
-            var coupons = _couponRepository.GetUserCoupons(userId);
-            var response = _mapper.Map<List<CouponResponse>>(coupons);
-            return ApiResponse<List<CouponResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<CouponResponse>> Update(UpdateCouponRequest request)

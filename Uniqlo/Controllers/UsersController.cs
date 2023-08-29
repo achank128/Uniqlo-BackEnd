@@ -19,19 +19,23 @@ namespace Uniqlo.Controllers
             _userService = userService;
         }
 
-        [HttpPost("all"), Authorize(Roles = "ADMIN")]
+        [HttpPost("all")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetUsers(FilterBaseRequest request)
         {
             var response = await _userService.GetAll(request);
             return Ok(response);
         }
 
-        [HttpGet("getme"), Authorize]
+        [HttpGet("getme")]
+        [Authorize]
         public async Task<IActionResult> GetMe()
         {
             Guid userId = new Guid(User.FindFirstValue(ClaimTypes.Sid));
             var response = await _userService.GetById(userId);
             return Ok(response);
         }
+
+
     }
 }

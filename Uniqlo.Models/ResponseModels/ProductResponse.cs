@@ -36,10 +36,10 @@ namespace Uniqlo.Models.ResponseModels
         public DateTime? UpdatedDate { get; set; } 
 
 
-        public virtual Unit Unit { get; set; }
-        public virtual GenderType GenderType { get; set; }
+        public virtual UnitResponse Unit { get; set; }
+        public virtual GenderTypeResponse GenderType { get; set; }
         public virtual ProductPriceResponse ProductPrice { get; set; }
         public virtual ProductReviewResponse? ProductReview { get; set; }
-        public virtual Collection? Collection { get; set; }
+        public virtual CollectionResponse? Collection { get; set; }
     }
 }

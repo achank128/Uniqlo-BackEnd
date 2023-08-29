@@ -11,14 +11,13 @@ using Uniqlo.Models.ResponseModels;
 
 namespace Uniqlo.BusinessLogic.MappingProfiles
 {
-    public class CouponProfile : Profile
+    public class UserCouponProfile : Profile
     {
-        public CouponProfile()
+        public UserCouponProfile()
         {
-            CreateMap<CreateCouponRequest, Coupon>();
-            CreateMap<UpdateCouponRequest, Coupon>();
-            CreateMap<Coupon, CouponResponse>();
-            CreateMap<PagedResponse<Coupon>, PagedResponse<CouponResponse>>();
+            CreateMap<CreateUserCouponRequest, UserCoupon>();
+            CreateMap<UserCoupon, UserCouponResponse>();
+            CreateMap<PagedResponse<UserCoupon>, PagedResponse<UserCouponResponse>>();
         }
     }
 }

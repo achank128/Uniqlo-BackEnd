@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
 using Uniqlo.Core.Keywords;
 using Uniqlo.DataAccess.Repositories.Interfaces;
+using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
 using Uniqlo.Models.Models;
 using Uniqlo.Models.ResponseModels;
@@ -17,11 +19,16 @@ namespace Uniqlo.BusinessLogic.Services.UserService
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IRepositoryBase<WishList> _wishListRepository;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(
+            IMapper mapper, 
+            IUserRepository userRepository, 
+            IRepositoryBase<WishList> wishListRepository)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _wishListRepository = wishListRepository;
         }
 
         public async Task<PagedResponse<UserResponse>> GetAll(FilterBaseRequest request)
@@ -40,5 +47,7 @@ namespace Uniqlo.BusinessLogic.Services.UserService
             var response = _mapper.Map<UserResponse>(user);
             return ApiResponse<UserResponse>.Success(response);
         }
+
+        
     }
 }

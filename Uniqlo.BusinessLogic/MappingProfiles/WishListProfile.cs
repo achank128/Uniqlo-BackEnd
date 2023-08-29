@@ -6,19 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.Models.EntityModels;
 using Uniqlo.Models.Models;
-using Uniqlo.Models.RequestModels.User;
 using Uniqlo.Models.ResponseModels;
 
 namespace Uniqlo.BusinessLogic.MappingProfiles
 {
-    public class UserProfile : Profile
+    public class WishListProfile : Profile
     {
-        public UserProfile()
+        public WishListProfile()
         {
-            CreateMap<UserRegisterRequest, User>();
-            CreateMap<User, UserResponse>();
-            CreateMap<PagedResponse<User>, PagedResponse<UserResponse>>();
-
+            CreateMap<WishList, WishListResponse>();
+            CreateMap<PagedResponse<WishList>, PagedResponse<WishListResponse>>();
         }
     }
 }

@@ -7,14 +7,13 @@ using Uniqlo.Models.EntityModels;
 
 namespace Uniqlo.Models.ResponseModels
 {
-    public class UserCouponResponse
+    public class WishListResponse
     {
         public Guid Id { get; set; }
+        public Guid ProductId { get; set; }
         public Guid UserId { get; set; }
-        public Guid CouponId { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public DateTime? UpdatedDate { get; set; }
-        public virtual CouponResponse Coupon { get; set; }
-
+        public DateTime? CreatedDate { get; set; } 
+        public DateTime? UpdatedDate { get; set; } 
+        public virtual ProductResponse Product { get; set; }
     }
 }

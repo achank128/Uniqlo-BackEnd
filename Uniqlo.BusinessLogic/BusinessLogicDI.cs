@@ -15,7 +15,9 @@ using Uniqlo.BusinessLogic.Services.ProductDetailService;
 using Uniqlo.BusinessLogic.Services.ProductService;
 using Uniqlo.BusinessLogic.Services.SizeService;
 using Uniqlo.BusinessLogic.Services.UnitService;
+using Uniqlo.BusinessLogic.Services.UserCouponService;
 using Uniqlo.BusinessLogic.Services.UserService;
+using Uniqlo.BusinessLogic.Services.WishListService;
 
 namespace Uniqlo.BusinessLogic
 {
@@ -43,6 +45,8 @@ namespace Uniqlo.BusinessLogic
             services.AddScoped<IProductDetailService, ProductDetailService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserCouponService, UserCouponService>();
+            services.AddScoped<IWishListService, WishListService>();
         }
 
         private static void RegisterAutoMapper(this IServiceCollection services)
