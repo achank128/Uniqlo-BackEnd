@@ -32,6 +32,9 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.Al
 //Memory caching
 builder.Services.AddMemoryCache();
 
+//HttpContext Access
+builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 

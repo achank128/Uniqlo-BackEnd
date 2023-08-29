@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Services.AuthService;
+using Uniqlo.BusinessLogic.Services.CartItemService;
+using Uniqlo.BusinessLogic.Services.CartService;
 using Uniqlo.BusinessLogic.Services.CategoryService;
 using Uniqlo.BusinessLogic.Services.CollectionService;
 using Uniqlo.BusinessLogic.Services.ColorService;
@@ -18,6 +20,7 @@ using Uniqlo.BusinessLogic.Services.UnitService;
 using Uniqlo.BusinessLogic.Services.UserCouponService;
 using Uniqlo.BusinessLogic.Services.UserService;
 using Uniqlo.BusinessLogic.Services.WishListService;
+using Uniqlo.BusinessLogic.Shared.ClaimService;
 
 namespace Uniqlo.BusinessLogic
 {
@@ -34,6 +37,7 @@ namespace Uniqlo.BusinessLogic
 
         private static void AddServices(this IServiceCollection services)
         {
+            services.AddScoped<IClaimService, ClaimService>();
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<ICollectionService, CollectionService>();
             services.AddScoped<ICategoryService, CategoryService>();
@@ -47,6 +51,8 @@ namespace Uniqlo.BusinessLogic
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserCouponService, UserCouponService>();
             services.AddScoped<IWishListService, WishListService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<ICartItemService, CartItemService>();
         }
 
         private static void RegisterAutoMapper(this IServiceCollection services)

@@ -20,8 +20,8 @@ namespace Uniqlo.Models.ResponseModels
         public DateTime? UpdatedDate { get; set; }
 
 
-        public virtual Product Product { get; set; }
-        public virtual Size Size { get; set; }
-        public virtual Color Color { get; set; }
+        public virtual ProductResponse Product { get; set; }
+        public virtual SizeResponse Size { get; set; }
+        public virtual ColorResponse Color { get; set; }
     }
 }
