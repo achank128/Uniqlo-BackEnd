@@ -64,6 +64,13 @@ namespace Uniqlo.BusinessLogic.Services.CategoryService
             return response;
         }
 
+        public async Task<ApiResponse<List<CategoryResponse>>> GetAll()
+        {
+            var categories = await _categoryRepository.GetAllAsync();
+            var response = _mapper.Map<List<CategoryResponse>>(categories);
+            return ApiResponse<List<CategoryResponse>>.Success(response);
+        }
+
         public async Task<ApiResponse<CategoryResponse>> GetById(Guid id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);

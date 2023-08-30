@@ -13,10 +13,15 @@ using Uniqlo.BusinessLogic.Services.CollectionService;
 using Uniqlo.BusinessLogic.Services.ColorService;
 using Uniqlo.BusinessLogic.Services.CouponService;
 using Uniqlo.BusinessLogic.Services.GenderTypeService;
+using Uniqlo.BusinessLogic.Services.OderItemService;
+using Uniqlo.BusinessLogic.Services.OrderService;
+using Uniqlo.BusinessLogic.Services.PaymentService;
 using Uniqlo.BusinessLogic.Services.ProductDetailService;
 using Uniqlo.BusinessLogic.Services.ProductService;
+using Uniqlo.BusinessLogic.Services.ShipmentService;
 using Uniqlo.BusinessLogic.Services.SizeService;
 using Uniqlo.BusinessLogic.Services.UnitService;
+using Uniqlo.BusinessLogic.Services.UserAddressService;
 using Uniqlo.BusinessLogic.Services.UserCouponService;
 using Uniqlo.BusinessLogic.Services.UserService;
 using Uniqlo.BusinessLogic.Services.WishListService;
@@ -53,6 +58,11 @@ namespace Uniqlo.BusinessLogic
             services.AddScoped<IWishListService, WishListService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<ICartItemService, CartItemService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderItemService, OrderItemService>();
+            services.AddScoped<IShipmentService, ShipmentService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IUserAddressService, UserAddressService>();
         }
 
         private static void RegisterAutoMapper(this IServiceCollection services)

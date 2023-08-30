@@ -20,7 +20,7 @@ namespace Uniqlo.Controllers
         }
 
         [HttpPost("all")]
-        [Authorize(Roles = "ADMIN")]
+        //[Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetUsers(FilterBaseRequest request)
         {
             var response = await _userService.GetAll(request);

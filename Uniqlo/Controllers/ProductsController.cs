@@ -54,7 +54,7 @@ namespace Uniqlo.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<IActionResult> Create(CreateProductRequest request)
         {
             var response = await _productService.Create(request);

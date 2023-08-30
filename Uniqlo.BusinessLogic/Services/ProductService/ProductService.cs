@@ -157,7 +157,8 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
 
             if (await _productRepository.SaveAsync())
             {
-                return ApiResponse<ProductResponse>.Success(Common.CreateSuccess);
+                var response = _mapper.Map<ProductResponse>(product);
+                return ApiResponse<ProductResponse>.Success(Common.CreateSuccess, response);
             }
             else
             {

@@ -84,6 +84,7 @@ namespace Uniqlo.Models.Context
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasOne(d => d.User).WithMany(p => p.Orders).HasForeignKey(d => d.UserId).OnDelete(DeleteBehavior.ClientSetNull);
+                entity.HasOne(d => d.Coupon).WithMany(p => p.Orders).HasForeignKey(d => d.CouponId).OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<OrderItem>(entity =>

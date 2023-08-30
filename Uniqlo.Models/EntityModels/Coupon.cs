@@ -19,6 +19,7 @@ namespace Uniqlo.Models.EntityModels
         public string? Description { get; set; }
         public string? DescriptionEn { get; set; }
         public string? DescriptionVi { get; set; }
+        public int? Amount { get; set; }
         public int? Percent { get; set; }
         [Column(TypeName = "money")]
         public decimal? Discount { get; set; }
@@ -34,5 +35,6 @@ namespace Uniqlo.Models.EntityModels
         public DateTime? UpdatedDate { get; set; } = DateTime.Now;
 
         public virtual ICollection<UserCoupon> UserCoupons { get; set; } = new List<UserCoupon>();
+        public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Uniqlo.Models.ResponseModels
+namespace Uniqlo.Models.RequestModels.UserAddress
 {
-    public class UserAddressResponse
+    public class CreateUserAddressRequest
     {
-        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public string? Title { get; set; }
         public string FullName { get; set; }
@@ -19,6 +18,6 @@ namespace Uniqlo.Models.ResponseModels
         public string Address { get; set; }
         public string? AddressDetail { get; set; }
         public string? Note { get; set; }
-        public bool IsDefault { get; set; } 
+        public bool IsDefault { get; set; }
     }
 }

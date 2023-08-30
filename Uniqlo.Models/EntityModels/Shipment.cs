@@ -15,7 +15,7 @@ namespace Uniqlo.Models.EntityModels
         public Guid OrderId { get; set; }
         public Guid UserAddressId { get; set; }
         public DateTime? ReceivedDate { get; set; }
-        public string? Details { get; set; }
+        public string? Note { get; set; }
         public int Amount { get; set; }
         [Column(TypeName = "money")]
         public decimal ShipmentPay { get; set; }
