@@ -56,7 +56,7 @@ namespace Uniqlo.BusinessLogic.Services.CategoryService
             }
         }
 
-        public async Task<PagedResponse<CategoryResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<CategoryResponse>> Filter(FilterBaseRequest request)
         {
             var categories = _categoryRepository.GetQueryable();
             var paged = await PagedResponse<Category>.CreateAsync(categories, request.PageIndex, request.PageSize);
@@ -66,8 +66,8 @@ namespace Uniqlo.BusinessLogic.Services.CategoryService
 
         public async Task<ApiResponse<List<CategoryResponse>>> GetAll()
         {
-            var categories = await _categoryRepository.GetAllAsync();
-            var response = _mapper.Map<List<CategoryResponse>>(categories);
+            var alls = await _categoryRepository.GetAllAsync();
+            var response = _mapper.Map<List<CategoryResponse>>(alls);
             return ApiResponse<List<CategoryResponse>>.Success(response);
         }
 

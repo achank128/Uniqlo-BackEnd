@@ -15,7 +15,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
         Task<ApiResponse<ProductResponse>> Create(CreateProductRequest request);
         Task<ApiResponse<ProductResponse>> CreateFull(CreateProductFullRequest request);
         Task<PagedResponse<ProductResponse>> Filter(FilterProductRequest request);
-        Task<PagedResponse<ProductResponse>> GetAll(FilterBaseRequest request);
+        Task<ApiResponse<List<ProductResponse>>> GetAll();
         Task<ApiResponse<ProductResponse>> GetById(Guid id);
         Task<ApiResponse<ProductResponse>> Update(UpdateProductRequest request);
         Task<ApiResponse<ProductResponse>> Delete(Guid id, DeleteRequest request);

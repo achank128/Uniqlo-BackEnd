@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
 using Uniqlo.Core.Keywords;
+using Uniqlo.DataAccess.Repositories.Implements;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
@@ -109,12 +110,19 @@ namespace Uniqlo.BusinessLogic.Services.ProductDetailService
             }
         }
 
-        public async Task<PagedResponse<ProductDetailResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<ProductDetailResponse>> Filter(FilterBaseRequest request)
         {
             var productDetails = _productDetailRepository.GetQueryable();
             var paged = await PagedResponse<ProductDetail>.CreateAsync(productDetails, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<ProductDetailResponse>>(paged);
             return response;
+        }
+
+        public async Task<ApiResponse<List<ProductDetailResponse>>> GetAll()
+        {
+            var alls = await _productDetailRepository.GetAllAsync();
+            var response = _mapper.Map<List<ProductDetailResponse>>(alls);
+            return ApiResponse<List<ProductDetailResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<ProductDetailResponse>> GetById(Guid id)

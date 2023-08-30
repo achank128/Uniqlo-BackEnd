@@ -13,7 +13,8 @@ namespace Uniqlo.BusinessLogic.Services.CartItemService
     public interface ICartItemService
     {
         Task<ApiResponse<CartItemResponse>> Create(CreateCartItemRequest request);
-        Task<PagedResponse<CartItemResponse>> GetAll(FilterBaseRequest request);
+        Task<PagedResponse<CartItemResponse>> Filter(FilterBaseRequest request);
+        Task<ApiResponse<List<CartItemResponse>>> GetAll();
         Task<ApiResponse<CartItemResponse>> GetById(Guid id);
         Task<ApiResponse<CartItemResponse>> Update(UpdateCartItemRequest request);
         Task<ApiResponse<CartItemResponse>> Delete(Guid id);

@@ -56,12 +56,19 @@ namespace Uniqlo.BusinessLogic.Services.CollectionService
             }
         }
 
-        public async Task<PagedResponse<CollectionResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<CollectionResponse>> Filter(FilterBaseRequest request)
         {
             var collections = _collectionRepository.GetQueryable();
             var paged = await PagedResponse<Collection>.CreateAsync(collections, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<CollectionResponse>>(paged);
             return response;
+        }
+
+        public async Task<ApiResponse<List<CollectionResponse>>> GetAll()
+        {
+            var alls = await _collectionRepository.GetAllAsync();
+            var response = _mapper.Map<List<CollectionResponse>>(alls);
+            return ApiResponse<List<CollectionResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<CollectionResponse>> GetById(Guid id)

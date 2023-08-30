@@ -56,12 +56,19 @@ namespace Uniqlo.BusinessLogic.Services.SizeService
             }
         }
 
-        public async Task<PagedResponse<SizeResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<SizeResponse>> Filter(FilterBaseRequest request)
         {
             var sizes = _sizeRepository.GetQueryable();
             var paged = await PagedResponse<Size>.CreateAsync(sizes, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<SizeResponse>>(paged);
             return response;
+        }
+
+        public async Task<ApiResponse<List<SizeResponse>>> GetAll()
+        {
+            var alls = await _sizeRepository.GetAllAsync();
+            var response = _mapper.Map<List<SizeResponse>>(alls);
+            return ApiResponse<List<SizeResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<SizeResponse>> GetById(int id)

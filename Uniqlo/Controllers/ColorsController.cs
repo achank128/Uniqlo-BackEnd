@@ -17,15 +17,22 @@ namespace Uniqlo.Controllers
             _colorService = colorService;
         }
 
-        [HttpPost("all")]
-        public async Task<IActionResult> GetAll(FilterBaseRequest request)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            var response = await _colorService.GetAll(request);
+            var response = await _colorService.GetAll();
+            return Ok(response);
+        }
+
+        [HttpPost("all")]
+        public async Task<IActionResult> Filter(FilterBaseRequest request)
+        {
+            var response = await _colorService.Filter(request);
             return Ok(response);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var response = await _colorService.GetById(id);
             return Ok(response);

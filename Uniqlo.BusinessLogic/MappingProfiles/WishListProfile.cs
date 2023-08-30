@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.Models.EntityModels;
 using Uniqlo.Models.Models;
+using Uniqlo.Models.RequestModels.WishList;
 using Uniqlo.Models.ResponseModels;
 
 namespace Uniqlo.BusinessLogic.MappingProfiles
@@ -14,6 +15,7 @@ namespace Uniqlo.BusinessLogic.MappingProfiles
     {
         public WishListProfile()
         {
+            CreateMap<CreateWishListRequest, WishList>();
             CreateMap<WishList, WishListResponse>();
             CreateMap<PagedResponse<WishList>, PagedResponse<WishListResponse>>();
         }

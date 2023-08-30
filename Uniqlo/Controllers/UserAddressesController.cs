@@ -27,7 +27,7 @@ namespace Uniqlo.Controllers
         [HttpPost("all")]
         public async Task<IActionResult> Filter(FilterBaseRequest request)
         {
-            var response = await _userAddressService.GetAll(request);
+            var response = await _userAddressService.Filter(request);
             return Ok(response);
         }
 

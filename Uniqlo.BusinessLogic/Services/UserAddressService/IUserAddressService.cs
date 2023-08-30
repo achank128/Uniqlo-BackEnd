@@ -13,7 +13,7 @@ namespace Uniqlo.BusinessLogic.Services.UserAddressService
     public interface IUserAddressService
     {
         Task<ApiResponse<UserAddressResponse>> Create(CreateUserAddressRequest request);
-        Task<PagedResponse<UserAddressResponse>> GetAll(FilterBaseRequest request);
+        Task<PagedResponse<UserAddressResponse>> Filter(FilterBaseRequest request);
         Task<ApiResponse<List<UserAddressResponse>>> GetAll();
         Task<ApiResponse<UserAddressResponse>> GetById(Guid id);
         Task<ApiResponse<UserAddressResponse>> Update(UpdateUserAddressRequest request);

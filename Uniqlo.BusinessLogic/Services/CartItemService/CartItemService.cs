@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
 using Uniqlo.BusinessLogic.Shared.ClaimService;
 using Uniqlo.Core.Keywords;
@@ -73,12 +68,19 @@ namespace Uniqlo.BusinessLogic.Services.CartItemService
             }
         }
 
-        public async Task<PagedResponse<CartItemResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<CartItemResponse>> Filter(FilterBaseRequest request)
         {
             var cartItems = _cartItemRepository.GetQueryable();
             var paged = await PagedResponse<CartItem>.CreateAsync(cartItems, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<CartItemResponse>>(paged);
             return response;
+        }
+
+        public async Task<ApiResponse<List<CartItemResponse>>> GetAll()
+        {
+            var alls = await _cartItemRepository.GetAllAsync();
+            var response = _mapper.Map<List<CartItemResponse>>(alls);
+            return ApiResponse<List<CartItemResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<CartItemResponse>> GetById(Guid id)

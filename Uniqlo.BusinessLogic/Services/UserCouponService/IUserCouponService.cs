@@ -13,7 +13,8 @@ namespace Uniqlo.BusinessLogic.Services.UserCouponService
     {
         Task<ApiResponse<UserCouponResponse>> CreateUserCoupon(CreateUserCouponRequest request);
         Task<ApiResponse<UserCouponResponse>> AddUserCoupon(Guid userId, Guid couponId);
-        Task<PagedResponse<UserCouponResponse>> GetAll(FilterBaseRequest request);
+        Task<PagedResponse<UserCouponResponse>> Filter(FilterBaseRequest request);
+        Task<ApiResponse<List<UserCouponResponse>>> GetAll();
         Task<ApiResponse<List<UserCouponResponse>>> GetUserCoupons(Guid userId);
         Task<ApiResponse<UserCouponResponse>> DeleteUserCoupon(Guid id);
     }

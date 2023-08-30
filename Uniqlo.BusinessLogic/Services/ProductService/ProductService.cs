@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
 using Uniqlo.Core.Keywords;
+using Uniqlo.DataAccess.Repositories.Implements;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
@@ -197,25 +198,11 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             return response;
         }
 
-        public async Task<PagedResponse<ProductResponse>> GetAll(FilterBaseRequest request)
+        public async Task<ApiResponse<List<ProductResponse>>> GetAll()
         {
-            var products = _productRepository.GetBy(p =>
-                (string.IsNullOrEmpty(request.KeyWord) 
-                || p.Name.Contains(request.KeyWord) 
-                || p.NameEn!.Contains(request.KeyWord) 
-                || p.NameVi!.Contains(request.KeyWord))
-            );
-
-            if (!string.IsNullOrEmpty(request.SortBy))
-            {
-                products = _productRepository.SortProducts(products, request.SortBy);
-            }
-
-            products = products.Include(p => p.ProductPrice).Include(p => p.ProductReview);
-
-            var paged = await PagedResponse<Product>.CreateAsync(products, request.PageIndex, request.PageSize);
-            var response = _mapper.Map<PagedResponse<ProductResponse>>(paged);
-            return response;
+            var alls = await _productRepository.GetAllAsync();
+            var response = _mapper.Map<List<ProductResponse>>(alls);
+            return ApiResponse<List<ProductResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<ProductResponse>> GetById(Guid id)

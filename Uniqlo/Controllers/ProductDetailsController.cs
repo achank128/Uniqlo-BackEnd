@@ -17,10 +17,17 @@ namespace Uniqlo.Controllers
             _productDetailService = productDetailService;
         }
 
-        [HttpPost("all")]
-        public async Task<IActionResult> GetAll(FilterBaseRequest request)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            var response = await _productDetailService.GetAll(request);
+            var response = await _productDetailService.GetAll();
+            return Ok(response);
+        }
+
+        [HttpPost("all")]
+        public async Task<IActionResult> Filter(FilterBaseRequest request)
+        {
+            var response = await _productDetailService.Filter(request);
             return Ok(response);
         }
 

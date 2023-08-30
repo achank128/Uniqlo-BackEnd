@@ -77,12 +77,19 @@ namespace Uniqlo.BusinessLogic.Services.UserCouponService
             }
         }
 
-        public async Task<PagedResponse<UserCouponResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<UserCouponResponse>> Filter(FilterBaseRequest request)
         {
             var categories = _userCouponRepository.GetQueryable().Include(s => s.Coupon);
             var paged = await PagedResponse<UserCoupon>.CreateAsync(categories, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<UserCouponResponse>>(paged);
             return response;
+        }
+
+        public async Task<ApiResponse<List<UserCouponResponse>>> GetAll()
+        {
+            var alls = await _userCouponRepository.GetAllAsync();
+            var response = _mapper.Map<List<UserCouponResponse>>(alls);
+            return ApiResponse<List<UserCouponResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<List<UserCouponResponse>>> GetUserCoupons(Guid userId)

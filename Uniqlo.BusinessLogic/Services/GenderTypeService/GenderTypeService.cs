@@ -56,12 +56,19 @@ namespace Uniqlo.BusinessLogic.Services.GenderTypeService
             }
         }
 
-        public async Task<PagedResponse<GenderTypeResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<GenderTypeResponse>> Filter(FilterBaseRequest request)
         {
             var genderTypes = _genderTypeRepository.GetQueryable();
             var paged = await PagedResponse<GenderType>.CreateAsync(genderTypes, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<GenderTypeResponse>>(paged);
             return response;
+        }
+
+        public async Task<ApiResponse<List<GenderTypeResponse>>> GetAll()
+        {
+            var alls = await _genderTypeRepository.GetAllAsync();
+            var response = _mapper.Map<List<GenderTypeResponse>>(alls);
+            return ApiResponse<List<GenderTypeResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<GenderTypeResponse>> GetById(int id)

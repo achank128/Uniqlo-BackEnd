@@ -13,7 +13,8 @@ namespace Uniqlo.BusinessLogic.Services.CollectionService
     public interface ICollectionService
     {
         Task<ApiResponse<CollectionResponse>> Create(CreateCollectionRequest request);
-        Task<PagedResponse<CollectionResponse>> GetAll(FilterBaseRequest request);
+        Task<PagedResponse<CollectionResponse>> Filter(FilterBaseRequest request);
+        Task<ApiResponse<List<CollectionResponse>>> GetAll();
         Task<ApiResponse<CollectionResponse>> GetById(Guid id);
         Task<ApiResponse<CollectionResponse>> Update(UpdateCollectionRequest request);
         Task<ApiResponse<CollectionResponse>> Delete(Guid id);

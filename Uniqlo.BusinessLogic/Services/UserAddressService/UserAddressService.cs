@@ -56,7 +56,7 @@ namespace Uniqlo.BusinessLogic.Services.UserAddressService
             }
         }
 
-        public async Task<PagedResponse<UserAddressResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<UserAddressResponse>> Filter(FilterBaseRequest request)
         {
             var userAddresses = _userAddressRepository.GetQueryable();
             var paged = await PagedResponse<UserAddress>.CreateAsync(userAddresses, request.PageIndex, request.PageSize);
@@ -66,8 +66,8 @@ namespace Uniqlo.BusinessLogic.Services.UserAddressService
 
         public async Task<ApiResponse<List<UserAddressResponse>>> GetAll()
         {
-            var userAddresses = await _userAddressRepository.GetAllAsync();
-            var response = _mapper.Map<List<UserAddressResponse>>(userAddresses);
+            var alls = await _userAddressRepository.GetAllAsync();
+            var response = _mapper.Map<List<UserAddressResponse>>(alls);
             return ApiResponse<List<UserAddressResponse>>.Success(response);
         }
 

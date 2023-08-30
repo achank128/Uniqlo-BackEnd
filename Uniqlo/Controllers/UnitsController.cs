@@ -17,10 +17,17 @@ namespace Uniqlo.Controllers
             _unitService = unitService;
         }
 
-        [HttpPost("all")]
-        public async Task<IActionResult> GetAll(FilterBaseRequest request)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            var response = await _unitService.GetAll(request);
+            var response = await _unitService.GetAll();
+            return Ok(response);
+        }
+
+        [HttpPost("all")]
+        public async Task<IActionResult> Filter(FilterBaseRequest request)
+        {
+            var response = await _unitService.Filter(request);
             return Ok(response);
         }
 

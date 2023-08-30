@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
 using Uniqlo.Core.Keywords;
+using Uniqlo.DataAccess.Repositories.Implements;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
@@ -61,12 +62,19 @@ namespace Uniqlo.BusinessLogic.Services.CouponService
             }
         }
 
-        public async Task<PagedResponse<CouponResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<CouponResponse>> Filter(FilterBaseRequest request)
         {
             var coupons = _couponRepository.GetQueryable();
             var paged = await PagedResponse<Coupon>.CreateAsync(coupons, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<CouponResponse>>(paged);
             return response;
+        }
+
+        public async Task<ApiResponse<List<CouponResponse>>> GetAll()
+        {
+            var alls = await _couponRepository.GetAllAsync();
+            var response = _mapper.Map<List<CouponResponse>>(alls);
+            return ApiResponse<List<CouponResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<CouponResponse>> GetById(Guid id)

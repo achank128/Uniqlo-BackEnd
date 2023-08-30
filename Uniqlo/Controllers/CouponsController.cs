@@ -18,10 +18,17 @@ namespace Uniqlo.Controllers
             _couponService = couponService;
         }
 
-        [HttpPost("all")]
-        public async Task<IActionResult> GetAll(FilterBaseRequest request)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            var response = await _couponService.GetAll(request);
+            var response = await _couponService.GetAll();
+            return Ok(response);
+        }
+
+        [HttpPost("all")]
+        public async Task<IActionResult> Filter(FilterBaseRequest request)
+        {
+            var response = await _couponService.Filter(request);
             return Ok(response);
         }
 

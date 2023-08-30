@@ -12,7 +12,8 @@ namespace Uniqlo.BusinessLogic.Services.GenderTypeService
     public interface IGenderTypeService
     {
         Task<ApiResponse<GenderTypeResponse>> Create(CreateGenderTypeRequest request);
-        Task<PagedResponse<GenderTypeResponse>> GetAll(FilterBaseRequest request);
+        Task<PagedResponse<GenderTypeResponse>> Filter(FilterBaseRequest request);
+        Task<ApiResponse<List<GenderTypeResponse>>> GetAll();
         Task<ApiResponse<GenderTypeResponse>> GetById(int id);
         Task<ApiResponse<GenderTypeResponse>> Update(UpdateGenderTypeRequest request);
         Task<ApiResponse<GenderTypeResponse>> Delete(int id);

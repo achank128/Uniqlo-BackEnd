@@ -13,7 +13,8 @@ namespace Uniqlo.BusinessLogic.Services.UnitService
     public interface IUnitService
     {
         Task<ApiResponse<UnitResponse>> Create(CreateUnitRequest request);
-        Task<PagedResponse<UnitResponse>> GetAll(FilterBaseRequest request);
+        Task<PagedResponse<UnitResponse>> Filter(FilterBaseRequest request);
+        Task<ApiResponse<List<UnitResponse>>> GetAll();
         Task<ApiResponse<UnitResponse>> GetById(int id);
         Task<ApiResponse<UnitResponse>> Update(UpdateUnitRequest request);
         Task<ApiResponse<UnitResponse>> Delete(int id);

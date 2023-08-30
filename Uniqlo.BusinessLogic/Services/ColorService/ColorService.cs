@@ -56,12 +56,19 @@ namespace Uniqlo.BusinessLogic.Services.ColorService
             }
         }
 
-        public async Task<PagedResponse<ColorResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<ColorResponse>> Filter(FilterBaseRequest request)
         {
             var colors = _colorRepository.GetQueryable();
             var paged = await PagedResponse<Color>.CreateAsync(colors, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<ColorResponse>>(paged);
             return response;
+        }
+
+        public async Task<ApiResponse<List<ColorResponse>>> GetAll()
+        {
+            var alls = await _colorRepository.GetAllAsync();
+            var response = _mapper.Map<List<ColorResponse>>(alls);
+            return ApiResponse<List<ColorResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<ColorResponse>> GetById(int id)

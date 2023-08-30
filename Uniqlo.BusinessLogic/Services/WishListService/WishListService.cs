@@ -10,6 +10,7 @@ using Uniqlo.Core.Keywords;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
 using Uniqlo.Models.Models;
+using Uniqlo.Models.RequestModels.WishList;
 using Uniqlo.Models.ResponseModels;
 
 namespace Uniqlo.BusinessLogic.Services.WishListService
@@ -25,14 +26,9 @@ namespace Uniqlo.BusinessLogic.Services.WishListService
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<WishListResponse>> AddWishList(Guid userId, Guid productId)
+        public async Task<ApiResponse<WishListResponse>> Create(CreateWishListRequest request)
         {
-            WishList wishList = new WishList
-            {
-                Id = Guid.NewGuid(),
-                UserId = userId,
-                ProductId = productId
-            };
+            var wishList = _mapper.Map<WishList>(request);
             _wishListRepository.Add(wishList);
 
             if (await _wishListRepository.SaveAsync())
@@ -61,12 +57,19 @@ namespace Uniqlo.BusinessLogic.Services.WishListService
             }
         }
 
-        public async Task<PagedResponse<WishListResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<WishListResponse>> Filter(FilterBaseRequest request)
         {
             var usercoupons = _wishListRepository.GetQueryable().Include(s => s.Product);
             var paged = await PagedResponse<WishList>.CreateAsync(usercoupons, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<WishListResponse>>(paged);
             return response;
+        }
+
+        public async Task<ApiResponse<List<WishListResponse>>> GetAll()
+        {
+            var alls = await _wishListRepository.GetAllAsync();
+            var response = _mapper.Map<List<WishListResponse>>(alls);
+            return ApiResponse<List<WishListResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<List<WishListResponse>>> GetUserWishList(Guid userId)

@@ -23,10 +23,10 @@ namespace Uniqlo.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("all")]
-        public async Task<IActionResult> GetAll(FilterBaseRequest request)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            var response = await _productService.GetAll(request);
+            var response = await _productService.GetAll();
             return Ok(response);
         }
 

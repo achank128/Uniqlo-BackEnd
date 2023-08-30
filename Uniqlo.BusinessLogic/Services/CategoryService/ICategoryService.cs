@@ -12,7 +12,7 @@ namespace Uniqlo.BusinessLogic.Services.CategoryService
     public interface ICategoryService
     {
         Task<ApiResponse<CategoryResponse>> Create(CreateCategoryRequest request);
-        Task<PagedResponse<CategoryResponse>> GetAll(FilterBaseRequest request);
+        Task<PagedResponse<CategoryResponse>> Filter(FilterBaseRequest request);
         Task<ApiResponse<List<CategoryResponse>>> GetAll();
         Task<ApiResponse<CategoryResponse>> GetById(Guid id);
         Task<ApiResponse<CategoryResponse>> Update(UpdateCategoryRequest request);

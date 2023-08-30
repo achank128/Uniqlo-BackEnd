@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Uniqlo.BusinessLogic.Services.UserService;
 using Uniqlo.BusinessLogic.Services.WishListService;
 using Uniqlo.Models.Models;
+using Uniqlo.Models.RequestModels.WishList;
 
 namespace Uniqlo.Controllers
 {
@@ -19,10 +20,17 @@ namespace Uniqlo.Controllers
             _wishListService = wishListService;
         }
 
-        [HttpPost("all")]
-        public async Task<IActionResult> GetAll(FilterBaseRequest request)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            var response = await _wishListService.GetAll(request);
+            var response = await _wishListService.GetAll();
+            return Ok(response);
+        }
+
+        [HttpPost("all")]
+        public async Task<IActionResult> Filter(FilterBaseRequest request)
+        {
+            var response = await _wishListService.Filter(request);
             return Ok(response);
         }
 
@@ -37,10 +45,9 @@ namespace Uniqlo.Controllers
 
         [HttpPost("wishlist/{productId}")]
         [Authorize]
-        public async Task<IActionResult> GetMyWishList(Guid productId)
+        public async Task<IActionResult> GetMyWishList(CreateWishListRequest request)
         {
-            Guid userId = new Guid(User.FindFirstValue(ClaimTypes.Sid));
-            var response = await _wishListService.AddWishList(userId, productId);
+            var response = await _wishListService.Create(request);
             return Ok(response);
         }
     }

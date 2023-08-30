@@ -13,7 +13,8 @@ namespace Uniqlo.BusinessLogic.Services.SizeService
     public interface ISizeService
     {
         Task<ApiResponse<SizeResponse>> Create(CreateSizeRequest request);
-        Task<PagedResponse<SizeResponse>> GetAll(FilterBaseRequest request);
+        Task<PagedResponse<SizeResponse>> Filter(FilterBaseRequest request);
+        Task<ApiResponse<List<SizeResponse>>> GetAll();
         Task<ApiResponse<SizeResponse>> GetById(int id);
         Task<ApiResponse<SizeResponse>> Update(UpdateSizeRequest request);
         Task<ApiResponse<SizeResponse>> Delete(int id);

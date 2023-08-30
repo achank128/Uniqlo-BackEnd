@@ -19,11 +19,18 @@ namespace Uniqlo.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var response = await _userService.GetAll();
+            return Ok(response);
+        }
+
         [HttpPost("all")]
         //[Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> GetUsers(FilterBaseRequest request)
+        public async Task<IActionResult> Filter(FilterBaseRequest request)
         {
-            var response = await _userService.GetAll(request);
+            var response = await _userService.Filter(request);
             return Ok(response);
         }
 

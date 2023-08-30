@@ -11,7 +11,8 @@ namespace Uniqlo.BusinessLogic.Services.UserService
 {
     public interface IUserService
     {
-        Task<PagedResponse<UserResponse>> GetAll(FilterBaseRequest request);
+        Task<PagedResponse<UserResponse>> Filter(FilterBaseRequest request);
+        Task<ApiResponse<List<UserResponse>>> GetAll();
         Task<ApiResponse<UserResponse>> GetById(Guid id);
     }
 }

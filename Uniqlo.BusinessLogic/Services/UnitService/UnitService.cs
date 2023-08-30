@@ -55,12 +55,19 @@ namespace Uniqlo.BusinessLogic.Services.UnitService
             }
         }
 
-        public async Task<PagedResponse<UnitResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<UnitResponse>> Filter(FilterBaseRequest request)
         {
             var units = _unitRepository.GetQueryable();
             var paged = await PagedResponse<Unit>.CreateAsync(units, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<UnitResponse>>(paged);
             return response;
+        }
+
+        public async Task<ApiResponse<List<UnitResponse>>> GetAll()
+        {
+            var alls = await _unitRepository.GetAllAsync();
+            var response = _mapper.Map<List<UnitResponse>>(alls);
+            return ApiResponse<List<UnitResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<UnitResponse>> GetById(int id)

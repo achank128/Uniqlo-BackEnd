@@ -69,12 +69,19 @@ namespace Uniqlo.BusinessLogic.Services.CartService
             }
         }
 
-        public async Task<PagedResponse<CartResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<CartResponse>> Filter(FilterBaseRequest request)
         {
             var carts = _cartRepository.GetQueryable();
             var paged = await PagedResponse<Cart>.CreateAsync(carts, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<CartResponse>>(paged);
             return response;
+        }
+
+        public async Task<ApiResponse<List<CartResponse>>> GetAll()
+        {
+            var alls = await _cartRepository.GetAllAsync();
+            var response = _mapper.Map<List<CartResponse>>(alls);
+            return ApiResponse<List<CartResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<CartResponse>> GetById(Guid id)

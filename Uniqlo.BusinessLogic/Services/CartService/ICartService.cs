@@ -14,7 +14,8 @@ namespace Uniqlo.BusinessLogic.Services.CartService
     public interface ICartService
     {
         Task<ApiResponse<CartResponse>> Create(CreateCartRequest request);
-        Task<PagedResponse<CartResponse>> GetAll(FilterBaseRequest request);
+        Task<PagedResponse<CartResponse>> Filter(FilterBaseRequest request);
+        Task<ApiResponse<List<CartResponse>>> GetAll();
         Task<ApiResponse<CartResponse>> GetById(Guid id);
         Task<ApiResponse<CartResponse>> GetByUser();
         Task<ApiResponse<CartResponse>> Update(UpdateCartRequest request);
