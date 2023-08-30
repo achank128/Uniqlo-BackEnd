@@ -18,6 +18,7 @@ using Uniqlo.BusinessLogic.Services.OrderService;
 using Uniqlo.BusinessLogic.Services.PaymentService;
 using Uniqlo.BusinessLogic.Services.ProductDetailService;
 using Uniqlo.BusinessLogic.Services.ProductService;
+using Uniqlo.BusinessLogic.Services.RegionService;
 using Uniqlo.BusinessLogic.Services.ShipmentService;
 using Uniqlo.BusinessLogic.Services.SizeService;
 using Uniqlo.BusinessLogic.Services.UnitService;
@@ -63,6 +64,7 @@ namespace Uniqlo.BusinessLogic
             services.AddScoped<IShipmentService, ShipmentService>();
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IUserAddressService, UserAddressService>();
+            services.AddScoped<IRegionService, RegionService>();
         }
 
         private static void RegisterAutoMapper(this IServiceCollection services)

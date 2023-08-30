@@ -44,6 +44,11 @@ namespace Uniqlo.Models.Context
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<UserCoupon> UserCoupons { get; set; }
         public virtual DbSet<WishList> WishLists { get; set; }
+        public virtual DbSet<AdministrativeRegion> AdministrativeRegions { get; set; }
+        public virtual DbSet<AdministrativeUnit> AdministrativeUnits { get; set; }
+        public virtual DbSet<Province> Provinces { get; set; }
+        public virtual DbSet<District> Districts { get; set; }
+        public virtual DbSet<Ward> Wards { get; set; }
         #endregion
 
 
@@ -152,6 +157,9 @@ namespace Uniqlo.Models.Context
             modelBuilder.Entity<UserAddress>(entity =>
             {
                 entity.HasOne(d => d.User).WithMany(p => p.UserAddresses).HasForeignKey(d => d.UserId).OnDelete(DeleteBehavior.ClientSetNull);
+                entity.HasOne(d => d.Province).WithMany(p => p.UserAddresses).HasForeignKey(d => d.ProvinceCode).OnDelete(DeleteBehavior.ClientSetNull);
+                entity.HasOne(d => d.District).WithMany(p => p.UserAddresses).HasForeignKey(d => d.DistrictCode).OnDelete(DeleteBehavior.ClientSetNull);
+                entity.HasOne(d => d.Ward).WithMany(p => p.UserAddresses).HasForeignKey(d => d.WardCode).OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<UserCoupon>(entity =>
@@ -164,6 +172,24 @@ namespace Uniqlo.Models.Context
             {
                 entity.HasOne(d => d.User).WithMany(p => p.WishLists).HasForeignKey(d => d.UserId).OnDelete(DeleteBehavior.ClientSetNull);
                 entity.HasOne(d => d.Product).WithMany(p => p.WishLists).HasForeignKey(d => d.ProductId).OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<Province>(entity =>
+            {
+                entity.HasOne(d => d.AdministrativeUnit).WithMany(p => p.Provinces).HasForeignKey(d => d.AdministrativeUnitId).OnDelete(DeleteBehavior.ClientSetNull);
+                entity.HasOne(d => d.AdministrativeRegion).WithMany(p => p.Provinces).HasForeignKey(d => d.AdministrativeRegionId).OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<District>(entity =>
+            {
+                entity.HasOne(d => d.Province).WithMany(p => p.Districts).HasForeignKey(d => d.ProvinceCode).OnDelete(DeleteBehavior.ClientSetNull);
+                entity.HasOne(d => d.AdministrativeUnit).WithMany(p => p.Districts).HasForeignKey(d => d.AdministrativeUnitId).OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<Ward>(entity =>
+            {
+                entity.HasOne(d => d.District).WithMany(p => p.Wards).HasForeignKey(d => d.DistrictCode).OnDelete(DeleteBehavior.ClientSetNull);
+                entity.HasOne(d => d.AdministrativeUnit).WithMany(p => p.Wards).HasForeignKey(d => d.AdministrativeUnitId).OnDelete(DeleteBehavior.ClientSetNull);
             });
 
 

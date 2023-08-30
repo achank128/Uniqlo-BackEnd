@@ -46,7 +46,7 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
-        [HttpPost("cretefull")]
+        [HttpPost("createfull")]
         public async Task<IActionResult> CreateFull(CreateOrderFullRequest request)
         {
             var response = await _orderService.CreateFull(request);

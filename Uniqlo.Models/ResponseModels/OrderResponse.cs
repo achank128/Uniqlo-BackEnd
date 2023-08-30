@@ -29,9 +29,9 @@ namespace Uniqlo.Models.ResponseModels
 
         public virtual UserResponse User { get; set; }
         public virtual CouponResponse? Coupon { get; set; }
-        public virtual List<OrderItem> OrderItems { get; set; }
-        public virtual List<Payment> Payments { get; set; } 
-        public virtual List<Shipment> Shipments { get; set; }
+        public virtual List<OrderItemResponse> OrderItems { get; set; }
+        public virtual List<PaymentResponse> Payments { get; set; } 
+        public virtual List<ShipmentResponse> Shipments { get; set; }
 
     }
 }

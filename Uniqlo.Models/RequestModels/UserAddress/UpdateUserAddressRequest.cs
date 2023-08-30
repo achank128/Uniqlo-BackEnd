@@ -13,9 +13,9 @@ namespace Uniqlo.Models.RequestModels.UserAddress
         public string? Title { get; set; }
         public string FullName { get; set; }
         public string Phone { get; set; }
-        public string ProvinceId { get; set; }
-        public string DistrictId { get; set; }
-        public string WardId { get; set; }
+        public string ProvinceCode { get; set; }
+        public string DistrictCode { get; set; }
+        public string WardCode { get; set; }
         public string Address { get; set; }
         public string? AddressDetail { get; set; }
         public string? Note { get; set; }
