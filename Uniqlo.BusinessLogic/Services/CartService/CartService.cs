@@ -86,7 +86,7 @@ namespace Uniqlo.BusinessLogic.Services.CartService
 
         public async Task<ApiResponse<CartResponse>> GetById(Guid id)
         {
-            var cart = await _cartRepository.GetCartByIdAsync(id);
+            var cart = await _cartRepository.GetCartById(id);
             if (cart == null) throw new NotFoundException(Common.NotFound);
 
             var response = _mapper.Map<CartResponse>(cart);
@@ -107,7 +107,7 @@ namespace Uniqlo.BusinessLogic.Services.CartService
                 _cartRepository.Add(newCart);
                 await _cartRepository.SaveAsync();
 
-                var cart = await _cartRepository.GetCartByIdAsync(newCart.Id);
+                var cart = await _cartRepository.GetCartById(newCart.Id);
                 if (cart == null) throw new NotFoundException(Common.NotFound);
 
                 var res = _mapper.Map<CartResponse>(cart);

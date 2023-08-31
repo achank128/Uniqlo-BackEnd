@@ -26,7 +26,7 @@ namespace Uniqlo.DataAccess.Repositories.Implements
             _context.SaveChanges();
         }
 
-        public async Task<Cart> GetCartByIdAsync(Guid id)
+        public async Task<Cart> GetCartById(Guid id)
         {
             var cart = await _context.Carts
                 .Where(c => c.Id == id)

@@ -10,6 +10,7 @@ namespace Uniqlo.DataAccess.Repositories.Interfaces
 {
     public interface IOrderRepository : IRepositoryBase<Order>
     {
-        Task<Order> GetOrderByIdAsync(Guid id);
+        Task<Order> GetOrderById(Guid id);
+        Task<List<Order>> GetOrderByUser(Guid userId);
     }
 }

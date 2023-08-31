@@ -8,10 +8,9 @@ using Uniqlo.Models.EntityModels;
 
 namespace Uniqlo.DataAccess.Repositories.Interfaces
 {
-    public interface ICartRepository : IRepositoryBase<Cart>
+    public interface IOrderItemRepository : IRepositoryBase<OrderItem>
     {
-        Task<Cart> GetCartById(Guid id);
-        Task<Cart> GetCartByUser(Guid userId);
-        void DeleteItemsFormCart(Guid id);
+        Task<OrderItem> GetOrderItemById(Guid id);
+        Task<List<OrderItem>> GetOrderItemByOrder(Guid orderId);
     }
 }

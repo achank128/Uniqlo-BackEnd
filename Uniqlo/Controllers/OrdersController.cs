@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Uniqlo.BusinessLogic.Services.OrderService;
-using Uniqlo.Models.Models;
 using Uniqlo.Models.RequestModels;
 using Uniqlo.Models.RequestModels.Order;
 
@@ -18,10 +19,17 @@ namespace Uniqlo.Controllers
             _orderService = orderService;
         }
 
-        [HttpPost("all")]
-        public async Task<IActionResult> GetAll(FilterBaseRequest request)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            var response = await _orderService.GetAll(request);
+            var response = await _orderService.GetAll();
+            return Ok(response);
+        }
+
+        [HttpPost("all")]
+        public async Task<IActionResult> Filter(FilterOrderRequest request)
+        {
+            var response = await _orderService.Filter(request);
             return Ok(response);
         }
 
@@ -29,6 +37,22 @@ namespace Uniqlo.Controllers
         public async Task<IActionResult> GetDetails(Guid id)
         {
             var response = await _orderService.GetOrderDetails(id);
+            return Ok(response);
+        }
+
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetOrderByUser(Guid userId)
+        {
+            var response = await _orderService.GetOrderByUser(userId);
+            return Ok(response);
+        }
+
+        [HttpGet("myorders")]
+        [Authorize]
+        public async Task<IActionResult> GetMyOrders()
+        {
+            Guid userId = new Guid(User.FindFirstValue(ClaimTypes.Sid));
+            var response = await _orderService.GetOrderByUser(userId);
             return Ok(response);
         }
 

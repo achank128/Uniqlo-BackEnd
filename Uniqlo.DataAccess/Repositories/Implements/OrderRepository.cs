@@ -19,7 +19,7 @@ namespace Uniqlo.DataAccess.Repositories.Implements
             _context = context;
         }
 
-        public async Task<Order> GetOrderByIdAsync(Guid id)
+        public async Task<Order> GetOrderById(Guid id)
         {
             var order = await _context.Orders
                .Where(o => o.Id == id)
@@ -33,6 +33,17 @@ namespace Uniqlo.DataAccess.Repositories.Implements
                .ThenInclude(pd => pd.Product)
                .SingleOrDefaultAsync();
             return order;
+        }
+
+        public async Task<List<Order>> GetOrderByUser(Guid userId)
+        {
+            var orders = await _context.Orders
+               .Where(o => o.UserId == userId)
+               .Include(o => o.OrderItems)
+               .ThenInclude(oi => oi.ProductDetail)
+               .ThenInclude(pd => pd.Product)
+               .ToListAsync();
+            return orders;
         }
     }
 }

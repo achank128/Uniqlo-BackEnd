@@ -19,7 +19,7 @@ namespace Uniqlo.Models.ResponseModels
         public string? CreditCardNumber { get; set; }
         public string? CreditCardNumberDisplay { get; set; }
         public string? Note { get; set; }
-        public string? Status { get; set; }
+        public string? Status { get; set; } 
         public DateTime? CreatedDate { get; set; } 
         public DateTime? UpdatedDate { get; set; } 
 

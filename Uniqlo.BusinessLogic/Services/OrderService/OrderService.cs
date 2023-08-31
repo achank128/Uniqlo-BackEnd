@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
 using Uniqlo.Core.Enums;
 using Uniqlo.Core.Keywords;
-using Uniqlo.DataAccess.Repositories.Implements;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
@@ -144,22 +143,33 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
             }
         }
 
-        public Task<ApiResponse<OrderResponse>> Delete(Guid id, DeleteRequest request)
+        public async Task<ApiResponse<OrderResponse>> Delete(Guid id, DeleteRequest request)
         {
-            throw new NotImplementedException();
+            var order = await _orderRepository.GetByIdAsync(id);
+            if (order == null) throw new NotFoundException(Common.NotFound);
+            order.DeleteStatus = request.DeleteStatus;
+            if (await _orderRepository.SaveAsync())
+            {
+                return ApiResponse<OrderResponse>.Success(Common.DeleteSuccess);
+            }
+            else
+            {
+                throw new BadRequestException(Common.DeleteFailure);
+            }
         }
 
-        public Task<PagedResponse<OrderResponse>> Filter(FilterOrderRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<PagedResponse<OrderResponse>> GetAll(FilterBaseRequest request)
+        public async Task<PagedResponse<OrderResponse>> Filter(FilterOrderRequest request)
         {
             var orders = _orderRepository.GetQueryable();
             var paged = await PagedResponse<Order>.CreateAsync(orders, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<OrderResponse>>(paged);
             return response;
+        }
+        public async Task<ApiResponse<List<OrderResponse>>> GetAll()
+        {
+            var alls = await _orderRepository.GetAllAsync();
+            var response = _mapper.Map<List<OrderResponse>>(alls);
+            return ApiResponse<List<OrderResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<OrderResponse>> GetById(Guid id)
@@ -170,9 +180,17 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
             return ApiResponse<OrderResponse>.Success(response);
         }
 
+        public async Task<ApiResponse<List<OrderResponse>>> GetOrderByUser(Guid userId)
+        {
+            var order = await _orderRepository.GetOrderByUser(userId);
+            if (order == null) throw new NotFoundException(Common.NotFound);
+            var response = _mapper.Map<List<OrderResponse>>(order);
+            return ApiResponse<List<OrderResponse>>.Success(response);
+        }
+
         public async Task<ApiResponse<OrderResponse>> GetOrderDetails(Guid id)
         {
-            var order = await _orderRepository.GetOrderByIdAsync(id);
+            var order = await _orderRepository.GetOrderById(id);
             if (order == null) throw new NotFoundException(Common.NotFound);
             var response = _mapper.Map<OrderResponse>(order);
             return ApiResponse<OrderResponse>.Success(response);

@@ -15,7 +15,8 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
         Task<ApiResponse<OrderResponse>> Create(CreateOrderRequest request);
         Task<ApiResponse<OrderResponse>> CreateFull(CreateOrderFullRequest request);
         Task<PagedResponse<OrderResponse>> Filter(FilterOrderRequest request);
-        Task<PagedResponse<OrderResponse>> GetAll(FilterBaseRequest request);
+        Task<ApiResponse<List<OrderResponse>>> GetAll();
+        Task<ApiResponse<List<OrderResponse>>> GetOrderByUser(Guid userId);
         Task<ApiResponse<OrderResponse>> GetById(Guid id);
         Task<ApiResponse<OrderResponse>> GetOrderDetails(Guid id);
         Task<ApiResponse<OrderResponse>> Update(UpdateOrderRequest request);
