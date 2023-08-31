@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Uniqlo.BusinessLogic.Exceptions;
+using Uniqlo.Core.Keywords;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.Context;
@@ -17,6 +19,16 @@ namespace Uniqlo.DataAccess.Repositories.Implements
         public CartRepository(UniqloContext context) : base(context)
         {
             _context = context;
+        }
+
+        public void CreateCart(Cart cart)
+        {
+            var userCart = _context.Carts.FirstOrDefault(s => s.UserId == cart.UserId);
+            if (userCart != null)
+            {
+                throw new BadRequestException(CartKeywords.UserHadCart);
+            }
+            _context.Carts.Add(cart);
         }
 
         public void DeleteItemsFormCart(Guid id)

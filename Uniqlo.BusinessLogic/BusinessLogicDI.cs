@@ -9,6 +9,7 @@ using Uniqlo.BusinessLogic.Services.AuthService;
 using Uniqlo.BusinessLogic.Services.CartItemService;
 using Uniqlo.BusinessLogic.Services.CartService;
 using Uniqlo.BusinessLogic.Services.CategoryService;
+using Uniqlo.BusinessLogic.Services.ClaimService;
 using Uniqlo.BusinessLogic.Services.CollectionService;
 using Uniqlo.BusinessLogic.Services.ColorService;
 using Uniqlo.BusinessLogic.Services.CouponService;
@@ -26,7 +27,6 @@ using Uniqlo.BusinessLogic.Services.UserAddressService;
 using Uniqlo.BusinessLogic.Services.UserCouponService;
 using Uniqlo.BusinessLogic.Services.UserService;
 using Uniqlo.BusinessLogic.Services.WishListService;
-using Uniqlo.BusinessLogic.Shared.ClaimService;
 
 namespace Uniqlo.BusinessLogic
 {

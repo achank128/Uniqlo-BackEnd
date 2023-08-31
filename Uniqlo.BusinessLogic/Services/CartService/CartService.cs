@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
-using Uniqlo.BusinessLogic.Shared.ClaimService;
+using Uniqlo.BusinessLogic.Services.ClaimService;
 using Uniqlo.Core.Keywords;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
@@ -41,7 +41,7 @@ namespace Uniqlo.BusinessLogic.Services.CartService
         public async Task<ApiResponse<CartResponse>> Create(CreateCartRequest request)
         {
             var cart = _mapper.Map<Cart>(request);
-            _cartRepository.Add(cart);
+             _cartRepository.CreateCart(cart);
 
             if (await _cartRepository.SaveAsync())
             {
@@ -93,10 +93,9 @@ namespace Uniqlo.BusinessLogic.Services.CartService
             return ApiResponse<CartResponse>.Success(response);
         }
 
-        public async Task<ApiResponse<CartResponse>> GetByUser()
+        public async Task<ApiResponse<CartResponse>> GetByUser(Guid userId)
         {
-            var userId = _claimService.GetUserId();
-            var userCart = _cartRepository.GetCartByUser(userId);
+            var userCart = await _cartRepository.GetCartByUser(userId);
             if(userCart == null)
             {
                 Cart newCart = new Cart { 

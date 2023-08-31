@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Uniqlo.BusinessLogic.Services.CartService;
+using Uniqlo.BusinessLogic.Services.ClaimService;
 using Uniqlo.Models.Models;
 using Uniqlo.Models.RequestModels;
 using Uniqlo.Models.RequestModels.Cart;
@@ -13,10 +14,12 @@ namespace Uniqlo.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
+        private readonly IClaimService _claimService;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, IClaimService claimService)
         {
             _cartService = cartService;
+            _claimService = claimService;
         }
 
         [HttpGet]
@@ -40,11 +43,18 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetCartByUser(Guid userId)
+        {
+            var response = await _cartService.GetByUser(userId);
+            return Ok(response);
+        }
+
         [HttpGet("mycart")]
         [Authorize]
         public async Task<IActionResult> GetMyCart()
         {
-            var response = await _cartService.GetByUser();
+            var response = await _cartService.GetByUser(_claimService.GetUserId());
             return Ok(response);
         }
 

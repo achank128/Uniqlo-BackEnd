@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Uniqlo.BusinessLogic.Exceptions;
-using Uniqlo.BusinessLogic.Shared.ClaimService;
+using Uniqlo.BusinessLogic.Services.ClaimService;
 using Uniqlo.Core.Keywords;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;

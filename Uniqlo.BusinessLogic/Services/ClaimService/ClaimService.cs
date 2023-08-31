@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Uniqlo.BusinessLogic.Shared.ClaimService
+namespace Uniqlo.BusinessLogic.Services.ClaimService
 {
     public class ClaimService : IClaimService
     {
@@ -32,7 +32,7 @@ namespace Uniqlo.BusinessLogic.Shared.ClaimService
         public string GetUserEmail()
         {
             var email = GetClaim("emailaddress");
-            if(email == null) return "";
+            if (email == null) return "";
             return email;
         }
 
