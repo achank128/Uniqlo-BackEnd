@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Uniqlo.BusinessLogic.Services.ClaimService
+namespace Uniqlo.BusinessLogic.Services.Shared.ClaimService
 {
     public interface IClaimService
     {

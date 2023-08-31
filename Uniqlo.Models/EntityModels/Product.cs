@@ -45,6 +45,7 @@ namespace Uniqlo.Models.EntityModels
         public virtual Collection? Collection { get; set; }
 
         public virtual ICollection<ProductSize> ProductSizes { get; set; } = new List<ProductSize>();
+        public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
         public virtual ICollection<ProductColor> ProductColors { get; set; } = new List<ProductColor>();
         public virtual ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
         public virtual ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();

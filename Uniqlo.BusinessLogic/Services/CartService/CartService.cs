@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
-using Uniqlo.BusinessLogic.Services.ClaimService;
+using Uniqlo.BusinessLogic.Services.Shared.ClaimService;
 using Uniqlo.Core.Keywords;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;

@@ -9,7 +9,7 @@ using Uniqlo.BusinessLogic.Services.AuthService;
 using Uniqlo.BusinessLogic.Services.CartItemService;
 using Uniqlo.BusinessLogic.Services.CartService;
 using Uniqlo.BusinessLogic.Services.CategoryService;
-using Uniqlo.BusinessLogic.Services.ClaimService;
+using Uniqlo.BusinessLogic.Services.CollectionPostService;
 using Uniqlo.BusinessLogic.Services.CollectionService;
 using Uniqlo.BusinessLogic.Services.ColorService;
 using Uniqlo.BusinessLogic.Services.CouponService;
@@ -18,8 +18,11 @@ using Uniqlo.BusinessLogic.Services.OderItemService;
 using Uniqlo.BusinessLogic.Services.OrderService;
 using Uniqlo.BusinessLogic.Services.PaymentService;
 using Uniqlo.BusinessLogic.Services.ProductDetailService;
+using Uniqlo.BusinessLogic.Services.ProductImageService;
 using Uniqlo.BusinessLogic.Services.ProductService;
 using Uniqlo.BusinessLogic.Services.RegionService;
+using Uniqlo.BusinessLogic.Services.Shared.ClaimService;
+using Uniqlo.BusinessLogic.Services.Shared.FileUploadService;
 using Uniqlo.BusinessLogic.Services.ShipmentService;
 using Uniqlo.BusinessLogic.Services.SizeService;
 using Uniqlo.BusinessLogic.Services.UnitService;
@@ -65,6 +68,9 @@ namespace Uniqlo.BusinessLogic
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IUserAddressService, UserAddressService>();
             services.AddScoped<IRegionService, RegionService>();
+            services.AddScoped<IProductImageService, ProductImageService>();
+            services.AddScoped<ICollectionPostService, CollectionPostService>();
+            services.AddScoped<IFileUploadService, FileUploadService>();
         }
 
         private static void RegisterAutoMapper(this IServiceCollection services)

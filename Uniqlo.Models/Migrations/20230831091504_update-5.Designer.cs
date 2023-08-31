@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Uniqlo.Models.Context;
 
@@ -11,9 +12,10 @@ using Uniqlo.Models.Context;
 namespace Uniqlo.Models.Migrations
 {
     [DbContext(typeof(UniqloContext))]
-    partial class UniqloContextModelSnapshot : ModelSnapshot
+    [Migration("20230831091504_update-5")]
+    partial class update5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -285,6 +287,10 @@ namespace Uniqlo.Models.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -296,10 +302,6 @@ namespace Uniqlo.Models.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TitleVi")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")

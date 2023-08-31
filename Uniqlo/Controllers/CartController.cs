@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Uniqlo.BusinessLogic.Services.CartService;
-using Uniqlo.BusinessLogic.Services.ClaimService;
+using Uniqlo.BusinessLogic.Services.Shared.ClaimService;
 using Uniqlo.Models.Models;
 using Uniqlo.Models.RequestModels;
 using Uniqlo.Models.RequestModels.Cart;
@@ -22,6 +22,10 @@ namespace Uniqlo.Controllers
             _claimService = claimService;
         }
 
+        /// <summary>
+        /// Lấy tất cả giỏ hàng
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -29,6 +33,11 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Lọc giỏ hàng
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("all")]
         public async Task<IActionResult> Filter(FilterBaseRequest request)
         {
@@ -36,6 +45,11 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Lấy 1 giỏ hàng theo id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -43,6 +57,11 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Lấy giỏ hàng theo user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetCartByUser(Guid userId)
         {
@@ -50,6 +69,10 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Lấy giỏi hàng của tôi
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("mycart")]
         [Authorize]
         public async Task<IActionResult> GetMyCart()
@@ -58,6 +81,11 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Tạo giỏ hàng
+        /// </summary>
+        /// <param name="request">CreateCartRequest</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Create(CreateCartRequest request)
         {
@@ -65,6 +93,11 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Sửa giỏ hàng
+        /// </summary>
+        /// <param name="request">UpdateCartRequest</param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<IActionResult> Update(UpdateCartRequest request)
         {
@@ -72,6 +105,12 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Xóa giỏ hàng
+        /// </summary>
+        /// <param name="id">Guid</param>
+        /// <param name="request">DeleteRequest</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id, DeleteRequest request)
         {

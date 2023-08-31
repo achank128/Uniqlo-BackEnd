@@ -16,7 +16,11 @@ namespace Uniqlo.Controllers
             _authService = authService;
         }
 
-
+        /// <summary>
+        /// Đăng ký tài khoản
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegisterRequest request)
         {
@@ -24,6 +28,11 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Đăng nhập
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginRequest request)
         {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Uniqlo.Models.EntityModels
+namespace Uniqlo.Models.RequestModels.ProductImage
 {
-    public class ProductImages
+    public class UpdateProductImageRequest
     {
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }

@@ -35,6 +35,7 @@ namespace Uniqlo.Models.Context
         public virtual DbSet<ProductPrice> ProductPrices { get; set; }
         public virtual DbSet<ProductReview> ProductReviews { get; set; }
         public virtual DbSet<ProductSize> ProductSizes { get; set; }
+        public virtual DbSet<ProductImage> ProductImages { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<Shipment> Shipments { get; set; }
         public virtual DbSet<Size> Sizes { get; set; }
@@ -135,6 +136,11 @@ namespace Uniqlo.Models.Context
             {
                 entity.HasOne(d => d.Product).WithMany(p => p.ProductSizes).HasForeignKey(d => d.ProductId).OnDelete(DeleteBehavior.ClientSetNull);
                 entity.HasOne(d => d.Size).WithMany(p => p.ProductSizes).HasForeignKey(d => d.SizeId).OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<ProductImage>(entity =>
+            {
+                entity.HasOne(d => d.Product).WithMany(p => p.ProductImages).HasForeignKey(d => d.ProductId).OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Review>(entity =>

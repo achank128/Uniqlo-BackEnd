@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Uniqlo.BusinessLogic.Services.ClaimService
+namespace Uniqlo.BusinessLogic.Services.Shared.ClaimService
 {
     public class ClaimService : IClaimService
     {
