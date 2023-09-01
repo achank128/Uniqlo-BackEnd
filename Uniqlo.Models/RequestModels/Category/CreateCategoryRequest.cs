@@ -14,6 +14,8 @@ namespace Uniqlo.Models.RequestModels.Category
         public string? Description { get; set; }
         public string? DescriptionEn { get; set; }
         public string? DescriptionVi { get; set; }
+        public int? Column { get; set; }
+        public int? Position { get; set; }
         public Guid? ParentId { get; set; }
         public int GenderTypeId { get; set; }
     }

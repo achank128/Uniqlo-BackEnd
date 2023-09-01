@@ -18,6 +18,8 @@ namespace Uniqlo.Models.EntityModels
         public string? Description { get; set; }
         public string? DescriptionEn { get; set; }
         public string? DescriptionVi { get; set; }
+        public int? Column { get; set; }
+        public int? Position { get; set; }
         public Guid? ParentId { get; set; }
         public int GenderTypeId { get; set; }
         public DateTime? CreatedDate { get; set; } = DateTime.Now;
@@ -27,6 +29,7 @@ namespace Uniqlo.Models.EntityModels
         public virtual GenderType GenderType { get; set; }
 
         public virtual ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
+        public virtual ICollection<Category> Children { get; set; } = new List<Category>();
 
     }
 }

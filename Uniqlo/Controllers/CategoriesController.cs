@@ -31,6 +31,13 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        [HttpGet("genderType/{id}")]
+        public async Task<IActionResult> GetByGenderType(int id)
+        {
+            var response = await _categoryService.GetDisplayByGendeType(id);
+            return Ok(response);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {

@@ -16,9 +16,15 @@ namespace Uniqlo.Models.ResponseModels
         public string? Description { get; set; }
         public string? DescriptionEn { get; set; }
         public string? DescriptionVi { get; set; }
+        public int? Column { get; set; }
+        public int? Position { get; set; }
         public Guid? ParentId { get; set; }
         public int GenderTypeId { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
         public virtual GenderType GenderType { get; set; }
+        public virtual List<CategoryResponse>? Children { get; set; }
+
     }
 }

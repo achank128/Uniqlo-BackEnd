@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Uniqlo.Models.Context;
 
@@ -11,9 +12,10 @@ using Uniqlo.Models.Context;
 namespace Uniqlo.Models.Migrations
 {
     [DbContext(typeof(UniqloContext))]
-    partial class UniqloContextModelSnapshot : ModelSnapshot
+    [Migration("20230901084521_update-7")]
+    partial class update7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,9 +166,6 @@ namespace Uniqlo.Models.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int?>("Column")
                         .HasColumnType("int");
 
@@ -205,8 +204,6 @@ namespace Uniqlo.Models.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("GenderTypeId");
 
@@ -1529,10 +1526,6 @@ namespace Uniqlo.Models.Migrations
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Category", b =>
                 {
-                    b.HasOne("Uniqlo.Models.EntityModels.Category", null)
-                        .WithMany("Children")
-                        .HasForeignKey("CategoryId");
-
                     b.HasOne("Uniqlo.Models.EntityModels.GenderType", "GenderType")
                         .WithMany("Categories")
                         .HasForeignKey("GenderTypeId")
@@ -1931,8 +1924,6 @@ namespace Uniqlo.Models.Migrations
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Category", b =>
                 {
-                    b.Navigation("Children");
-
                     b.Navigation("ProductCategories");
                 });
 

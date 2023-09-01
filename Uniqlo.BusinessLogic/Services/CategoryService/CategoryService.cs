@@ -32,7 +32,8 @@ namespace Uniqlo.BusinessLogic.Services.CategoryService
 
             if (await _categoryRepository.SaveAsync())
             {
-                return ApiResponse<CategoryResponse>.Success(Common.CreateSuccess);
+                var response = _mapper.Map<CategoryResponse>(category);
+                return ApiResponse<CategoryResponse>.Success(Common.CreateSuccess, response);
             }
             else
             {
@@ -78,6 +79,13 @@ namespace Uniqlo.BusinessLogic.Services.CategoryService
 
             var response = _mapper.Map<CategoryResponse>(category);
             return ApiResponse<CategoryResponse>.Success(response);
+        }
+
+        public async Task<ApiResponse<List<CategoryResponse>>> GetDisplayByGendeType(int genderTypeId)
+        {
+            var categories = await _categoryRepository.GetCategoriesByGenderType(genderTypeId);
+            var response = _mapper.Map<List<CategoryResponse>>(categories);
+            return ApiResponse<List<CategoryResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<CategoryResponse>> Update(UpdateCategoryRequest request)
