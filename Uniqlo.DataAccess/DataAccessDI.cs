@@ -37,6 +37,7 @@ namespace Uniqlo.DataAccess
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IShipmentRepository, ShipmentRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+            services.AddScoped<ICollectionRepository, CollectionRepository>();
         }
 
         private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

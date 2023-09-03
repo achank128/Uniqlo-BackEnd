@@ -38,6 +38,13 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        [HttpGet("collection/{id}")]
+        public async Task<IActionResult> GetByCollection(Guid id)
+        {
+            var response = await _collectionPostService.GetByCollection(id);
+            return Ok(response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateCollectionPostRequest request)
         {

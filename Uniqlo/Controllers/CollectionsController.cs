@@ -24,6 +24,13 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        [HttpGet("show")]
+        public async Task<IActionResult> GetShow()
+        {
+            var response = await _collectionService.GetDisplayShow();
+            return Ok(response);
+        }
+
         [HttpPost("all")]
         public async Task<IActionResult> Filter(FilterBaseRequest request)
         {
@@ -42,6 +49,13 @@ namespace Uniqlo.Controllers
         public async Task<IActionResult> Create(CreateCollectionRequest request)
         {
             var response = await _collectionService.Create(request);
+            return Ok(response);
+        }
+
+        [HttpPost("createfull")]
+        public async Task<IActionResult> CreateFull(CreateCollectionFullRequest request)
+        {
+            var response = await _collectionService.CreateFull(request);
             return Ok(response);
         }
 

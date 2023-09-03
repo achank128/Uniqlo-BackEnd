@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Uniqlo.Models.RequestModels.CollectionPost;
 
-namespace Uniqlo.Models.ResponseModels
+namespace Uniqlo.Models.RequestModels.Collection
 {
-    public class CollectionResponse
+    public class CreateCollectionFullRequest
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string? NameEn { get; set; }
         public string? NameVi { get; set; }
@@ -20,12 +20,7 @@ namespace Uniqlo.Models.ResponseModels
         public string? ContentEn { get; set; }
         public string? ContentVi { get; set; }
         public string Author { get; set; }
-        public bool DeleteStatus { get; set; }
         public bool IsShow { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public DateTime? UpdatedDate { get; set; }
-
-        public List<CollectionPostResponse> CollectionPosts { get; set; }
-
+        public List<CreateCollectionPostRequest> Posts { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +76,13 @@ namespace Uniqlo.BusinessLogic.Services.CollectionPostService
         {
             var alls = await _collectionPostRepository.GetAllAsync();
             var response = _mapper.Map<List<CollectionPostResponse>>(alls);
+            return ApiResponse<List<CollectionPostResponse>>.Success(response);
+        }
+
+        public async Task<ApiResponse<List<CollectionPostResponse>>> GetByCollection(Guid collectionId)
+        {
+            var collectionPosts = await _collectionPostRepository.GetBy(s => s.CollectionId == collectionId).ToListAsync();
+            var response = _mapper.Map<List<CollectionPostResponse>>(collectionPosts);
             return ApiResponse<List<CollectionPostResponse>>.Success(response);
         }
 

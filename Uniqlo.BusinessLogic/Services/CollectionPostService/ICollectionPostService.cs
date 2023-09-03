@@ -15,6 +15,7 @@ namespace Uniqlo.BusinessLogic.Services.CollectionPostService
         Task<ApiResponse<CollectionPostResponse>> Upload(UploadCollectionPostRequest request);
         Task<PagedResponse<CollectionPostResponse>> Filter(FilterBaseRequest request);
         Task<ApiResponse<List<CollectionPostResponse>>> GetAll();
+        Task<ApiResponse<List<CollectionPostResponse>>> GetByCollection(Guid collectionId);
         Task<ApiResponse<CollectionPostResponse>> GetById(Guid id);
         Task<ApiResponse<CollectionPostResponse>> Update(UpdateCollectionPostRequest request);
         Task<ApiResponse<CollectionPostResponse>> Delete(Guid id);
