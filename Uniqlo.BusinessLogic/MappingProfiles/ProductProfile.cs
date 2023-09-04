@@ -16,12 +16,17 @@ namespace Uniqlo.BusinessLogic.MappingProfiles
         public ProductProfile()
         {
             CreateMap<CreateProductFullRequest, Product>();
+            CreateMap<CreateProductCrawlRequest, Product>();
             CreateMap<CreateProductRequest, Product>();
             CreateMap<UpdateProductRequest, Product>();
             CreateMap<Product, ProductResponse>();
+            CreateMap<PagedResponse<Product>, PagedResponse<ProductResponse>>();
+
+
             CreateMap<ProductPrice, ProductPriceResponse>();
             CreateMap<ProductReview, ProductReviewResponse>();
-            CreateMap<PagedResponse<Product>, PagedResponse<ProductResponse>>();
+            CreateMap<ProductColor, ProductColorResponse>();
+            CreateMap<ProductSize, ProductSizeResponse>();
         }
     }
 }

@@ -10,5 +10,8 @@ namespace Uniqlo.DataAccess.Repositories.Interfaces
 {
     public interface IProductDetailRepository : IRepositoryBase<ProductDetail>
     {
+        Task<bool> AddProductDetails(Guid productId);
+        Task<List<ProductDetail>> GetProductDetailByProduct(Guid productId);
+
     }
 }

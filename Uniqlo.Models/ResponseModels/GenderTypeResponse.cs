@@ -16,6 +16,6 @@ namespace Uniqlo.Models.ResponseModels
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
 
-        public virtual ICollection<Category> Categories { get; set; }
+        public virtual ICollection<CategoryResponse> Categories { get; set; }
     }
 }

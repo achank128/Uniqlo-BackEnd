@@ -73,6 +73,19 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+
+        /// <summary>
+        /// Thêm sản phẩm tự động
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("createCrawl")]
+        public async Task<IActionResult> CreateCrawl(CreateProductCrawlRequest request)
+        {
+            var response = await _productService.CreateCrawl(request);
+            return Ok(response);
+        }
+
         [HttpPut]
         public async Task<IActionResult> Update(UpdateProductRequest request)
         {

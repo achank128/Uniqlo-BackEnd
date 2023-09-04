@@ -24,6 +24,13 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        [HttpGet("product/{productId}")]
+        public async Task<IActionResult> GetByProduct(Guid productId)
+        {
+            var response = await _productDetailService.GetByProduct(productId);
+            return Ok(response);
+        }
+
         [HttpPost("all")]
         public async Task<IActionResult> Filter(FilterBaseRequest request)
         {
@@ -42,6 +49,13 @@ namespace Uniqlo.Controllers
         public async Task<IActionResult> Create(CreateProductDetailRequest request)
         {
             var response = await _productDetailService.Create(request);
+            return Ok(response);
+        }
+
+        [HttpPost("product/{productId}")]
+        public async Task<IActionResult> CreateForProduct(Guid productId)
+        {
+            var response = await _productDetailService.CreateForProduct(productId);
             return Ok(response);
         }
 

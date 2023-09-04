@@ -47,6 +47,18 @@ namespace Uniqlo.BusinessLogic.Services.ProductDetailService
             }
         }
 
+        public async Task<ApiResponse<ProductDetailResponse>> CreateForProduct(Guid productId)
+        {
+            if (await _productDetailRepository.AddProductDetails(productId))
+            {
+                return ApiResponse<ProductDetailResponse>.Success(Common.CreateSuccess);
+            }
+            else
+            {
+                throw new BadRequestException(Common.CreateFailure);
+            }
+        }
+
         public async Task<ApiResponse<ProductDetailResponse>> CreateList(CreateListProductDetailRequest request)
         {
             //Add product sizes
@@ -132,6 +144,13 @@ namespace Uniqlo.BusinessLogic.Services.ProductDetailService
 
             var response = _mapper.Map<ProductDetailResponse>(productDetail);
             return ApiResponse<ProductDetailResponse>.Success(response);
+        }
+
+        public async Task<ApiResponse<List<ProductDetailResponse>>> GetByProduct(Guid productId)
+        {
+            var productDetails = await _productDetailRepository.GetProductDetailByProduct(productId);
+            var response = _mapper.Map<List<ProductDetailResponse>>(productDetails);
+            return ApiResponse<List<ProductDetailResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<ProductDetailResponse>> Update(UpdateProductDetailRequest request)

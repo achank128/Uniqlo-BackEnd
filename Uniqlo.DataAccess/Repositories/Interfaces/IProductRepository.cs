@@ -12,6 +12,8 @@ namespace Uniqlo.DataAccess.Repositories.Interfaces
 {
     public interface IProductRepository : IRepositoryBase<Product>
     {
+        void CreateCrawl(Product product, CreateProductCrawlRequest productCrawl);
+        Task<Product> GetProductById(Guid id);
         IQueryable<Product> GetProductsByCategory(Guid categoryId, Expression<Func<Product, bool>> predicate);
         IQueryable<Product> FilterProducts(FilterProductRequest filter);
         IQueryable<Product> SortProducts(IQueryable<Product> products, string sortBy);

@@ -28,6 +28,9 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
         private readonly IRepositoryBase<ProductPrice> _productPriceRepository;
         private readonly IRepositoryBase<ProductCategory> _productCategoryRepository;
         private readonly IRepositoryBase<ProductSize> _productSizeRepository;
+        private readonly IRepositoryBase<ProductColor> _productColorRepository;
+        private readonly IRepositoryBase<Color> _colorRepository;
+        private readonly IRepositoryBase<Size> _sizeRepository;
 
         public ProductService(
             IMapper mapper,
@@ -36,7 +39,10 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             IRepositoryBase<ProductReview> productReviewRepository,
             IRepositoryBase<ProductPrice> productPriceRepository,
             IRepositoryBase<ProductCategory> productCategoryRepository,
-            IRepositoryBase<ProductSize> productSizeRepository)
+            IRepositoryBase<ProductSize> productSizeRepository,
+            IRepositoryBase<ProductColor> productColorRepository,
+            IRepositoryBase<Color> colorRepository,
+            IRepositoryBase<Size> sizeRepository)
         {
             _productRepository = productRepository;
             _mapper = mapper;
@@ -45,6 +51,9 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             _productPriceRepository = productPriceRepository;
             _productCategoryRepository = productCategoryRepository;
             _productSizeRepository = productSizeRepository;
+            _productColorRepository = productColorRepository;
+            _colorRepository = colorRepository;
+            _sizeRepository = sizeRepository;
         }
 
         public async Task<ApiResponse<ProductResponse>> Create(CreateProductRequest request)
@@ -75,6 +84,22 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             product.ProductPriceId = productPrice.Id;
 
             _productRepository.Add(product);
+
+            if (await _productRepository.SaveAsync())
+            {
+                return ApiResponse<ProductResponse>.Success(Common.CreateSuccess);
+            }
+            else
+            {
+                throw new BadRequestException(Common.CreateFailure);
+            }
+        }
+
+        public async Task<ApiResponse<ProductResponse>> CreateCrawl(CreateProductCrawlRequest request)
+        {
+            var product = _mapper.Map<Product>(request);
+            product.Id = Guid.NewGuid();
+            _productRepository.CreateCrawl(product, request);
 
             if (await _productRepository.SaveAsync())
             {
@@ -191,7 +216,12 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
                 products = _productRepository.SortProducts(products, request.SortBy);
             }
 
-            products = products.Include(p => p.ProductPrice).Include(p => p.ProductReview);
+            products = products
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductPrice)
+                .Include(p => p.ProductReview)
+                .Include(p => p.ProductSizes)
+                .Include(p => p.GenderType);
 
             var paged = await PagedResponse<Product>.CreateAsync(products, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<ProductResponse>>(paged);
@@ -207,10 +237,10 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
 
         public async Task<ApiResponse<ProductResponse>> GetById(Guid id)
         {
-            var category = await _productRepository.GetByIdAsync(id);
-            if (category == null) throw new NotFoundException(Common.NotFound);
+            var product = await _productRepository.GetProductById(id);
+            if (product == null) throw new NotFoundException(Common.NotFound);
 
-            var response = _mapper.Map<ProductResponse>(category);
+            var response = _mapper.Map<ProductResponse>(product);
             return ApiResponse<ProductResponse>.Success(response);
         }
 
