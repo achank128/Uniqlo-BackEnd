@@ -8,11 +8,11 @@ namespace Uniqlo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CartItemController : ControllerBase
+    public class CartItemsController : ControllerBase
     {
         private readonly ICartItemService _cartItemService;
 
-        public CartItemController(ICartItemService cartItemService)
+        public CartItemsController(ICartItemService cartItemService)
         {
             _cartItemService = cartItemService;
         }
@@ -49,6 +49,13 @@ namespace Uniqlo.Controllers
         public async Task<IActionResult> Update(UpdateCartItemRequest request)
         {
             var response = await _cartItemService.Update(request);
+            return Ok(response);
+        }
+
+        [HttpPut("quantity")]
+        public async Task<IActionResult> UpdateQuantity(UpdateQuantityCartItemRequest request)
+        {
+            var response = await _cartItemService.UpdateQuantity(request);
             return Ok(response);
         }
 

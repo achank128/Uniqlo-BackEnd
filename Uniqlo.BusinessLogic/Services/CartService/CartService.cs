@@ -23,19 +23,21 @@ namespace Uniqlo.BusinessLogic.Services.CartService
         private readonly IClaimService _claimService;
         private readonly ICartRepository _cartRepository;
         private readonly IRepositoryBase<CartItem> _cartItemRepository;
+        private readonly IProductRepository _productRepository;
 
 
         public CartService(
-            IMapper mapper, 
-            IClaimService claimService, 
-            ICartRepository cartRepository, 
-            IRepositoryBase<CartItem> cartItemRepository
-            )
+            IMapper mapper,
+            IClaimService claimService,
+            ICartRepository cartRepository,
+            IRepositoryBase<CartItem> cartItemRepository,
+            IProductRepository productRepository)
         {
             _mapper = mapper;
             _claimService = claimService;
             _cartRepository = cartRepository;
             _cartItemRepository = cartItemRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<ApiResponse<CartResponse>> Create(CreateCartRequest request)
@@ -106,14 +108,16 @@ namespace Uniqlo.BusinessLogic.Services.CartService
                 _cartRepository.Add(newCart);
                 await _cartRepository.SaveAsync();
 
-                var cart = await _cartRepository.GetCartById(newCart.Id);
-                if (cart == null) throw new NotFoundException(Common.NotFound);
-
-                var res = _mapper.Map<CartResponse>(cart);
+                var res = _mapper.Map<CartResponse>(newCart);
                 return ApiResponse<CartResponse>.Success(res);
             }
 
             var response = _mapper.Map<CartResponse>(userCart);
+            foreach (var item in response.CartItems) {
+                var product = await _productRepository.GetProductById(item.ProductDetail.ProductId);
+                item.Product = _mapper.Map<ProductResponse>(product);
+            }
+
             return ApiResponse<CartResponse>.Success(response);
         }
 

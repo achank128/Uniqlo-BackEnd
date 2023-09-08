@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
 using Uniqlo.Core.Keywords;
+using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
 using Uniqlo.Models.Models;
@@ -19,11 +20,16 @@ namespace Uniqlo.BusinessLogic.Services.WishListService
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryBase<WishList> _wishListRepository;
+        private readonly IProductRepository _productRepository;
 
-        public WishListService(IRepositoryBase<WishList> wishListRepository, IMapper mapper)
+        public WishListService(
+            IRepositoryBase<WishList> wishListRepository, 
+            IMapper mapper, 
+            IProductRepository productRepository)
         {
             _wishListRepository = wishListRepository;
             _mapper = mapper;
+            _productRepository = productRepository;
         }
 
         public async Task<ApiResponse<WishListResponse>> Create(CreateWishListRequest request)
@@ -33,7 +39,8 @@ namespace Uniqlo.BusinessLogic.Services.WishListService
 
             if (await _wishListRepository.SaveAsync())
             {
-                return ApiResponse<WishListResponse>.Success(Common.CreateSuccess);
+                var response = _mapper.Map<WishListResponse>(wishList);
+                return ApiResponse<WishListResponse>.Success(Common.CreateSuccess, response);
             }
             else
             {
@@ -43,10 +50,10 @@ namespace Uniqlo.BusinessLogic.Services.WishListService
 
         public async Task<ApiResponse<WishListResponse>> Delete(Guid id)
         {
-            var userCoupon = await _wishListRepository.GetByIdAsync(id);
-            if (userCoupon == null) throw new NotFoundException(Common.NotFound);
+            var wishlist = await _wishListRepository.GetByIdAsync(id);
+            if (wishlist == null) throw new NotFoundException(Common.NotFound);
 
-            _wishListRepository.Delete(userCoupon);
+            _wishListRepository.Delete(wishlist);
             if (await _wishListRepository.SaveAsync())
             {
                 return ApiResponse<WishListResponse>.Success(Common.DeleteSuccess);
@@ -74,7 +81,13 @@ namespace Uniqlo.BusinessLogic.Services.WishListService
 
         public async Task<ApiResponse<List<WishListResponse>>> GetUserWishList(Guid userId)
         {
-            var wishList = await _wishListRepository.GetBy(s => s.UserId == userId).Include(s => s.Product).ToListAsync();
+            var wishList = await _wishListRepository.GetBy(s => s.UserId == userId).ToListAsync();
+
+            foreach(var wish in wishList)
+            {
+                wish.Product = await _productRepository.GetProductById(wish.ProductId);
+            }
+
             var response = _mapper.Map<List<WishListResponse>>(wishList);
             return ApiResponse<List<WishListResponse>>.Success(response);
         }

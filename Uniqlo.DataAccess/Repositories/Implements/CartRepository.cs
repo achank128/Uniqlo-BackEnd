@@ -42,9 +42,8 @@ namespace Uniqlo.DataAccess.Repositories.Implements
         {
             var cart = await _context.Carts
                 .Where(c => c.Id == id)
-                .Include(c => c.CartItems)
-                .ThenInclude(ci => ci.ProductDetail)
-                .ThenInclude(pd => pd.Product)
+                .Include(c => c.CartItems).ThenInclude(ci => ci.ProductDetail).ThenInclude(pd => pd.Color)
+                .Include(c => c.CartItems).ThenInclude(ci => ci.ProductDetail).ThenInclude(pd => pd.Size)
                 .SingleOrDefaultAsync();
             return cart;
         }
@@ -53,9 +52,8 @@ namespace Uniqlo.DataAccess.Repositories.Implements
         {
             var cart = await _context.Carts
                 .Where(c => c.UserId == userId)
-                .Include(c => c.CartItems)
-                .ThenInclude(ci => ci.ProductDetail)
-                .ThenInclude(pd => pd.Product)
+                .Include(c => c.CartItems).ThenInclude(ci => ci.ProductDetail).ThenInclude(pd => pd.Color)
+                .Include(c => c.CartItems).ThenInclude(ci => ci.ProductDetail).ThenInclude(pd => pd.Size)
                 .SingleOrDefaultAsync();
             return cart;
         }

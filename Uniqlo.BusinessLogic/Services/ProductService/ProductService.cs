@@ -216,13 +216,6 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
                 products = _productRepository.SortProducts(products, request.SortBy);
             }
 
-            products = products
-                .Include(p => p.ProductImages)
-                .Include(p => p.ProductPrice)
-                .Include(p => p.ProductReview)
-                .Include(p => p.ProductSizes)
-                .Include(p => p.GenderType);
-
             var paged = await PagedResponse<Product>.CreateAsync(products, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<ProductResponse>>(paged);
             return response;

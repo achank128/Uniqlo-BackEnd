@@ -158,13 +158,12 @@ namespace Uniqlo.DataAccess.Repositories.Implements
                             && (filter.IsLimited == null || p.IsLimited == filter.IsLimited)
                             select p).Distinct();
 
-            //Expression<Func<Product, bool>> predicate = p => p.DeleteStatus == false
-            //&& (string.IsNullOrEmpty(filter.KeyWord) || p.Name.Contains(filter.KeyWord) || p.NameEn!.Contains(filter.KeyWord) || p.NameVi!.Contains(filter.KeyWord))
-            //&& (filter.CollectionId == null || filter.CollectionId == p.CollectionId)
-            //&& (filter.IsSale == null || p.IsSale == filter.IsSale)
-            //&& (filter.IsOnlineOnly == null || p.IsOnlineOnly == filter.IsOnlineOnly)
-            //&& (filter.IsLimited == null || p.IsLimited == filter.IsLimited);
-            //products = products.Where(predicate);
+            products = products
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductPrice)
+                .Include(p => p.ProductReview)
+                .Include(p => p.ProductSizes)
+                .Include(p => p.GenderType);
 
             return products;
         }

@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
 using Uniqlo.Core.Keywords;
-using Uniqlo.DataAccess.Repositories.Implements;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
@@ -23,8 +22,7 @@ namespace Uniqlo.BusinessLogic.Services.CouponService
 
         public CouponService(
             IMapper mapper, 
-            ICouponRepository couponRepository, 
-            IRepositoryBase<UserCoupon> userCouponRepository
+            ICouponRepository couponRepository
             )
         {
             _mapper = mapper;
@@ -84,6 +82,13 @@ namespace Uniqlo.BusinessLogic.Services.CouponService
 
             var response = _mapper.Map<CouponResponse>(coupon);
             return ApiResponse<CouponResponse>.Success(response);
+        }
+
+        public async Task<ApiResponse<List<CouponResponse>>> GetByUser(Guid userId)
+        {
+            var coupons = await _couponRepository.GetCouponsByUser(userId);
+            var response = _mapper.Map<List<CouponResponse>>(coupons);
+            return ApiResponse<List<CouponResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<CouponResponse>> Update(UpdateCouponRequest request)

@@ -16,6 +16,7 @@ namespace Uniqlo.Models.ResponseModels
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
 
+        public virtual ProductResponse Product { get; set; }
         public virtual ProductDetailResponse ProductDetail { get; set; }
 
     }

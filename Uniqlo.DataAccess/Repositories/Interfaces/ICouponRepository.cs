@@ -11,6 +11,6 @@ namespace Uniqlo.DataAccess.Repositories.Interfaces
 {
     public interface ICouponRepository : IRepositoryBase<Coupon>
     {
-        IQueryable<Coupon> GetUserCoupons(Guid userId);
+        Task<List<Coupon>> GetCouponsByUser(Guid userId);
     }
 }

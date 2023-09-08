@@ -55,6 +55,8 @@ namespace Uniqlo.DataAccess.Repositories.Implements
         {
             var productDetails = await _context.ProductDetails
                 .Where(p => p.ProductId == productId)
+                .Include(p => p.Color)
+                .Include(p => p.Size)
                 .ToListAsync();
 
             return productDetails;

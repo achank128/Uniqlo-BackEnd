@@ -8,11 +8,11 @@ namespace Uniqlo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CollectionPostController : ControllerBase
+    public class CollectionPostsController : ControllerBase
     {
         private readonly ICollectionPostService _collectionPostService;
 
-        public CollectionPostController(ICollectionPostService collectionPostService)
+        public CollectionPostsController(ICollectionPostService collectionPostService)
         {
             _collectionPostService = collectionPostService;
         }

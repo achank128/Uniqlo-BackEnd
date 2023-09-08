@@ -11,12 +11,12 @@ namespace Uniqlo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CartController : ControllerBase
+    public class CartsController : ControllerBase
     {
         private readonly ICartService _cartService;
         private readonly IClaimService _claimService;
 
-        public CartController(ICartService cartService, IClaimService claimService)
+        public CartsController(ICartService cartService, IClaimService claimService)
         {
             _cartService = cartService;
             _claimService = claimService;

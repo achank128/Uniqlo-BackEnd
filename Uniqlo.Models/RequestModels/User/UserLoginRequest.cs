@@ -9,9 +9,9 @@ namespace Uniqlo.Models.RequestModels.User
 {
     public class UserLoginRequest
     {
-        [Required]
+        [Required(ErrorMessage = "Email là bắt buộc")]
         public string Email { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Mật khẩu là bắt buộc")]
         public string Password { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Uniqlo.BusinessLogic.Services.CouponService;
+using Uniqlo.BusinessLogic.Services.Shared.ClaimService;
 using Uniqlo.Models.Models;
 using Uniqlo.Models.RequestModels.Coupon;
 
@@ -12,10 +13,12 @@ namespace Uniqlo.Controllers
     public class CouponsController : ControllerBase
     {
         private readonly ICouponService _couponService;
+        private readonly IClaimService _claimService;
 
-        public CouponsController(ICouponService couponService)
+        public CouponsController(ICouponService couponService, IClaimService claimService)
         {
             _couponService = couponService;
+            _claimService = claimService;
         }
 
         [HttpGet]
@@ -29,6 +32,13 @@ namespace Uniqlo.Controllers
         public async Task<IActionResult> Filter(FilterBaseRequest request)
         {
             var response = await _couponService.Filter(request);
+            return Ok(response);
+        }
+
+        [HttpGet("mycoupon")]
+        public async Task<IActionResult> GetMyCoupon()
+        {
+            var response = await _couponService.GetByUser(_claimService.GetUserId());
             return Ok(response);
         }
 

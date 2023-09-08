@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,13 +20,14 @@ namespace Uniqlo.DataAccess.Repositories.Implements
             _context = context;
         }
 
-        public IQueryable<Coupon> GetUserCoupons(Guid userId)
+        public async Task<List<Coupon>> GetCouponsByUser(Guid userId)
         {
             var coupons = from c in _context.Coupons
-                          join uc in _context.UserCoupons on c.Id equals uc.CouponId
-                          where uc.UserId == userId
+                          join uc in _context.UserCoupons on c.Id equals uc.CouponId into u_ucLeftJoin
+                          from u_uc in u_ucLeftJoin.DefaultIfEmpty()
+                          where u_uc.UserId == userId || c.Type == "PUBLIC"
                           select c;
-            return coupons;
+            return await coupons.ToListAsync();
         }
     }
 }
