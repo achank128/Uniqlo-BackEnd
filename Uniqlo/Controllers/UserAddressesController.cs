@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Uniqlo.BusinessLogic.Services.Shared.ClaimService;
 using Uniqlo.BusinessLogic.Services.UserAddressService;
 using Uniqlo.Models.Models;
 using Uniqlo.Models.RequestModels.UserAddress;
@@ -11,16 +13,26 @@ namespace Uniqlo.Controllers
     public class UserAddressesController : ControllerBase
     {
         private readonly IUserAddressService _userAddressService;
+        private readonly IClaimService _claimService;
 
-        public UserAddressesController(IUserAddressService userAddressService)
+        public UserAddressesController(IUserAddressService userAddressService, IClaimService claimService)
         {
             _userAddressService = userAddressService;
+            _claimService = claimService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var response = await _userAddressService.GetAll();
+            return Ok(response);
+        }
+
+        [HttpGet("myaddress")]
+        [Authorize]
+        public async Task<IActionResult> GetMyAddress()
+        {
+            var response = await _userAddressService.GetByUser(_claimService.GetUserId());
             return Ok(response);
         }
 

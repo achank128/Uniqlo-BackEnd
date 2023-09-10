@@ -106,6 +106,18 @@ namespace Uniqlo.Controllers
         }
 
         /// <summary>
+        /// Clear giỏ hàng, xóa hết item
+        /// </summary>
+        /// <param name="request">UpdateCartRequest</param>
+        /// <returns></returns>
+        [HttpPut("clear/{id}")]
+        public async Task<IActionResult> Clear(Guid id)
+        {
+            var response = await _cartService.ClearItem(id);
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Xóa giỏ hàng
         /// </summary>
         /// <param name="id">Guid</param>

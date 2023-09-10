@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Uniqlo.BusinessLogic.Services.CouponService;
@@ -36,6 +37,7 @@ namespace Uniqlo.Controllers
         }
 
         [HttpGet("mycoupon")]
+        [Authorize]
         public async Task<IActionResult> GetMyCoupon()
         {
             var response = await _couponService.GetByUser(_claimService.GetUserId());

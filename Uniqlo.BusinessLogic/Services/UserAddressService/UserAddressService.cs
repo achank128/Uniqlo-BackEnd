@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,11 +74,23 @@ namespace Uniqlo.BusinessLogic.Services.UserAddressService
 
         public async Task<ApiResponse<UserAddressResponse>> GetById(Guid id)
         {
-            var userAddess = await _userAddressRepository.GetByIdAsync(id);
-            if (userAddess == null) throw new NotFoundException(Common.NotFound);
+            var userAddress = await _userAddressRepository.GetByIdAsync(id);
+            if (userAddress == null) throw new NotFoundException(Common.NotFound);
 
-            var response = _mapper.Map<UserAddressResponse>(userAddess);
+            var response = _mapper.Map<UserAddressResponse>(userAddress);
             return ApiResponse<UserAddressResponse>.Success(response);
+        }
+
+        public async Task<ApiResponse<List<UserAddressResponse>>> GetByUser(Guid userId)
+        {
+            var userAddresses = _userAddressRepository.GetBy(u => u.UserId == userId);
+            userAddresses = userAddresses
+                .Include(u => u.Province)
+                .Include(u => u.District)
+                .Include(u => u.Ward);
+            var addresses = await userAddresses.ToListAsync();
+            var response = _mapper.Map<List<UserAddressResponse>>(userAddresses);
+            return ApiResponse<List<UserAddressResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<UserAddressResponse>> Update(UpdateUserAddressRequest request)

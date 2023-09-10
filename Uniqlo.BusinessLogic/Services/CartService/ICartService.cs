@@ -19,6 +19,7 @@ namespace Uniqlo.BusinessLogic.Services.CartService
         Task<ApiResponse<CartResponse>> GetById(Guid id);
         Task<ApiResponse<CartResponse>> GetByUser(Guid userId);
         Task<ApiResponse<CartResponse>> Update(UpdateCartRequest request);
+        Task<ApiResponse<CartResponse>> ClearItem(Guid id);
         Task<ApiResponse<CartResponse>> Delete(Guid id, DeleteRequest request);
     }
 }

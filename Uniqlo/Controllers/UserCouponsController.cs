@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Uniqlo.BusinessLogic.Services.UserCouponService;
@@ -39,7 +40,8 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
-        [HttpGet("mycoupons")]
+        [HttpGet("mycoupon")]
+        [Authorize]
         public async Task<IActionResult> GetMyCoupons()
         {
             Guid userId = new Guid(User.FindFirstValue(ClaimTypes.Sid));

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,22 @@ namespace Uniqlo.BusinessLogic.Services.CartService
             _cartRepository = cartRepository;
             _cartItemRepository = cartItemRepository;
             _productRepository = productRepository;
+        }
+
+        public async Task<ApiResponse<CartResponse>> ClearItem(Guid id)
+        {
+            var cartItems = await _cartItemRepository.GetBy(s => s.CartId == id).ToListAsync();
+            _cartItemRepository.DeleteRange(cartItems);
+
+            if (await _cartRepository.SaveAsync())
+            {
+                return ApiResponse<CartResponse>.Success(Common.CreateSuccess);
+            }
+            else
+            {
+                throw new BadRequestException(Common.CreateFailure);
+            }
+
         }
 
         public async Task<ApiResponse<CartResponse>> Create(CreateCartRequest request)
