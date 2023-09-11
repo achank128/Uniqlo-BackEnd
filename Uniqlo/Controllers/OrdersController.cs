@@ -84,10 +84,10 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
-        [HttpPut("cancel")]
-        public async Task<IActionResult> CancelOrder(CancelOrderRequest request)
+        [HttpPut("status")]
+        public async Task<IActionResult> UpdateStatus(UpdateOrderStatusRequest request)
         {
-            var response = await _orderService.Cancel(request);
+            var response = await _orderService.UpdateStatus(request);
             return Ok(response);
         }
 

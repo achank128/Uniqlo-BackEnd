@@ -147,12 +147,15 @@ namespace Uniqlo.DataAccess.Repositories.Implements
                             from p_ps in p_psLeftJoin.DefaultIfEmpty()
                             join pcl in _context.ProductColors on p.Id equals pcl.ProductId into p_pclLeftJoin
                             from p_pcl in p_pclLeftJoin.DefaultIfEmpty()
+                            join pp in _context.ProductPrices on p.ProductPriceId equals pp.Id 
                             where p.DeleteStatus == false
                             && (filter.CategoryId == null || p_pc.CategoryId == filter.CategoryId)
                             && (filter.SizeIds == null || filter.SizeIds.Count() == 0 || filter.SizeIds.Contains(p_ps.SizeId))
                             && (filter.ColorIds == null || filter.ColorIds.Count() == 0 || filter.ColorIds.Contains(p_pcl.ColorId))
                             && (string.IsNullOrEmpty(filter.KeyWord) || p.Name.Contains(filter.KeyWord) || p.NameEn!.Contains(filter.KeyWord) || p.NameVi!.Contains(filter.KeyWord))
                             && (filter.CollectionId == null || filter.CollectionId == p.CollectionId)
+                            && (filter.PriceMin == null || pp.Price >= filter.PriceMin)
+                            && (filter.PriceMax == null || pp.Price <= filter.PriceMax)
                             && (filter.IsSale == null || p.IsSale == filter.IsSale)
                             && (filter.IsOnlineOnly == null || p.IsOnlineOnly == filter.IsOnlineOnly)
                             && (filter.IsLimited == null || p.IsLimited == filter.IsLimited)

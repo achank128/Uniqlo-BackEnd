@@ -21,7 +21,6 @@ namespace Uniqlo.BusinessLogic.Services.CartService
     public class CartService : ICartService
     {
         private readonly IMapper _mapper;
-        private readonly IClaimService _claimService;
         private readonly ICartRepository _cartRepository;
         private readonly IRepositoryBase<CartItem> _cartItemRepository;
         private readonly IProductRepository _productRepository;
@@ -29,13 +28,11 @@ namespace Uniqlo.BusinessLogic.Services.CartService
 
         public CartService(
             IMapper mapper,
-            IClaimService claimService,
             ICartRepository cartRepository,
             IRepositoryBase<CartItem> cartItemRepository,
             IProductRepository productRepository)
         {
             _mapper = mapper;
-            _claimService = claimService;
             _cartRepository = cartRepository;
             _cartItemRepository = cartItemRepository;
             _productRepository = productRepository;

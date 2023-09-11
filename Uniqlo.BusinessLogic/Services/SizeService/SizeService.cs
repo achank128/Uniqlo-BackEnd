@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +69,13 @@ namespace Uniqlo.BusinessLogic.Services.SizeService
         {
             var alls = await _sizeRepository.GetAllAsync();
             var response = _mapper.Map<List<SizeResponse>>(alls);
+            return ApiResponse<List<SizeResponse>>.Success(response);
+        }
+
+        public async Task<ApiResponse<List<SizeResponse>>> GetByGenderType(int genderTypeId)
+        {
+            var sizes = await _sizeRepository.GetBy(s => s.GenderTypeId == genderTypeId).ToListAsync();
+            var response = _mapper.Map<List<SizeResponse>>(sizes);
             return ApiResponse<List<SizeResponse>>.Success(response);
         }
 

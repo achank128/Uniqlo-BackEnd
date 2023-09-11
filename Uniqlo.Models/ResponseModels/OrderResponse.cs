@@ -26,6 +26,8 @@ namespace Uniqlo.Models.ResponseModels
         public string? CancelReason { get; set; }
         public bool IsPaid { get; set; } 
         public bool DeleteStatus { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
         public virtual UserResponse User { get; set; }
         public virtual CouponResponse? Coupon { get; set; }

@@ -20,7 +20,7 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
         Task<ApiResponse<OrderResponse>> GetById(Guid id);
         Task<ApiResponse<OrderResponse>> GetOrderDetails(Guid id);
         Task<ApiResponse<OrderResponse>> Update(UpdateOrderRequest request);
-        Task<ApiResponse<OrderResponse>> Cancel(CancelOrderRequest request);
+        Task<ApiResponse<OrderResponse>> UpdateStatus(UpdateOrderStatusRequest request);
         Task<ApiResponse<OrderResponse>> Delete(Guid id, DeleteRequest request);
     }
 }

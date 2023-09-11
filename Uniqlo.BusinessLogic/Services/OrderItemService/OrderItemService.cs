@@ -18,11 +18,16 @@ namespace Uniqlo.BusinessLogic.Services.OderItemService
     {
         private readonly IMapper _mapper;
         private readonly IOrderItemRepository _orderItemRepository;
+        private readonly IProductRepository _productRepository;
 
-        public OrderItemService(IOrderItemRepository orderItemRepository, IMapper mapper)
+        public OrderItemService(
+            IOrderItemRepository orderItemRepository, 
+            IMapper mapper, 
+            IProductRepository productRepository)
         {
             _orderItemRepository = orderItemRepository;
             _mapper = mapper;
+            _productRepository = productRepository;
         }
 
         public async Task<ApiResponse<OrderItemResponse>> Create(CreateOrderItemRequest request)
@@ -83,7 +88,14 @@ namespace Uniqlo.BusinessLogic.Services.OderItemService
         public async Task<ApiResponse<List<OrderItemResponse>>> GetByOrder(Guid orderId)
         {
             var orderItems = await _orderItemRepository.GetOrderItemByOrder(orderId);
+
             var response = _mapper.Map<List<OrderItemResponse>> (orderItems);
+            foreach (var item in response)
+            {
+                var product = await _productRepository.GetProductById(item.ProductDetail.ProductId);
+                item.Product = _mapper.Map<ProductResponse>(product);
+            }
+
             return ApiResponse<List<OrderItemResponse>>.Success(response);
         }
     }

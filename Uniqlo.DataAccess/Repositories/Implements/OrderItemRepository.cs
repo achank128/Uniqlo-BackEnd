@@ -23,7 +23,6 @@ namespace Uniqlo.DataAccess.Repositories.Implements
         {
             var orderItem = await _context.OrderItems.Where(s => s.Id == id)
                 .Include(s => s.ProductDetail)
-                .ThenInclude(s => s.Product)
                 .SingleOrDefaultAsync();
 
             return orderItem;
@@ -32,8 +31,8 @@ namespace Uniqlo.DataAccess.Repositories.Implements
         public async Task<List<OrderItem>> GetOrderItemByOrder(Guid orderId)
         {
             var orderItem = await _context.OrderItems.Where(s => s.OrderId == orderId)
-                .Include(s => s.ProductDetail)
-                .ThenInclude(s => s.Product)
+                .Include(s => s.ProductDetail).ThenInclude(pd => pd.Color)
+                .Include(s => s.ProductDetail).ThenInclude(pd => pd.Size)
                 .ToListAsync();
 
             return orderItem;

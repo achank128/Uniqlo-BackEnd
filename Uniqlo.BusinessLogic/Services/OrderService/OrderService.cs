@@ -24,49 +24,24 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
         private readonly IRepositoryBase<OrderItem> _orderItemRepository;
         private readonly IPaymentRepository _paymentRepository;
         private readonly IShipmentRepository _shipmentRepository;
+        private readonly IProductDetailRepository _productDetailRepository;
 
         public OrderService(
             IMapper mapper,
             IOrderRepository orderRepository,
             IRepositoryBase<OrderItem> orderItemRepository,
             IPaymentRepository paymentRepository,
-            IShipmentRepository shipmentRepository)
+            IShipmentRepository shipmentRepository,
+            IProductDetailRepository productDetailRepository)
         {
             _mapper = mapper;
             _orderRepository = orderRepository;
             _orderItemRepository = orderItemRepository;
             _paymentRepository = paymentRepository;
             _shipmentRepository = shipmentRepository;
+            _productDetailRepository = productDetailRepository;
         }
 
-        public async Task<ApiResponse<OrderResponse>> Cancel(CancelOrderRequest request)
-        {
-            
-            var order = await _orderRepository.GetByIdAsync(request.Id);
-            if (order == null) throw new NotFoundException(Common.NotFound);
-
-            if(order.Status == "COMPLETED")
-            {
-                throw new BadRequestException(OrderKeywords.OrderCompleted);
-            }
-            if (order.Status == "CONFIRMED" )
-            {
-                throw new BadRequestException(OrderKeywords.OrderCompleted);
-            }
-
-            order.Status = "CANCELED";
-            order.CancelReason = request.CancelReason;
-
-            _orderRepository.Update(order);
-            if (await _orderRepository.SaveAsync())
-            {
-                return ApiResponse<OrderResponse>.Success(Common.UpdateSuccess);
-            }
-            else
-            {
-                throw new BadRequestException(Common.UpdateFailure);
-            }
-        }
 
         public async Task<ApiResponse<OrderResponse>> Create(CreateOrderRequest request)
         {
@@ -75,11 +50,11 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
             if (await _orderRepository.SaveAsync())
             {
                 var response = _mapper.Map<OrderResponse>(order);
-                return ApiResponse<OrderResponse>.Success(Common.CreateSuccess, response);
+                return ApiResponse<OrderResponse>.Success(OrderKeywords.CreateSuccess, response);
             }
             else
             {
-                throw new BadRequestException(Common.CreateFailure);
+                throw new BadRequestException(OrderKeywords.CreateFailure);
             }
         }
 
@@ -87,19 +62,32 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
         {
             var order = _mapper.Map<Order>(request);
             order.Id = Guid.NewGuid();
+            _orderRepository.Add(order);
 
-            List<OrderItem> orderItems = new List<OrderItem>();
+            if (request.OrderItems.Count() <= 0)
+            {
+                throw new BadRequestException(OrderKeywords.OrderItemEmpty);
+            }
+
             foreach (var item in request.OrderItems)
             {
-                OrderItem orderItem = new OrderItem
+                var productDetail = await _productDetailRepository.GetByIdAsync(item.ProductDetailId);
+                if (productDetail.InStock < item.Quantity)
                 {
-                    Id = Guid.NewGuid(),
-                    OrderId = order.Id,
-                    ProductDetailId = item.ProductDetailId,
-                    Quantity = item.Quantity,
-                    Price = item.Price
-                };
-                orderItems.Add(orderItem);
+                    throw new BadRequestException(OrderKeywords.OrderProductOutOfStock);
+                }
+                productDetail.InStock -= item.Quantity;
+                _productDetailRepository.Update(productDetail);
+
+                //OrderItem orderItem = new OrderItem
+                //{
+                //    Id = Guid.NewGuid(),
+                //    OrderId = order.Id,
+                //    ProductDetailId = item.ProductDetailId,
+                //    Quantity = item.Quantity,
+                //    Price = item.Price
+                //};
+                //_orderItemRepository.Add(orderItem);
             }
 
             Shipment shipment = new Shipment
@@ -112,6 +100,7 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
                 ShipmentPay = request.ShipmentPay,
                 Note = request.Note,
             };
+            _shipmentRepository.Add(shipment);
 
             Payment payment = new Payment
             {
@@ -126,20 +115,16 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
                 CreditCardNumberDisplay = request.CreditCardNumberDisplay,
                 Note = request.PaymentNote
             };
-
-            _orderRepository.Add(order);
-            _orderItemRepository.AddRange(orderItems);
             _paymentRepository.Add(payment);
-            _shipmentRepository.Add(shipment);
 
             if (await _orderRepository.SaveAsync())
             {
                 var response = _mapper.Map<OrderResponse>(order);
-                return ApiResponse<OrderResponse>.Success(Common.CreateSuccess, response);
+                return ApiResponse<OrderResponse>.Success(OrderKeywords.CreateSuccess, response);
             }
             else
             {
-                throw new BadRequestException(Common.CreateFailure);
+                throw new BadRequestException(OrderKeywords.CreateFailure);
             }
         }
 
@@ -150,11 +135,11 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
             order.DeleteStatus = request.DeleteStatus;
             if (await _orderRepository.SaveAsync())
             {
-                return ApiResponse<OrderResponse>.Success(Common.DeleteSuccess);
+                return ApiResponse<OrderResponse>.Success(OrderKeywords.DeleteSuccess);
             }
             else
             {
-                throw new BadRequestException(Common.DeleteFailure);
+                throw new BadRequestException(OrderKeywords.DeleteFailure);
             }
         }
 
@@ -176,6 +161,7 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
         {
             var order = await _orderRepository.GetByIdAsync(id);
             if (order == null) throw new NotFoundException(Common.NotFound);
+
             var response = _mapper.Map<OrderResponse>(order);
             return ApiResponse<OrderResponse>.Success(response);
         }
@@ -184,6 +170,7 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
         {
             var order = await _orderRepository.GetOrderByUser(userId);
             if (order == null) throw new NotFoundException(Common.NotFound);
+
             var response = _mapper.Map<List<OrderResponse>>(order);
             return ApiResponse<List<OrderResponse>>.Success(response);
         }
@@ -203,11 +190,42 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
             _orderRepository.Update(order);
             if (await _orderRepository.SaveAsync())
             {
-                return ApiResponse<OrderResponse>.Success(Common.UpdateSuccess);
+                return ApiResponse<OrderResponse>.Success(OrderKeywords.UpdateSuccess);
             }
             else
             {
-                throw new BadRequestException(Common.UpdateFailure);
+                throw new BadRequestException(OrderKeywords.UpdateFailure);
+            }
+        }
+
+        public async Task<ApiResponse<OrderResponse>> UpdateStatus(UpdateOrderStatusRequest request)
+        {
+            var order = await _orderRepository.GetByIdAsync(request.Id);
+            if (order == null) throw new NotFoundException(Common.NotFound);
+
+            if(request.Status == "CANCELLED")
+            {
+                if (order.Status != "OPEN")
+                {
+                    throw new BadRequestException(OrderKeywords.OrderCannotCancel);
+                }
+
+                order.Status = "CANCELLED";
+                order.CancelReason = request.Reason;
+            } 
+            else
+            {
+                order.Status = request.Status;
+            }
+            order.UpdatedDate = DateTime.Now;
+            _orderRepository.Update(order);
+            if (await _orderRepository.SaveAsync())
+            {
+                return ApiResponse<OrderResponse>.Success(OrderKeywords.UpdateSuccess);
+            }
+            else
+            {
+                throw new BadRequestException(OrderKeywords.UpdateFailure);
             }
         }
     }

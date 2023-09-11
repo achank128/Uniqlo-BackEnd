@@ -24,13 +24,9 @@ namespace Uniqlo.DataAccess.Repositories.Implements
             var order = await _context.Orders
                .Where(o => o.Id == id)
                .Include(o => o.Payments)
-               .Include(o => o.User)
                .Include(o => o.Coupon)
                .Include(o => o.Shipments)
                .ThenInclude(sm => sm.UserAddress)
-               .Include(o => o.OrderItems)
-               .ThenInclude(oi => oi.ProductDetail)
-               .ThenInclude(pd => pd.Product)
                .SingleOrDefaultAsync();
             return order;
         }
@@ -39,9 +35,13 @@ namespace Uniqlo.DataAccess.Repositories.Implements
         {
             var orders = await _context.Orders
                .Where(o => o.UserId == userId)
-               .Include(o => o.OrderItems)
-               .ThenInclude(oi => oi.ProductDetail)
-               .ThenInclude(pd => pd.Product)
+               .Include(o => o.Payments)
+               .Include(o => o.Coupon)
+               .Include(o => o.Shipments)
+               .Include(o => o.OrderItems).ThenInclude(s => s.ProductDetail).ThenInclude(pd => pd.Color)
+               .Include(o => o.OrderItems).ThenInclude(s => s.ProductDetail).ThenInclude(pd => pd.Size)
+               .Include(o => o.OrderItems).ThenInclude(s => s.ProductDetail).ThenInclude(pd => pd.Product).ThenInclude(p => p.ProductImages)
+               .OrderByDescending(o => o.CreatedDate)
                .ToListAsync();
             return orders;
         }

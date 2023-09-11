@@ -13,7 +13,8 @@ namespace Uniqlo.Models.RequestModels.Product
         public Guid? CollectionId { get; set; }
         public List<int>? SizeIds { get; set; }
         public List<int>? ColorIds { get; set; }
-        public List<int>? PriceTypes { get; set; }
+        public decimal? PriceMin { get; set; }
+        public decimal? PriceMax { get; set; }
         public bool? IsSale { get; set; }
         public bool? IsOnlineOnly { get; set; }
         public bool? IsLimited { get; set; }
