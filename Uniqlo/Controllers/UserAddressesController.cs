@@ -57,6 +57,14 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        [HttpPut("setdefault/{id}")]
+        [Authorize]
+        public async Task<IActionResult> SetDefautl(Guid id)
+        {
+            var response = await _userAddressService.SetDefault(id, _claimService.GetUserId());
+            return Ok(response);
+        }
+
         [HttpPut]
         public async Task<IActionResult> Update(UpdateUserAddressRequest request)
         {

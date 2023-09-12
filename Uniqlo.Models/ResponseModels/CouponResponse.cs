@@ -22,6 +22,7 @@ namespace Uniqlo.Models.ResponseModels
         public decimal? Discount { get; set; }
         public decimal? Max { get; set; }
         public decimal? TotalFrom { get; set; }
+        public int? Amount { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public bool IsExpired { get; set; } 

@@ -18,6 +18,7 @@ namespace Uniqlo.BusinessLogic.Services.UserAddressService
         Task<ApiResponse<List<UserAddressResponse>>> GetByUser(Guid userId);
         Task<ApiResponse<UserAddressResponse>> GetById(Guid id);
         Task<ApiResponse<UserAddressResponse>> Update(UpdateUserAddressRequest request);
+        Task<ApiResponse<UserAddressResponse>> SetDefault(Guid id, Guid userId);
         Task<ApiResponse<UserAddressResponse>> Delete(Guid id);
     }
 }

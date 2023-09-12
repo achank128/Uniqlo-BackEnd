@@ -63,12 +63,12 @@ namespace Uniqlo.BusinessLogic.Services.AuthService
 
             if (userLogin == null)
             {
-                throw new BadRequestException(UserKeywords.UsernameIncorrect);
+                throw new BadRequestException(AuthKeywords.EmailIncorrect);
             }
 
             if (!BCrypt.Net.BCrypt.Verify(request.Password, userLogin.Password))
             {
-                throw new BadRequestException(UserKeywords.PasswordIncorrect);
+                throw new BadRequestException(AuthKeywords.PasswordIncorrect);
             }
 
             var user = _mapper.Map<UserResponse>(userLogin);
@@ -78,11 +78,14 @@ namespace Uniqlo.BusinessLogic.Services.AuthService
                 AccessToken = token,
                 User = user
             };
-            return ApiResponse<AuthResponse>.Success(response);
+            return ApiResponse<AuthResponse>.Success(AuthKeywords.LoginSuccess, response);
         }
 
         public async Task<ApiResponse<AuthResponse>> Register(UserRegisterRequest request)
         {
+            var userEmail = _userRepository.GetQueryable().SingleOrDefault(p => p.Email == request.Email);
+            if(userEmail != null) throw new BadRequestException(AuthKeywords.EmailExist);
+
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
             User newUser = new User {
@@ -105,7 +108,7 @@ namespace Uniqlo.BusinessLogic.Services.AuthService
                     AccessToken = token,
                     User = user
                 };
-                return ApiResponse<AuthResponse>.Success(response);
+                return ApiResponse<AuthResponse>.Success(AuthKeywords.RegisterSuccess, response);
             }
             else
             {

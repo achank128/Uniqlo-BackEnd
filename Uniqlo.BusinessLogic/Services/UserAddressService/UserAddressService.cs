@@ -28,8 +28,23 @@ namespace Uniqlo.BusinessLogic.Services.UserAddressService
 
         public async Task<ApiResponse<UserAddressResponse>> Create(CreateUserAddressRequest request)
         {
+            var addresses = await _userAddressRepository.GetBy(a => a.UserId == request.UserId).ToListAsync();
+
+            if(addresses.Count() == 0) {
+                request.IsDefault = true;
+            }
+
             var userAddress = _mapper.Map<UserAddress>(request);
             _userAddressRepository.Add(userAddress);
+
+            if (userAddress.IsDefault)
+            {
+                foreach (var item in addresses)
+                {
+                    item.IsDefault = false;
+                    _userAddressRepository.Update(item);
+                }
+            }
 
             if (await _userAddressRepository.SaveAsync())
             {
@@ -91,6 +106,29 @@ namespace Uniqlo.BusinessLogic.Services.UserAddressService
             var addresses = await userAddresses.ToListAsync();
             var response = _mapper.Map<List<UserAddressResponse>>(userAddresses);
             return ApiResponse<List<UserAddressResponse>>.Success(response);
+        }
+
+        public async Task<ApiResponse<UserAddressResponse>> SetDefault(Guid id, Guid userId)
+        {
+            var addresses = await _userAddressRepository.GetBy(a => a.UserId == userId).ToListAsync();
+            foreach (var item in addresses)
+            {
+                item.IsDefault = false;
+                _userAddressRepository.Update(item);
+            }
+            var userAddress = await _userAddressRepository.GetByIdAsync(id);
+            if (userAddress == null) throw new NotFoundException(Common.NotFound);
+            userAddress.IsDefault = true;
+            userAddress.UpdatedDate = DateTime.Now;
+            _userAddressRepository.Update(userAddress);
+            if (await _userAddressRepository.SaveAsync())
+            {
+                return ApiResponse<UserAddressResponse>.Success(Common.UpdateSuccess);
+            }
+            else
+            {
+                throw new BadRequestException(Common.UpdateFailure);
+            }
         }
 
         public async Task<ApiResponse<UserAddressResponse>> Update(UpdateUserAddressRequest request)

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Uniqlo.BusinessLogic.Services.Shared.ClaimService;
 using Uniqlo.BusinessLogic.Services.UserCouponService;
 using Uniqlo.Models.Models;
 using Uniqlo.Models.RequestModels.Coupon;
@@ -13,10 +14,12 @@ namespace Uniqlo.Controllers
     public class UserCouponsController : ControllerBase
     {
         private readonly IUserCouponService _userCouponService;
+        private readonly IClaimService _claimService;
 
-        public UserCouponsController(IUserCouponService userCouponService)
+        public UserCouponsController(IUserCouponService userCouponService, IClaimService claimService)
         {
             _userCouponService = userCouponService;
+            _claimService = claimService;
         }
 
         [HttpGet]
@@ -44,8 +47,7 @@ namespace Uniqlo.Controllers
         [Authorize]
         public async Task<IActionResult> GetMyCoupons()
         {
-            Guid userId = new Guid(User.FindFirstValue(ClaimTypes.Sid));
-            var response = await _userCouponService.GetUserCoupons(userId);
+            var response = await _userCouponService.GetUserCoupons(_claimService.GetUserId());
             return Ok(response);
         }
 
@@ -56,11 +58,10 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
-        [HttpPost("user/{couponId}")]
-        public async Task<IActionResult> AddUserCoupon(Guid couponId)
+        [HttpPost("add/{couponCode}")]
+        public async Task<IActionResult> AddUserCoupon(string couponCode)
         {
-            Guid userId = new Guid(User.FindFirstValue(ClaimTypes.Sid));
-            var response = await _userCouponService.AddUserCoupon(userId, couponId);
+            var response = await _userCouponService.AddUserCoupon(_claimService.GetUserId(), couponCode);
             return Ok(response);
         }
 

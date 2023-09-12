@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
 using Uniqlo.Core.Keywords;
+using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
 using Uniqlo.Models.Models;
@@ -18,24 +19,30 @@ namespace Uniqlo.BusinessLogic.Services.UserCouponService
     public class UserCouponService : IUserCouponService
     {
         private readonly IRepositoryBase<UserCoupon> _userCouponRepository;
+        private readonly ICouponRepository _couponRepository;
         private readonly IMapper _mapper;
 
-        public UserCouponService(IRepositoryBase<UserCoupon> userCouponRepository, IMapper mapper)
+        public UserCouponService(
+            IRepositoryBase<UserCoupon> userCouponRepository, 
+            IMapper mapper, 
+            ICouponRepository couponRepository)
         {
             _userCouponRepository = userCouponRepository;
             _mapper = mapper;
+            _couponRepository = couponRepository;
         }
 
-        public async Task<ApiResponse<UserCouponResponse>> AddUserCoupon(Guid userId, Guid couponId)
+        public async Task<ApiResponse<UserCouponResponse>> AddUserCoupon(Guid userId, string couponCode)
         {
+            var coupon = await _couponRepository.GetBy(c => c.Code == couponCode).FirstOrDefaultAsync();
+            if(coupon == null) throw new NotFoundException(Common.NotFound);
             UserCoupon userCoupon = new UserCoupon
             {
                 Id = Guid.NewGuid(),
                 UserId = userId,
-                CouponId = couponId
+                CouponId = coupon.Id
             };
             _userCouponRepository.Add(userCoupon);
-
             if (await _userCouponRepository.SaveAsync())
             {
                 return ApiResponse<UserCouponResponse>.Success(Common.CreateSuccess);
