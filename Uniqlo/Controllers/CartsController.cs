@@ -38,7 +38,7 @@ namespace Uniqlo.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("all")]
+        [HttpPost("filter")]
         public async Task<IActionResult> Filter(FilterBaseRequest request)
         {
             var response = await _cartService.Filter(request);

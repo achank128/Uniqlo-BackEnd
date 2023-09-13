@@ -26,7 +26,7 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
-        [HttpPost("all")]
+        [HttpPost("filter")]
         public async Task<IActionResult> Filter(FilterOrderRequest request)
         {
             var response = await _orderService.Filter(request);
