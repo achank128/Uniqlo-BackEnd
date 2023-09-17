@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,8 @@ namespace Uniqlo.BusinessLogic.Services.CategoryService
         public async Task<PagedResponse<CategoryResponse>> Filter(FilterBaseRequest request)
         {
             var categories = _categoryRepository.GetQueryable();
+            categories = categories.Where(p => (string.IsNullOrEmpty(request.KeyWord) || p.Name.Contains(request.KeyWord) || p.NameEn!.Contains(request.KeyWord) || p.NameVi!.Contains(request.KeyWord)));
+                
             var paged = await PagedResponse<Category>.CreateAsync(categories, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<CategoryResponse>>(paged);
             return response;

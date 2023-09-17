@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.Core.Helpers;
@@ -9,6 +10,7 @@ using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.Context;
 using Uniqlo.Models.EntityModels;
+using Uniqlo.Models.RequestModels.ProductDetail;
 
 namespace Uniqlo.DataAccess.Repositories.Implements
 {
@@ -49,6 +51,19 @@ namespace Uniqlo.DataAccess.Repositories.Implements
             }
 
             return true;
+        }
+
+        public IQueryable<ProductDetail> FilterProducts(Expression<Func<ProductDetail, bool>> condition)
+        {
+            var productDetails = _context.ProductDetails.Where(condition);
+
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            _context.ChangeTracker.AutoDetectChangesEnabled = false;
+            productDetails.Include(pd => pd.Product).Load();
+            productDetails.Include(pd => pd.Color).Load();
+            productDetails.Include(pd => pd.Size).Load();
+
+            return productDetails;
         }
 
         public async Task<List<ProductDetail>> GetProductDetailByProduct(Guid productId)

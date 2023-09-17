@@ -32,7 +32,7 @@ namespace Uniqlo.Controllers
         }
 
         [HttpPost("filter")]
-        public async Task<IActionResult> Filter(FilterBaseRequest request)
+        public async Task<IActionResult> Filter(FilterProductDetailRequest request)
         {
             var response = await _productDetailService.Filter(request);
             return Ok(response);

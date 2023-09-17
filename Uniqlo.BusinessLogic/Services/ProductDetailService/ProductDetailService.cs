@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
@@ -27,8 +29,8 @@ namespace Uniqlo.BusinessLogic.Services.ProductDetailService
             IProductDetailRepository productDetailRepository, 
             IRepositoryBase<ProductSize> productSizeRepository)
         {
-            _productDetailRepository = productDetailRepository;
             _mapper = mapper;
+            _productDetailRepository = productDetailRepository;
             _productSizeRepository = productSizeRepository;
         }
 
@@ -122,9 +124,16 @@ namespace Uniqlo.BusinessLogic.Services.ProductDetailService
             }
         }
 
-        public async Task<PagedResponse<ProductDetailResponse>> Filter(FilterBaseRequest request)
+        public async Task<PagedResponse<ProductDetailResponse>> Filter(FilterProductDetailRequest request)
         {
-            var productDetails = _productDetailRepository.GetQueryable();
+
+            Expression<Func<ProductDetail, bool>> condition = p =>
+                (request.ProductId == null || p.ProductId == request.ProductId)
+                && (request.SizeId == null || p.SizeId == request.SizeId)
+                && (request.ColorId == null || p.ColorId == request.ColorId);
+
+            var productDetails = _productDetailRepository.FilterProducts(condition);
+
             var paged = await PagedResponse<ProductDetail>.CreateAsync(productDetails, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<ProductDetailResponse>>(paged);
             return response;
@@ -139,7 +148,10 @@ namespace Uniqlo.BusinessLogic.Services.ProductDetailService
 
         public async Task<ApiResponse<ProductDetailResponse>> GetById(Guid id)
         {
-            var productDetail = await _productDetailRepository.GetByIdAsync(id);
+            var productDetail = await _productDetailRepository.GetBy(p => p.Id == id)
+                .Include(p => p.Color)
+                .Include(p=>p.Size)
+                .FirstOrDefaultAsync();
             if (productDetail == null) throw new NotFoundException(Common.NotFound);
 
             var response = _mapper.Map<ProductDetailResponse>(productDetail);

@@ -35,6 +35,7 @@ namespace Uniqlo.BusinessLogic.Services.UserService
         public async Task<PagedResponse<UserResponse>> Filter(FilterBaseRequest request)
         {
             var users = _userRepository.GetQueryable();
+            users = users.Where(u => u.Role == "CUSTOMER");
             var paged = await PagedResponse<User>.CreateAsync(users, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<UserResponse>>(paged);
             return response;

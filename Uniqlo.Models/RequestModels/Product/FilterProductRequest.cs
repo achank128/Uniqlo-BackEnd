@@ -11,6 +11,7 @@ namespace Uniqlo.Models.RequestModels.Product
     {
         public Guid? CategoryId { get; set; }
         public Guid? CollectionId { get; set; }
+        public int? GenderTypeId { get; set; }
         public List<int>? SizeIds { get; set; }
         public List<int>? ColorIds { get; set; }
         public decimal? PriceMin { get; set; }

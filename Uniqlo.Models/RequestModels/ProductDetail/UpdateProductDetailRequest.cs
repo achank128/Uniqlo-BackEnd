@@ -14,6 +14,7 @@ namespace Uniqlo.Models.RequestModels.ProductDetail
         public int ColorId { get; set; }
         public bool StockStatus { get; set; }
         public int InStock { get; set; }
+        public int Sold { get; set; }
         public string? Description { get; set; }
     }
 }

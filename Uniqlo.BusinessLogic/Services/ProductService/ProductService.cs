@@ -29,8 +29,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
         private readonly IRepositoryBase<ProductCategory> _productCategoryRepository;
         private readonly IRepositoryBase<ProductSize> _productSizeRepository;
         private readonly IRepositoryBase<ProductColor> _productColorRepository;
-        private readonly IRepositoryBase<Color> _colorRepository;
-        private readonly IRepositoryBase<Size> _sizeRepository;
+        private readonly IRepositoryBase<ProductImage> _productImageRepository;
 
         public ProductService(
             IMapper mapper,
@@ -40,20 +39,16 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             IRepositoryBase<ProductPrice> productPriceRepository,
             IRepositoryBase<ProductCategory> productCategoryRepository,
             IRepositoryBase<ProductSize> productSizeRepository,
-            IRepositoryBase<ProductColor> productColorRepository,
-            IRepositoryBase<Color> colorRepository,
-            IRepositoryBase<Size> sizeRepository)
+            IRepositoryBase<ProductColor> productColorRepository)
         {
-            _productRepository = productRepository;
             _mapper = mapper;
+            _productRepository = productRepository;
             _productReviewRepository = productReviewRepository;
             _productDetailRepository = productDetailRepository;
             _productPriceRepository = productPriceRepository;
             _productCategoryRepository = productCategoryRepository;
             _productSizeRepository = productSizeRepository;
             _productColorRepository = productColorRepository;
-            _colorRepository = colorRepository;
-            _sizeRepository = sizeRepository;
         }
 
         public async Task<ApiResponse<ProductResponse>> Create(CreateProductRequest request)
@@ -159,6 +154,18 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
                     ProductId = product.Id,
                 };
                 _productSizeRepository.Add(productSize);
+            }
+
+            //Add product colors
+            foreach (int colorId in request.Colors)
+            {
+                ProductColor productColor = new ProductColor
+                {
+                    Id = Guid.NewGuid(),
+                    ColorId = colorId,
+                    ProductId = product.Id,
+                };
+                _productColorRepository.Add(productColor);
             }
 
             //Add product details

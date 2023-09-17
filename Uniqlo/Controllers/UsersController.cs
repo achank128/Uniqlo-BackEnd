@@ -26,7 +26,7 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
-        [HttpPost("filter")]
+        [HttpPost("customers/filter")]
         //[Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> Filter(FilterBaseRequest request)
         {

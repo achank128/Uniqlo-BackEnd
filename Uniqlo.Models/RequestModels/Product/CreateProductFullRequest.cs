@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Uniqlo.Models.RequestModels.ProductImage;
 
 namespace Uniqlo.Models.RequestModels.Product
 {
@@ -36,5 +37,6 @@ namespace Uniqlo.Models.RequestModels.Product
         public List<int> Sizes { get; set; }
         public List<int> Colors { get; set; }
         public List<Guid> Categories { get; set; }
+        public List<CreateProductImageRequest> ProductImages { get; set; }
     }
 }

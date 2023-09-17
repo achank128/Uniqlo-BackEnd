@@ -24,7 +24,7 @@ namespace Uniqlo.Models.ResponseModels
         public DateTime? UpdatedDate { get; set; }
 
         public virtual GenderTypeResponse GenderType { get; set; }
-        public virtual List<CategoryResponse>? Children { get; set; }
+        public List<CategoryResponse>? Children { get; set; }
 
     }
 }

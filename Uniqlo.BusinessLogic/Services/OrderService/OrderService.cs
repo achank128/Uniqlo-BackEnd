@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,17 +78,8 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
                     throw new BadRequestException(OrderKeywords.OrderProductOutOfStock);
                 }
                 productDetail.InStock -= item.Quantity;
+                productDetail.Sold += item.Quantity;
                 _productDetailRepository.Update(productDetail);
-
-                //OrderItem orderItem = new OrderItem
-                //{
-                //    Id = Guid.NewGuid(),
-                //    OrderId = order.Id,
-                //    ProductDetailId = item.ProductDetailId,
-                //    Quantity = item.Quantity,
-                //    Price = item.Price
-                //};
-                //_orderItemRepository.Add(orderItem);
             }
 
             Shipment shipment = new Shipment
@@ -209,7 +201,18 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
                 {
                     throw new BadRequestException(OrderKeywords.OrderCannotCancel);
                 }
-
+                var orderItems = await _orderItemRepository.GetBy(o => o.OrderId == order.Id).ToListAsync();
+                foreach (var item in orderItems)
+                {
+                    var productDetail = await _productDetailRepository.GetByIdAsync(item.ProductDetailId);
+                    if (productDetail.InStock < item.Quantity)
+                    {
+                        throw new BadRequestException(OrderKeywords.OrderProductOutOfStock);
+                    }
+                    productDetail.InStock += item.Quantity;
+                    productDetail.Sold -= item.Quantity;
+                    _productDetailRepository.Update(productDetail);
+                }
                 order.Status = "CANCELLED";
                 order.CancelReason = request.Reason;
             } 

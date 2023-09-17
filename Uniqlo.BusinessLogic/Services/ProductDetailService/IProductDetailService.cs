@@ -14,7 +14,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductDetailService
         Task<ApiResponse<ProductDetailResponse>> Create(CreateProductDetailRequest request);
         Task<ApiResponse<ProductDetailResponse>> CreateList(CreateListProductDetailRequest request);
         Task<ApiResponse<ProductDetailResponse>> CreateForProduct(Guid productId);
-        Task<PagedResponse<ProductDetailResponse>> Filter(FilterBaseRequest request);
+        Task<PagedResponse<ProductDetailResponse>> Filter(FilterProductDetailRequest request);
         Task<ApiResponse<List<ProductDetailResponse>>> GetAll();
         Task<ApiResponse<List<ProductDetailResponse>>> GetByProduct(Guid productId);
         Task<ApiResponse<ProductDetailResponse>> GetById(Guid id);

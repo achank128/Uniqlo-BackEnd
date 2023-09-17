@@ -15,6 +15,7 @@ namespace Uniqlo.Models.ResponseModels
         public int ColorId { get; set; }
         public bool StockStatus { get; set; }
         public int InStock { get; set; }
+        public int Sold { get; set; }
         public string? Description { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }

@@ -18,6 +18,7 @@ namespace Uniqlo.Models.EntityModels
         public int ColorId { get; set; }
         public bool StockStatus { get; set; } = false;
         public int InStock { get; set; }
+        public int Sold { get; set; } = 0;
         public string? Description { get; set; }
         public bool? DeleteStatus { get; set; } = false;
         public DateTime? CreatedDate { get; set; } = DateTime.Now;
