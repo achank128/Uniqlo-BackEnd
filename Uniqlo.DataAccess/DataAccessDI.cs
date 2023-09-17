@@ -33,9 +33,9 @@ namespace Uniqlo.DataAccess
             services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IShipmentRepository, ShipmentRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<ICollectionRepository, CollectionRepository>();
         }

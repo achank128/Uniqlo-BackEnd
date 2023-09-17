@@ -14,10 +14,11 @@ namespace Uniqlo.Models.Models
         public int PageIndex { get; set; }
         public int TotalRecords { get; set; }
         public int TotalPages { get; set; }
+        public object Statistics { get; set; }
 
         public PagedResponse() { }
 
-        public PagedResponse(List<T> items, int count, int pageIndex, int pageSize)
+        public PagedResponse(List<T> items, int count, int pageIndex, int pageSize, object statistics)
         {
             this.StatusCode = StatusCodes.Status200OK;
             this.IsSuccess = true;
@@ -27,6 +28,7 @@ namespace Uniqlo.Models.Models
             this.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             this.TotalRecords = count;
             this.Data = items;
+            this.Statistics = statistics;
         }
 
         public static async Task<PagedResponse<T>> CreateAsync(IQueryable<T> source, int? pageIndex, int? pageSize)
@@ -36,7 +38,17 @@ namespace Uniqlo.Models.Models
 
             var count = await source.CountAsync();
             var items = await source.Skip((pageIndex.Value - 1) * pageSize.Value).Take(pageSize.Value).ToListAsync();
-            return new PagedResponse<T>(items, count, pageIndex.Value, pageSize.Value);
+            return new PagedResponse<T>(items, count, pageIndex.Value, pageSize.Value, null);
+        }
+
+        public static async Task<PagedResponse<T>> CreateStatisticAsync(IQueryable<T> source, int? pageIndex, int? pageSize, object statistics)
+        {
+            if (pageSize == null || pageSize < 1) pageSize = 10;
+            if (pageIndex == null || pageIndex < 1) pageIndex = 1;
+
+            var count = await source.CountAsync();
+            var items = await source.Skip((pageIndex.Value - 1) * pageSize.Value).Take(pageSize.Value).ToListAsync();
+            return new PagedResponse<T>(items, count, pageIndex.Value, pageSize.Value, statistics);
         }
     }
 }

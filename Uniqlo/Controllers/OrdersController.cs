@@ -33,13 +33,6 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
-        [HttpGet("detail/{id}")]
-        public async Task<IActionResult> GetDetails(Guid id)
-        {
-            var response = await _orderService.GetOrderDetails(id);
-            return Ok(response);
-        }
-
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetOrderByUser(Guid userId)
         {

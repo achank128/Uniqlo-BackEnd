@@ -137,8 +137,20 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
 
         public async Task<PagedResponse<OrderResponse>> Filter(FilterOrderRequest request)
         {
-            var orders = _orderRepository.GetQueryable();
-            var paged = await PagedResponse<Order>.CreateAsync(orders, request.PageIndex, request.PageSize);
+            var orders = _orderRepository.FilterOrders(request);
+            var ordersOpen = await orders.Where(o => o.Status == "OPEN").CountAsync();
+            var ordersConfirmed = await orders.Where(o => o.Status == "CONFIRMED").CountAsync();
+            var ordersCompleted = await orders.Where(o => o.Status == "COMPLETED").CountAsync();
+            var ordersCancelled = await orders.Where(o => o.Status == "CANCELLED").CountAsync();
+
+            var statistics = new {
+                ordersOpen,
+                ordersConfirmed,
+                ordersCompleted,
+                ordersCancelled
+            };
+
+            var paged = await PagedResponse<Order>.CreateStatisticAsync(orders, request.PageIndex, request.PageSize, statistics);
             var response = _mapper.Map<PagedResponse<OrderResponse>>(paged);
             return response;
         }
@@ -151,9 +163,8 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
 
         public async Task<ApiResponse<OrderResponse>> GetById(Guid id)
         {
-            var order = await _orderRepository.GetByIdAsync(id);
+            var order = await _orderRepository.GetOrderById(id);
             if (order == null) throw new NotFoundException(Common.NotFound);
-
             var response = _mapper.Map<OrderResponse>(order);
             return ApiResponse<OrderResponse>.Success(response);
         }
@@ -165,14 +176,6 @@ namespace Uniqlo.BusinessLogic.Services.OrderService
 
             var response = _mapper.Map<List<OrderResponse>>(order);
             return ApiResponse<List<OrderResponse>>.Success(response);
-        }
-
-        public async Task<ApiResponse<OrderResponse>> GetOrderDetails(Guid id)
-        {
-            var order = await _orderRepository.GetOrderById(id);
-            if (order == null) throw new NotFoundException(Common.NotFound);
-            var response = _mapper.Map<OrderResponse>(order);
-            return ApiResponse<OrderResponse>.Success(response);
         }
 
         public async Task<ApiResponse<OrderResponse>> Update(UpdateOrderRequest request)

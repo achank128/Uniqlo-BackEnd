@@ -9,5 +9,9 @@ namespace Uniqlo.Models.RequestModels.Order
 {
     public class FilterOrderRequest : FilterBaseRequest
     {
+        public Guid? ProductId { get; set; }
+        public string? OrderStatus { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }

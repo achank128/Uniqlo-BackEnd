@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,9 +57,9 @@ namespace Uniqlo.BusinessLogic.Services.ShipmentService
             }
         }
 
-        public async Task<PagedResponse<ShipmentResponse>> Filter(FilterBaseRequest request)
+        public async Task<PagedResponse<ShipmentResponse>> Filter(FilterShipmentRequest request)
         {
-            var shipments = _shipmentRepository.GetQueryable();
+            var shipments = _shipmentRepository.FilterShipments(request);
             var paged = await PagedResponse<Shipment>.CreateAsync(shipments, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<ShipmentResponse>>(paged);
             return response;
@@ -73,7 +74,16 @@ namespace Uniqlo.BusinessLogic.Services.ShipmentService
 
         public async Task<ApiResponse<ShipmentResponse>> GetById(Guid id)
         {
-            var shipment = await _shipmentRepository.GetByIdAsync(id);
+            var shipment = await _shipmentRepository.GetShipmentById(id);
+            if (shipment == null) throw new NotFoundException(Common.NotFound);
+
+            var response = _mapper.Map<ShipmentResponse>(shipment);
+            return ApiResponse<ShipmentResponse>.Success(response);
+        }
+
+        public async Task<ApiResponse<ShipmentResponse>> GetByOrder(Guid orderId)
+        {
+            var shipment = await _shipmentRepository.GetShipmentByOrder(orderId);
             if (shipment == null) throw new NotFoundException(Common.NotFound);
 
             var response = _mapper.Map<ShipmentResponse>(shipment);
@@ -83,6 +93,26 @@ namespace Uniqlo.BusinessLogic.Services.ShipmentService
         public async Task<ApiResponse<ShipmentResponse>> Update(UpdateShipmentRequest request)
         {
             var shipment = _mapper.Map<Shipment>(request);
+            shipment.UpdatedDate = DateTime.Now;
+            _shipmentRepository.Update(shipment);
+            if (await _shipmentRepository.SaveAsync())
+            {
+                return ApiResponse<ShipmentResponse>.Success(Common.UpdateSuccess);
+            }
+            else
+            {
+                throw new BadRequestException(Common.UpdateFailure);
+            }
+        }
+
+        public async Task<ApiResponse<ShipmentResponse>> UpdateStatus(UpdateShipmentStatusRequest request)
+        {
+            var shipment = await _shipmentRepository.GetByIdAsync(request.Id);
+            if (shipment == null) throw new NotFoundException(Common.NotFound);
+
+            shipment.Status = request.Status;
+            shipment.StatusDetails = request.StatusDetail;
+
             shipment.UpdatedDate = DateTime.Now;
             _shipmentRepository.Update(shipment);
             if (await _shipmentRepository.SaveAsync())

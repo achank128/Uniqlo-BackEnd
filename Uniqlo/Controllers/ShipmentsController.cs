@@ -25,7 +25,7 @@ namespace Uniqlo.Controllers
         }
 
         [HttpPost("filter")]
-        public async Task<IActionResult> Filter(FilterBaseRequest request)
+        public async Task<IActionResult> Filter(FilterShipmentRequest request)
         {
             var response = await _shipmentService.Filter(request);
             return Ok(response);
@@ -35,6 +35,13 @@ namespace Uniqlo.Controllers
         public async Task<IActionResult> Get(Guid id)
         {
             var response = await _shipmentService.GetById(id);
+            return Ok(response);
+        }
+
+        [HttpGet("order/{orderId}")]
+        public async Task<IActionResult> GetByOrder(Guid orderId)
+        {
+            var response = await _shipmentService.GetByOrder(orderId);
             return Ok(response);
         }
 
@@ -49,6 +56,13 @@ namespace Uniqlo.Controllers
         public async Task<IActionResult> Update(UpdateShipmentRequest request)
         {
             var response = await _shipmentService.Update(request);
+            return Ok(response);
+        }
+
+        [HttpPut("status")]
+        public async Task<IActionResult> UpdateStatus(UpdateShipmentStatusRequest request)
+        {
+            var response = await _shipmentService.UpdateStatus(request);
             return Ok(response);
         }
 
