@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Uniqlo.BusinessLogic.Services.Shared.FileUploadService;
+using Uniqlo.BusinessLogic.Shared.FileUploadService;
 
 namespace Uniqlo.Controllers
 {

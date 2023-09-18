@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.Models.Models;
 
-namespace Uniqlo.BusinessLogic.Services.Shared.FileUploadService
+namespace Uniqlo.BusinessLogic.Shared.FileUploadService
 {
     public class FileUploadService : IFileUploadService
     {
@@ -31,7 +31,8 @@ namespace Uniqlo.BusinessLogic.Services.Shared.FileUploadService
                 postedFile.CopyTo(fileStream);
             }
 
-            return new FileResponse { 
+            return new FileResponse
+            {
                 FileName = fileName,
                 FilePath = filePath,
             };

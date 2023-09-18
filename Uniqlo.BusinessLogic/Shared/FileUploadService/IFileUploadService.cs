@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.Models.Models;
 
-namespace Uniqlo.BusinessLogic.Services.Shared.FileUploadService
+namespace Uniqlo.BusinessLogic.Shared.FileUploadService
 {
     public interface IFileUploadService
     {

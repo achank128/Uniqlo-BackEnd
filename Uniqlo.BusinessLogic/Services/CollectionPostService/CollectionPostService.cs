@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
-using Uniqlo.BusinessLogic.Services.Shared.FileUploadService;
+using Uniqlo.BusinessLogic.Shared.FileUploadService;
 using Uniqlo.Core.Keywords;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;

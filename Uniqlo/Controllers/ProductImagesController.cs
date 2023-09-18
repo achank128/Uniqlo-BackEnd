@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Uniqlo.BusinessLogic.Services.CategoryService;
 using Uniqlo.BusinessLogic.Services.ProductImageService;
-using Uniqlo.BusinessLogic.Services.Shared.FileUploadService;
+using Uniqlo.BusinessLogic.Shared.FileUploadService;
 using Uniqlo.Models.Models;
 using Uniqlo.Models.RequestModels.Category;
 using Uniqlo.Models.RequestModels.ProductImage;

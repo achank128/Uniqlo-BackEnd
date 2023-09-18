@@ -1,74 +1,73 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Uniqlo.BusinessLogic.Services.CouponService;
+using Uniqlo.BusinessLogic.Services.ReviewService;
 using Uniqlo.BusinessLogic.Shared.ClaimService;
 using Uniqlo.Models.Models;
-using Uniqlo.Models.RequestModels.Coupon;
+using Uniqlo.Models.RequestModels.Review;
 
 namespace Uniqlo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CouponsController : ControllerBase
+    public class ReviewsController : ControllerBase
     {
-        private readonly ICouponService _couponService;
+        private readonly IReviewService _reviewService;
         private readonly IClaimService _claimService;
 
-        public CouponsController(ICouponService couponService, IClaimService claimService)
+        public ReviewsController(IReviewService couponService, IClaimService claimService)
         {
-            _couponService = couponService;
+            _reviewService = couponService;
             _claimService = claimService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _couponService.GetAll();
+            var response = await _reviewService.GetAll();
             return Ok(response);
         }
 
         [HttpPost("filter")]
-        public async Task<IActionResult> Filter(FilterBaseRequest request)
+        public async Task<IActionResult> Filter(FilterReviewRequest request)
         {
-            var response = await _couponService.Filter(request);
+            var response = await _reviewService.Filter(request);
             return Ok(response);
         }
 
-        [HttpGet("mycoupon")]
+        [HttpGet("myreview")]
         [Authorize]
         public async Task<IActionResult> GetMyCoupon()
         {
-            var response = await _couponService.GetByUser(_claimService.GetUserId());
+            var response = await _reviewService.GetByUser(_claimService.GetUserId());
             return Ok(response);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var response = await _couponService.GetById(id);
+            var response = await _reviewService.GetById(id);
             return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCouponRequest request)
+        public async Task<IActionResult> Create(CreateReviewRequest request)
         {
-            var response = await _couponService.Create(request);
+            var response = await _reviewService.Create(request);
             return Ok(response);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateCouponRequest request)
+        public async Task<IActionResult> Update(UpdateReviewRequest request)
         {
-            var response = await _couponService.Update(request);
+            var response = await _reviewService.Update(request);
             return Ok(response);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var response = await _couponService.Delete(id);
+            var response = await _reviewService.Delete(id);
             return Ok(response);
         }
     }

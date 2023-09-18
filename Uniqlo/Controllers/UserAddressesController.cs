@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Uniqlo.BusinessLogic.Services.Shared.ClaimService;
 using Uniqlo.BusinessLogic.Services.UserAddressService;
+using Uniqlo.BusinessLogic.Shared.ClaimService;
 using Uniqlo.Models.Models;
 using Uniqlo.Models.RequestModels.UserAddress;
 

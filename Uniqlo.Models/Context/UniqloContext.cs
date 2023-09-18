@@ -147,6 +147,7 @@ namespace Uniqlo.Models.Context
             {
                 entity.HasOne(d => d.Product).WithMany(p => p.Reviews).HasForeignKey(d => d.ProductId).OnDelete(DeleteBehavior.ClientSetNull);
                 entity.HasOne(d => d.User).WithMany(p => p.Reviews).HasForeignKey(d => d.UserId).OnDelete(DeleteBehavior.ClientSetNull);
+                entity.HasOne(d => d.Size).WithMany(p => p.Reviews).HasForeignKey(d => d.SizeId).OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Shipment>(entity =>

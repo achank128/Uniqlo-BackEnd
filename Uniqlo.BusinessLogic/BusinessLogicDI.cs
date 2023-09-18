@@ -21,8 +21,7 @@ using Uniqlo.BusinessLogic.Services.ProductDetailService;
 using Uniqlo.BusinessLogic.Services.ProductImageService;
 using Uniqlo.BusinessLogic.Services.ProductService;
 using Uniqlo.BusinessLogic.Services.RegionService;
-using Uniqlo.BusinessLogic.Services.Shared.ClaimService;
-using Uniqlo.BusinessLogic.Services.Shared.FileUploadService;
+using Uniqlo.BusinessLogic.Services.ReviewService;
 using Uniqlo.BusinessLogic.Services.ShipmentService;
 using Uniqlo.BusinessLogic.Services.SizeService;
 using Uniqlo.BusinessLogic.Services.UnitService;
@@ -30,6 +29,8 @@ using Uniqlo.BusinessLogic.Services.UserAddressService;
 using Uniqlo.BusinessLogic.Services.UserCouponService;
 using Uniqlo.BusinessLogic.Services.UserService;
 using Uniqlo.BusinessLogic.Services.WishListService;
+using Uniqlo.BusinessLogic.Shared.ClaimService;
+using Uniqlo.BusinessLogic.Shared.FileUploadService;
 
 namespace Uniqlo.BusinessLogic
 {
@@ -70,6 +71,7 @@ namespace Uniqlo.BusinessLogic
             services.AddScoped<IRegionService, RegionService>();
             services.AddScoped<IProductImageService, ProductImageService>();
             services.AddScoped<ICollectionPostService, CollectionPostService>();
+            services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IFileUploadService, FileUploadService>();
         }
 
