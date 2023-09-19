@@ -11,6 +11,7 @@ namespace Uniqlo.DataAccess.Repositories.Interfaces
     public interface ICategoryRepository : IRepositoryBase<Category>
     {
         Task<List<Category>> GetCategoriesByGenderType(int genderTypeId);
+        Task<List<Category>> GetCategoriesByProduct(Guid productId);
 
     }
 }

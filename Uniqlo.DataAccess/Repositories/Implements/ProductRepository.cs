@@ -191,29 +191,31 @@ namespace Uniqlo.DataAccess.Repositories.Implements
             //};
             _context.ChangeTracker.LazyLoadingEnabled = false;
             _context.ChangeTracker.AutoDetectChangesEnabled = false;
-            products.Include(p => p.ProductImages).Load();
             products.Include(p => p.ProductPrice).Load();
+            products.Include(p => p.GenderType).Load();
             products.Include(p => p.ProductReview).Load();
+            products.Include(p => p.ProductImages).Load();
             products.Include(p => p.ProductSizes).Load();
             products.Include(p => p.ProductColors).Load();
-            products.Include(p => p.GenderType).Load();
 
             return products;
         }
 
         public async Task<Product> GetProductById(Guid id)
         {
-            var products = await _context.Products
-                .Where(p => p.Id == id)
-                .Include(p => p.ProductImages)
-                .Include(p => p.ProductPrice)
-                .Include(p => p.ProductReview)
-                .Include(p => p.ProductSizes).ThenInclude(pc => pc.Size)
-                .Include(p => p.ProductColors).ThenInclude(pc => pc.Color)
-                .Include(p => p.GenderType)
-                .SingleOrDefaultAsync();
+            var product = _context.Products.Where(p => p.Id == id);
 
-            return products;
+            _context.ChangeTracker.LazyLoadingEnabled = false;
+            _context.ChangeTracker.AutoDetectChangesEnabled = false;
+            product.Include(p => p.Collection).Load();
+            product.Include(p => p.ProductPrice).Load();
+            product.Include(p => p.ProductReview).Load();
+            product.Include(p => p.GenderType).Load();
+            product.Include(p => p.ProductImages).Load();
+            product.Include(p => p.ProductSizes).ThenInclude(pc => pc.Size).Load();
+            product.Include(p => p.ProductColors).ThenInclude(pc => pc.Color).Load();
+            
+            return await product.SingleOrDefaultAsync();
         }
 
         public IQueryable<Product> GetProductsByCategory(Guid categoryId, Expression<Func<Product, bool>> predicate)

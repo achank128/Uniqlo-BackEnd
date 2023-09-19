@@ -43,5 +43,15 @@ namespace Uniqlo.DataAccess.Repositories.Implements
                 .ToListAsync();
             return categories;
         }
+
+        public async Task<List<Category>> GetCategoriesByProduct(Guid productId)
+        {
+            var categories = (from c in _context.Categories
+                             join pc in _context.ProductCategories on c.Id equals pc.CategoryId into c_pcLeftJoin
+                             from c_pc in c_pcLeftJoin.DefaultIfEmpty()
+                             where c_pc.ProductId == productId
+                             select c).Distinct();
+            return await categories.ToListAsync();
+        }
     }
 }

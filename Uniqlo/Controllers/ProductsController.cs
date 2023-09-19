@@ -62,11 +62,11 @@ namespace Uniqlo.Controllers
         }
 
         /// <summary>
-        /// Thêm sản phẩm gồm cả chi tiết sp
+        /// Thêm sản phẩm đầy đủ
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("createFull")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateFull(CreateProductFullRequest request)
         {
             var response = await _productService.CreateFull(request);
@@ -86,6 +86,11 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Cập nhật thông tin sản phẩm
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<IActionResult> Update(UpdateProductRequest request)
         {
@@ -93,6 +98,25 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Cập nhật thông tin sản phẩm đầy đủ
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateFull(UpdateProductFullRequest request)
+        {
+            var response = await _productService.UpdateFull(request);
+            return Ok(response);
+        }
+
+
+        /// <summary>
+        /// Xóa sản phẩm theo mã
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id, DeleteRequest request)
         {

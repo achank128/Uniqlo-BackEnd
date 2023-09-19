@@ -15,10 +15,11 @@ namespace Uniqlo.BusinessLogic.MappingProfiles
     {
         public ProductProfile()
         {
+            CreateMap<CreateProductRequest, Product>();
             CreateMap<CreateProductFullRequest, Product>();
             CreateMap<CreateProductCrawlRequest, Product>();
-            CreateMap<CreateProductRequest, Product>();
             CreateMap<UpdateProductRequest, Product>();
+            CreateMap<UpdateProductFullRequest, Product>();
             CreateMap<Product, ProductResponse>();
             CreateMap<PagedResponse<Product>, PagedResponse<ProductResponse>>();
 

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -39,7 +40,8 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             IRepositoryBase<ProductPrice> productPriceRepository,
             IRepositoryBase<ProductCategory> productCategoryRepository,
             IRepositoryBase<ProductSize> productSizeRepository,
-            IRepositoryBase<ProductColor> productColorRepository)
+            IRepositoryBase<ProductColor> productColorRepository,
+            IRepositoryBase<ProductImage> productImageRepository)
         {
             _mapper = mapper;
             _productRepository = productRepository;
@@ -49,6 +51,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             _productCategoryRepository = productCategoryRepository;
             _productSizeRepository = productSizeRepository;
             _productColorRepository = productColorRepository;
+            _productImageRepository = productImageRepository;
         }
 
         public async Task<ApiResponse<ProductResponse>> Create(CreateProductRequest request)
@@ -259,6 +262,106 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             }
         }
 
+        public async Task<ApiResponse<ProductResponse>> UpdateFull(UpdateProductFullRequest request)
+        {
+            var product = _mapper.Map<Product>(request);
 
+            //Update product price
+            var productPrice = await _productPriceRepository.GetByIdAsync(product.ProductPriceId);
+            productPrice.Price = request.Price;
+            productPrice.PromoPrice = request.PromoPrice;
+            productPrice.ImportPrice = request.ImportPrice;
+            productPrice.VAT = request.VAT;
+            _productPriceRepository.Update(productPrice);
+
+            //Update product categories
+            var productCategories = await _productCategoryRepository.GetBy(c => c.ProductId == product.Id).ToListAsync();
+            _productCategoryRepository.DeleteRange(productCategories);
+            foreach (Guid categoryId in request.Categories)
+            {
+                ProductCategory productCategory = new ProductCategory
+                {
+                    Id = Guid.NewGuid(),
+                    CategoryId = categoryId,
+                    ProductId = product.Id,
+                };
+                _productCategoryRepository.Add(productCategory);
+            }
+
+            //Update product images
+            if(request.ProductImagesUpdate != null)
+            {
+                var productImages = await _productImageRepository.GetBy(i => i.ProductId == product.Id).ToListAsync();
+                _productImageRepository.DeleteRange(productImages);
+                foreach (var item in request.ProductImagesUpdate)
+                {
+                    ProductImage productImage = new ProductImage
+                    {
+                        Id = Guid.NewGuid(),
+                        ProductId = item.ProductId,
+                        Image = item.Image,
+                        ImageUrl = item.ImageUrl,
+                        Type = item.Type,
+                    };
+                    _productImageRepository.Add(productImage);
+                }
+            }
+
+            ////Add product sizes
+            //foreach (int sizeId in request.Sizes)
+            //{
+            //    ProductSize productSize = new ProductSize
+            //    {
+            //        Id = Guid.NewGuid(),
+            //        SizeId = sizeId,
+            //        ProductId = product.Id,
+            //    };
+            //    _productSizeRepository.Add(productSize);
+            //}
+
+            ////Add product colors
+            //foreach (int colorId in request.Colors)
+            //{
+            //    ProductColor productColor = new ProductColor
+            //    {
+            //        Id = Guid.NewGuid(),
+            //        ColorId = colorId,
+            //        ProductId = product.Id,
+            //    };
+            //    _productColorRepository.Add(productColor);
+            //}
+
+            ////Add product details
+            //foreach (int colorId in request.Colors)
+            //{
+            //    foreach (int sizeId in request.Sizes)
+            //    {
+
+            //        ProductDetail productDetail = new ProductDetail
+            //        {
+            //            Id = Guid.NewGuid(),
+            //            SizeId = sizeId,
+            //            ColorId = colorId,
+            //            ProductId = product.Id,
+            //            InStock = 0,
+            //        };
+            //        _productDetailRepository.Add(productDetail);
+            //    }
+            //}
+
+
+
+            _productRepository.Update(product);
+
+            if (await _productRepository.SaveAsync())
+            {
+                var response = _mapper.Map<ProductResponse>(product);
+                return ApiResponse<ProductResponse>.Success(Common.UpdateSuccess, response);
+            }
+            else
+            {
+                throw new BadRequestException(Common.UpdateFailure);
+            }
+        }
     }
 }

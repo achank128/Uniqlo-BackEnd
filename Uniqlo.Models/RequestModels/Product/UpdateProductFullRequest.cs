@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Uniqlo.Models.EntityModels;
+using Uniqlo.Models.RequestModels.ProductImage;
 
-namespace Uniqlo.Models.ResponseModels
+namespace Uniqlo.Models.RequestModels.Product
 {
-    public class ProductResponse
+    public class UpdateProductFullRequest
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -30,21 +30,15 @@ namespace Uniqlo.Models.ResponseModels
         public Guid ProductPriceId { get; set; }
         public Guid? ProductReviewId { get; set; }
         public Guid? CollectionId { get; set; }
-        public bool? DeleteStatus { get; set; } 
-        public string? Status { get; set; } 
-        public DateTime? CreatedDate { get; set; } 
-        public DateTime? UpdatedDate { get; set; } 
-
-
-        public virtual UnitResponse Unit { get; set; }
-        public virtual GenderTypeResponse GenderType { get; set; }
-        public virtual ProductPriceResponse ProductPrice { get; set; }
-        public virtual ProductReviewResponse? ProductReview { get; set; }
-        public virtual CollectionResponse? Collection { get; set; }
-
-        public List<ProductImageResponse> ProductImages { get; set; }
-        public List<ProductSizeResponse> ProductSizes { get; set; }
-        public List<ProductColorResponse> ProductColors { get; set; }
+        public string? Status { get; set; }
+        public List<int> Sizes { get; set; }
+        public List<int> Colors { get; set; }
+        public List<Guid> Categories { get; set; }
+        public List<UpdateProductImageRequest> ProductImagesUpdate { get; set; }
+        public decimal Price { get; set; }
+        public decimal? PromoPrice { get; set; }
+        public decimal? ImportPrice { get; set; }
+        public decimal? VAT { get; set; }
 
     }
 }

@@ -19,6 +19,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
         Task<ApiResponse<List<ProductResponse>>> GetAll();
         Task<ApiResponse<ProductResponse>> GetById(Guid id);
         Task<ApiResponse<ProductResponse>> Update(UpdateProductRequest request);
+        Task<ApiResponse<ProductResponse>> UpdateFull(UpdateProductFullRequest request);
         Task<ApiResponse<ProductResponse>> Delete(Guid id, DeleteRequest request);
     }
 }

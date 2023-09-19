@@ -38,6 +38,13 @@ namespace Uniqlo.Controllers
             return Ok(response);
         }
 
+        [HttpGet("product/{id}")]
+        public async Task<IActionResult> GetByProduct(Guid id)
+        {
+            var response = await _categoryService.GetByProduct(id);
+            return Ok(response);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {

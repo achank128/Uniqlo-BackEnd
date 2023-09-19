@@ -93,6 +93,7 @@ namespace Uniqlo.BusinessLogic.Services.CollectionService
         public async Task<PagedResponse<CollectionResponse>> Filter(FilterBaseRequest request)
         {
             var collections = _collectionRepository.GetQueryable();
+            collections = collections.Where(c => (string.IsNullOrEmpty(request.KeyWord) || c.Name.Contains(request.KeyWord) || c.NameEn!.Contains(request.KeyWord) || c.NameVi!.Contains(request.KeyWord)));
             var paged = await PagedResponse<Collection>.CreateAsync(collections, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<CollectionResponse>>(paged);
             return response;
