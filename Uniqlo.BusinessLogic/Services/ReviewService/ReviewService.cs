@@ -19,9 +19,9 @@ namespace Uniqlo.BusinessLogic.Services.ReviewService
     public class ReviewService : IReviewService
     {
         private readonly IMapper _mapper;
-        private readonly IRepositoryBase<Review> _reviewRepository;
+        private readonly IReviewRepository _reviewRepository;
 
-        public ReviewService(IMapper mapper, IRepositoryBase<Review> reviewRepository)
+        public ReviewService(IMapper mapper, IReviewRepository reviewRepository)
         {
             _mapper = mapper;
             _reviewRepository = reviewRepository;
@@ -60,10 +60,7 @@ namespace Uniqlo.BusinessLogic.Services.ReviewService
 
         public async Task<PagedResponse<ReviewResponse>> Filter(FilterReviewRequest request)
         {
-            var reviews = _reviewRepository.GetQueryable();
-            reviews = reviews.Where(r => (request.ProductId == null || r.ProductId == request.ProductId) 
-                                    && (request.Star == null || r.Star == request.Star))
-                             .Include(r => r.Size);
+            var reviews = _reviewRepository.FilterReviews(request);
             var paged = await PagedResponse<Review>.CreateAsync(reviews, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<ReviewResponse>>(paged);
             return response;
@@ -78,7 +75,7 @@ namespace Uniqlo.BusinessLogic.Services.ReviewService
 
         public async Task<ApiResponse<ReviewResponse>> GetById(Guid id)
         {
-            var review = await _reviewRepository.GetByIdAsync(id);
+            var review = await _reviewRepository.GetReviewById(id);
             if (review == null) throw new NotFoundException(Common.NotFound);
 
             var response = _mapper.Map<ReviewResponse>(review);

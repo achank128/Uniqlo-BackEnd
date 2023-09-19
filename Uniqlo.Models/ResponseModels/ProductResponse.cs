@@ -40,6 +40,8 @@ namespace Uniqlo.Models.ResponseModels
         public virtual GenderTypeResponse GenderType { get; set; }
         public virtual ProductPriceResponse ProductPrice { get; set; }
         public virtual ProductReviewResponse? ProductReview { get; set; }
+        public virtual Collection? Collection { get; set; }
+
         public List<ProductImageResponse> ProductImages { get; set; }
         public List<ProductSizeResponse> ProductSizes { get; set; }
         public List<ProductColorResponse> ProductColors { get; set; }

@@ -38,6 +38,7 @@ namespace Uniqlo.DataAccess
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<ICollectionRepository, CollectionRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
         }
 
         private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

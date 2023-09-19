@@ -26,6 +26,7 @@ namespace Uniqlo.DataAccess.Repositories.Implements
                          where (filter.StartDate == null || o.CreatedDate > filter.StartDate)
                          && (filter.EndDate == null || o.CreatedDate < filter.EndDate)
                          && (filter.OrderStatus == null || o.Status == filter.OrderStatus)
+                         orderby o.CreatedDate descending
                          select o;
 
             _context.ChangeTracker.LazyLoadingEnabled = false;
