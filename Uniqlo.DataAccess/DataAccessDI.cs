@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Uniqlo.DataAccess.Repositories.Implements;
+using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.Context;
 
@@ -25,6 +27,17 @@ namespace Uniqlo.DataAccess
         private static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICouponRepository, CouponRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IShipmentRepository, ShipmentRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+            services.AddScoped<ICollectionRepository, CollectionRepository>();
         }
 
         private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

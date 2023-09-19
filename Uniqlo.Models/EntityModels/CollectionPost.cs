@@ -14,10 +14,14 @@ namespace Uniqlo.Models.EntityModels
         public Guid Id { get; set; }
         public Guid CollectionId { get; set; }
         public string Title { get; set; }
+        public string? TitleEn { get; set; }
+        public string? TitleVi { get; set; }
         public string? Description { get; set; }
+        public string? DescriptionEn { get; set; }
+        public string? DescriptionVi { get; set; }
         public string? Image { get; set; }
         public string? ImageUrl { get; set; }
-        public string ImageType { get; set; } = "IMAGE";
+        public string Type { get; set; } = "IMAGE";
         public DateTime? CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdatedDate { get; set; } = DateTime.Now;
 

@@ -17,10 +17,80 @@ namespace Uniqlo.Models.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.10")
+                .HasAnnotation("ProductVersion", "6.0.21")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.AdministrativeRegion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CodeName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("code_name");
+
+                    b.Property<string>("CodeNameEn")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("code_name_en");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name_en");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("administrative_regions");
+                });
+
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.AdministrativeUnit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CodeName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("code_name");
+
+                    b.Property<string>("CodeNameEn")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("code_name_en");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("full_name");
+
+                    b.Property<string>("FullNameEn")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("full_name_en");
+
+                    b.Property<string>("ShortName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("short_name");
+
+                    b.Property<string>("ShortNameEn")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("short_name_en");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("administrative_units");
+                });
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Cart", b =>
                 {
@@ -94,10 +164,22 @@ namespace Uniqlo.Models.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Column")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionVi")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("GenderTypeId")
@@ -107,13 +189,24 @@ namespace Uniqlo.Models.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NameEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameVi")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Position")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("GenderTypeId");
 
@@ -133,6 +226,12 @@ namespace Uniqlo.Models.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ContentEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContentVi")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -142,8 +241,23 @@ namespace Uniqlo.Models.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DescriptionEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionVi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsShow")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameVi")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
@@ -173,17 +287,29 @@ namespace Uniqlo.Models.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
+                    b.Property<string>("DescriptionEn")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageType")
-                        .IsRequired()
+                    b.Property<string>("DescriptionVi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleVi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -222,6 +348,12 @@ namespace Uniqlo.Models.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NameEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameVi")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
@@ -236,6 +368,9 @@ namespace Uniqlo.Models.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int?>("Amount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -244,6 +379,12 @@ namespace Uniqlo.Models.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionVi")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Discount")
@@ -268,6 +409,12 @@ namespace Uniqlo.Models.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TitleEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleVi")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal?>("TotalFrom")
                         .HasColumnType("money");
 
@@ -283,6 +430,53 @@ namespace Uniqlo.Models.Migrations
                     b.ToTable("Coupons");
                 });
 
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.District", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("code");
+
+                    b.Property<int?>("AdministrativeUnitId")
+                        .IsRequired()
+                        .HasColumnType("int")
+                        .HasColumnName("administrative_unit_id");
+
+                    b.Property<string>("CodeName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("code_name");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("full_name");
+
+                    b.Property<string>("FullNameEn")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("full_name_en");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("NameEn")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name_en");
+
+                    b.Property<string>("ProvinceCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("province_code");
+
+                    b.HasKey("Code");
+
+                    b.HasIndex("AdministrativeUnitId");
+
+                    b.HasIndex("ProvinceCode");
+
+                    b.ToTable("districts");
+                });
+
             modelBuilder.Entity("Uniqlo.Models.EntityModels.GenderType", b =>
                 {
                     b.Property<int>("Id")
@@ -296,6 +490,12 @@ namespace Uniqlo.Models.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameVi")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")
@@ -393,7 +593,7 @@ namespace Uniqlo.Models.Migrations
                     b.Property<string>("CancelReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("CouponId")
+                    b.Property<Guid?>("CouponId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -404,6 +604,12 @@ namespace Uniqlo.Models.Migrations
 
                     b.Property<decimal?>("Discount")
                         .HasColumnType("money");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Items")
+                        .HasColumnType("int");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -431,6 +637,8 @@ namespace Uniqlo.Models.Migrations
                         .HasColumnType("money");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CouponId");
 
                     b.HasIndex("UserId");
 
@@ -538,8 +746,20 @@ namespace Uniqlo.Models.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DescriptionEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionVi")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("GenderTypeId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsLimited")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOnlineOnly")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsSale")
                         .HasColumnType("bit");
@@ -547,11 +767,29 @@ namespace Uniqlo.Models.Migrations
                     b.Property<string>("Materials")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MaterialsEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MaterialsVi")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NameEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameVi")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Overview")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OverviewEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OverviewVi")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ProductPriceId")
@@ -611,6 +849,33 @@ namespace Uniqlo.Models.Migrations
                     b.ToTable("ProductCategories");
                 });
 
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.ProductColor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductColors");
+                });
+
             modelBuilder.Entity("Uniqlo.Models.EntityModels.ProductDetail", b =>
                 {
                     b.Property<Guid>("Id")
@@ -623,6 +888,9 @@ namespace Uniqlo.Models.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool?>("DeleteStatus")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -633,6 +901,9 @@ namespace Uniqlo.Models.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sold")
                         .HasColumnType("int");
 
                     b.Property<bool>("StockStatus")
@@ -650,6 +921,40 @@ namespace Uniqlo.Models.Migrations
                     b.HasIndex("SizeId");
 
                     b.ToTable("ProductDetails");
+                });
+
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.ProductImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.ProductPrice", b =>
@@ -731,6 +1036,53 @@ namespace Uniqlo.Models.Migrations
                     b.ToTable("ProductSizes");
                 });
 
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.Province", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("code");
+
+                    b.Property<int?>("AdministrativeRegionId")
+                        .IsRequired()
+                        .HasColumnType("int")
+                        .HasColumnName("administrative_region_id");
+
+                    b.Property<int?>("AdministrativeUnitId")
+                        .IsRequired()
+                        .HasColumnType("int")
+                        .HasColumnName("administrative_unit_id");
+
+                    b.Property<string>("CodeName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("code_name");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("full_name");
+
+                    b.Property<string>("FullNameEn")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("full_name_en");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("NameEn")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name_en");
+
+                    b.HasKey("Code");
+
+                    b.HasIndex("AdministrativeRegionId");
+
+                    b.HasIndex("AdministrativeUnitId");
+
+                    b.ToTable("provinces");
+                });
+
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Review", b =>
                 {
                     b.Property<Guid>("Id")
@@ -744,14 +1096,14 @@ namespace Uniqlo.Models.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Fit")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Fit")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Size")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Star")
                         .HasColumnType("int");
@@ -770,6 +1122,8 @@ namespace Uniqlo.Models.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.HasIndex("SizeId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
@@ -787,7 +1141,7 @@ namespace Uniqlo.Models.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Details")
+                    b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("OrderId")
@@ -840,6 +1194,12 @@ namespace Uniqlo.Models.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameVi")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")
@@ -901,6 +1261,12 @@ namespace Uniqlo.Models.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameVi")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")
@@ -985,9 +1351,9 @@ namespace Uniqlo.Models.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DistrictId")
+                    b.Property<string>("DistrictCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -1003,9 +1369,9 @@ namespace Uniqlo.Models.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProvinceId")
+                    b.Property<string>("ProvinceCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -1016,13 +1382,19 @@ namespace Uniqlo.Models.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("WardId")
+                    b.Property<string>("WardCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DistrictCode");
+
+                    b.HasIndex("ProvinceCode");
+
                     b.HasIndex("UserId");
+
+                    b.HasIndex("WardCode");
 
                     b.ToTable("UserAddresses");
                 });
@@ -1052,6 +1424,53 @@ namespace Uniqlo.Models.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserCoupons");
+                });
+
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.Ward", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("code");
+
+                    b.Property<int?>("AdministrativeUnitId")
+                        .IsRequired()
+                        .HasColumnType("int")
+                        .HasColumnName("administrative_unit_id");
+
+                    b.Property<string>("CodeName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("code_name");
+
+                    b.Property<string>("DistrictCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("district_code");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("full_name");
+
+                    b.Property<string>("FullNameEn")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("full_name_en");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("NameEn")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name_en");
+
+                    b.HasKey("Code");
+
+                    b.HasIndex("AdministrativeUnitId");
+
+                    b.HasIndex("DistrictCode");
+
+                    b.ToTable("wards");
                 });
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.WishList", b =>
@@ -1115,6 +1534,10 @@ namespace Uniqlo.Models.Migrations
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Category", b =>
                 {
+                    b.HasOne("Uniqlo.Models.EntityModels.Category", null)
+                        .WithMany("Children")
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("Uniqlo.Models.EntityModels.GenderType", "GenderType")
                         .WithMany("Categories")
                         .HasForeignKey("GenderTypeId")
@@ -1131,6 +1554,23 @@ namespace Uniqlo.Models.Migrations
                         .IsRequired();
 
                     b.Navigation("Collection");
+                });
+
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.District", b =>
+                {
+                    b.HasOne("Uniqlo.Models.EntityModels.AdministrativeUnit", "AdministrativeUnit")
+                        .WithMany("Districts")
+                        .HasForeignKey("AdministrativeUnitId")
+                        .IsRequired();
+
+                    b.HasOne("Uniqlo.Models.EntityModels.Province", "Province")
+                        .WithMany("Districts")
+                        .HasForeignKey("ProvinceCode")
+                        .IsRequired();
+
+                    b.Navigation("AdministrativeUnit");
+
+                    b.Navigation("Province");
                 });
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.ImportBill", b =>
@@ -1170,10 +1610,16 @@ namespace Uniqlo.Models.Migrations
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Order", b =>
                 {
+                    b.HasOne("Uniqlo.Models.EntityModels.Coupon", "Coupon")
+                        .WithMany("Orders")
+                        .HasForeignKey("CouponId");
+
                     b.HasOne("Uniqlo.Models.EntityModels.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .IsRequired();
+
+                    b.Navigation("Coupon");
 
                     b.Navigation("User");
                 });
@@ -1258,6 +1704,23 @@ namespace Uniqlo.Models.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.ProductColor", b =>
+                {
+                    b.HasOne("Uniqlo.Models.EntityModels.Color", "Color")
+                        .WithMany("ProductColors")
+                        .HasForeignKey("ColorId")
+                        .IsRequired();
+
+                    b.HasOne("Uniqlo.Models.EntityModels.Product", "Product")
+                        .WithMany("ProductColors")
+                        .HasForeignKey("ProductId")
+                        .IsRequired();
+
+                    b.Navigation("Color");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Uniqlo.Models.EntityModels.ProductDetail", b =>
                 {
                     b.HasOne("Uniqlo.Models.EntityModels.Color", "Color")
@@ -1282,6 +1745,16 @@ namespace Uniqlo.Models.Migrations
                     b.Navigation("Size");
                 });
 
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.ProductImage", b =>
+                {
+                    b.HasOne("Uniqlo.Models.EntityModels.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Uniqlo.Models.EntityModels.ProductSize", b =>
                 {
                     b.HasOne("Uniqlo.Models.EntityModels.Product", "Product")
@@ -1299,11 +1772,33 @@ namespace Uniqlo.Models.Migrations
                     b.Navigation("Size");
                 });
 
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.Province", b =>
+                {
+                    b.HasOne("Uniqlo.Models.EntityModels.AdministrativeRegion", "AdministrativeRegion")
+                        .WithMany("Provinces")
+                        .HasForeignKey("AdministrativeRegionId")
+                        .IsRequired();
+
+                    b.HasOne("Uniqlo.Models.EntityModels.AdministrativeUnit", "AdministrativeUnit")
+                        .WithMany("Provinces")
+                        .HasForeignKey("AdministrativeUnitId")
+                        .IsRequired();
+
+                    b.Navigation("AdministrativeRegion");
+
+                    b.Navigation("AdministrativeUnit");
+                });
+
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Review", b =>
                 {
                     b.HasOne("Uniqlo.Models.EntityModels.Product", "Product")
                         .WithMany("Reviews")
                         .HasForeignKey("ProductId")
+                        .IsRequired();
+
+                    b.HasOne("Uniqlo.Models.EntityModels.Size", "Size")
+                        .WithMany("Reviews")
+                        .HasForeignKey("SizeId")
                         .IsRequired();
 
                     b.HasOne("Uniqlo.Models.EntityModels.User", "User")
@@ -1312,6 +1807,8 @@ namespace Uniqlo.Models.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("Size");
 
                     b.Navigation("User");
                 });
@@ -1345,12 +1842,33 @@ namespace Uniqlo.Models.Migrations
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.UserAddress", b =>
                 {
+                    b.HasOne("Uniqlo.Models.EntityModels.District", "District")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("DistrictCode")
+                        .IsRequired();
+
+                    b.HasOne("Uniqlo.Models.EntityModels.Province", "Province")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("ProvinceCode")
+                        .IsRequired();
+
                     b.HasOne("Uniqlo.Models.EntityModels.User", "User")
                         .WithMany("UserAddresses")
                         .HasForeignKey("UserId")
                         .IsRequired();
 
+                    b.HasOne("Uniqlo.Models.EntityModels.Ward", "Ward")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("WardCode")
+                        .IsRequired();
+
+                    b.Navigation("District");
+
+                    b.Navigation("Province");
+
                     b.Navigation("User");
+
+                    b.Navigation("Ward");
                 });
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.UserCoupon", b =>
@@ -1370,6 +1888,23 @@ namespace Uniqlo.Models.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.Ward", b =>
+                {
+                    b.HasOne("Uniqlo.Models.EntityModels.AdministrativeUnit", "AdministrativeUnit")
+                        .WithMany("Wards")
+                        .HasForeignKey("AdministrativeUnitId")
+                        .IsRequired();
+
+                    b.HasOne("Uniqlo.Models.EntityModels.District", "District")
+                        .WithMany("Wards")
+                        .HasForeignKey("DistrictCode")
+                        .IsRequired();
+
+                    b.Navigation("AdministrativeUnit");
+
+                    b.Navigation("District");
+                });
+
             modelBuilder.Entity("Uniqlo.Models.EntityModels.WishList", b =>
                 {
                     b.HasOne("Uniqlo.Models.EntityModels.Product", "Product")
@@ -1387,6 +1922,20 @@ namespace Uniqlo.Models.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.AdministrativeRegion", b =>
+                {
+                    b.Navigation("Provinces");
+                });
+
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.AdministrativeUnit", b =>
+                {
+                    b.Navigation("Districts");
+
+                    b.Navigation("Provinces");
+
+                    b.Navigation("Wards");
+                });
+
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Cart", b =>
                 {
                     b.Navigation("CartItems");
@@ -1394,6 +1943,8 @@ namespace Uniqlo.Models.Migrations
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Category", b =>
                 {
+                    b.Navigation("Children");
+
                     b.Navigation("ProductCategories");
                 });
 
@@ -1406,12 +1957,23 @@ namespace Uniqlo.Models.Migrations
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Color", b =>
                 {
+                    b.Navigation("ProductColors");
+
                     b.Navigation("ProductDetails");
                 });
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Coupon", b =>
                 {
+                    b.Navigation("Orders");
+
                     b.Navigation("UserCoupons");
+                });
+
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.District", b =>
+                {
+                    b.Navigation("UserAddresses");
+
+                    b.Navigation("Wards");
                 });
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.GenderType", b =>
@@ -1443,7 +2005,11 @@ namespace Uniqlo.Models.Migrations
 
                     b.Navigation("ProductCategories");
 
+                    b.Navigation("ProductColors");
+
                     b.Navigation("ProductDetails");
+
+                    b.Navigation("ProductImages");
 
                     b.Navigation("ProductSizes");
 
@@ -1471,11 +2037,20 @@ namespace Uniqlo.Models.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.Province", b =>
+                {
+                    b.Navigation("Districts");
+
+                    b.Navigation("UserAddresses");
+                });
+
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Size", b =>
                 {
                     b.Navigation("ProductDetails");
 
                     b.Navigation("ProductSizes");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Uniqlo.Models.EntityModels.Store", b =>
@@ -1508,6 +2083,11 @@ namespace Uniqlo.Models.Migrations
             modelBuilder.Entity("Uniqlo.Models.EntityModels.UserAddress", b =>
                 {
                     b.Navigation("Shipments");
+                });
+
+            modelBuilder.Entity("Uniqlo.Models.EntityModels.Ward", b =>
+                {
+                    b.Navigation("UserAddresses");
                 });
 #pragma warning restore 612, 618
         }

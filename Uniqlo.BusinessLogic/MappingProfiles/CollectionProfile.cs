@@ -16,6 +16,7 @@ namespace Uniqlo.BusinessLogic.MappingProfiles
         public CollectionProfile()
         {
             CreateMap<CreateCollectionRequest, Collection>();
+            CreateMap<CreateCollectionFullRequest, Collection>();
             CreateMap<UpdateCollectionRequest, Collection>();
             CreateMap<Collection, CollectionResponse>();
             CreateMap<PagedResponse<Collection>, PagedResponse<CollectionResponse>>();

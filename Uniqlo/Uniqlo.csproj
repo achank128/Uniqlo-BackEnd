@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Uniqlo.Models\Uniqlo.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Images\" />
+  </ItemGroup>
+
 </Project>

@@ -2,6 +2,7 @@ using Uniqlo.Middlewares;
 using Uniqlo.DataAccess;
 using Uniqlo.BusinessLogic;
 using Uniqlo;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,9 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.Al
 //Memory caching
 builder.Services.AddMemoryCache();
 
+//HttpContext Access
+builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 
@@ -43,6 +47,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
+
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+    RequestPath = new PathString("/Resources")
+});
 
 app.UseHttpsRedirection();
 

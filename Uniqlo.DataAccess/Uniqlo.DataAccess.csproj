@@ -8,10 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\Uniqlo.Core\Uniqlo.Core.csproj" />
     <ProjectReference Include="..\Uniqlo.Models\Uniqlo.Models.csproj" />
   </ItemGroup>
 

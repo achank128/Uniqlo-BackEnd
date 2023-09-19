@@ -12,6 +12,8 @@ namespace Uniqlo.Models.EntityModels
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
+        public string? NameEn { get; set; }
+        public string? NameVi { get; set; }
         public string Code { get; set; }
         public string? Image { get; set; }
         public string? ImageUrl { get; set; }
@@ -19,6 +21,8 @@ namespace Uniqlo.Models.EntityModels
         public DateTime? UpdatedDate { get; set; } = DateTime.Now;
 
         public virtual ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
+        public virtual ICollection<ProductColor> ProductColors { get; set; } = new List<ProductColor>();
+
 
 
     }

@@ -16,9 +16,9 @@ namespace Uniqlo.Models.EntityModels
         public string? Title { get; set; }
         public string FullName { get; set; }
         public string Phone { get; set; }
-        public string ProvinceId { get; set; }
-        public string DistrictId { get; set; }
-        public string WardId { get; set; }
+        public string ProvinceCode { get; set; }
+        public string DistrictCode { get; set; }
+        public string WardCode { get; set; }
         public string Address { get; set; }
         public string? AddressDetail { get; set; }
         public string? Note { get; set; }
@@ -28,6 +28,9 @@ namespace Uniqlo.Models.EntityModels
 
 
         public virtual User User { get; set; }
+        public virtual Province Province { get; set; }
+        public virtual District District { get; set; }
+        public virtual Ward Ward { get; set; }
 
         public virtual ICollection<Shipment> Shipments { get; set; } = new List<Shipment>();
 
