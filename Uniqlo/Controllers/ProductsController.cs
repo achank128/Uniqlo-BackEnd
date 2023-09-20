@@ -123,5 +123,16 @@ namespace Uniqlo.Controllers
             var response = await _productService.Delete(id, request);
             return Ok(response);
         }
+
+        private string GetInstanceId()
+        {
+            var instanceId = HttpContext.Session.GetString("InstanceId");
+            if (string.IsNullOrEmpty(instanceId))
+            {
+                instanceId = Guid.NewGuid().ToString();
+                HttpContext.Session.SetString("InstanceId", instanceId);
+            }
+            return instanceId;
+        }
     }
 }

@@ -29,6 +29,7 @@ using Uniqlo.BusinessLogic.Services.UserAddressService;
 using Uniqlo.BusinessLogic.Services.UserCouponService;
 using Uniqlo.BusinessLogic.Services.UserService;
 using Uniqlo.BusinessLogic.Services.WishListService;
+using Uniqlo.BusinessLogic.Shared.CacheService;
 using Uniqlo.BusinessLogic.Shared.ClaimService;
 using Uniqlo.BusinessLogic.Shared.FileUploadService;
 
@@ -47,7 +48,12 @@ namespace Uniqlo.BusinessLogic
 
         private static void AddServices(this IServiceCollection services)
         {
+            //Shared
             services.AddScoped<IClaimService, ClaimService>();
+            services.AddScoped<IFileUploadService, FileUploadService>();
+            services.AddSingleton<ICacheService, CacheService>();
+
+            //Services
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<ICollectionService, CollectionService>();
             services.AddScoped<ICategoryService, CategoryService>();
@@ -72,7 +78,6 @@ namespace Uniqlo.BusinessLogic
             services.AddScoped<IProductImageService, ProductImageService>();
             services.AddScoped<ICollectionPostService, CollectionPostService>();
             services.AddScoped<IReviewService, ReviewService>();
-            services.AddScoped<IFileUploadService, FileUploadService>();
         }
 
         private static void RegisterAutoMapper(this IServiceCollection services)

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,8 +10,8 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
+using Uniqlo.BusinessLogic.Shared.CacheService;
 using Uniqlo.Core.Keywords;
-using Uniqlo.DataAccess.Repositories.Implements;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
@@ -23,6 +25,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
     public class ProductService : IProductService
     {
         private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
         private readonly IProductRepository _productRepository;
         private readonly IProductDetailRepository _productDetailRepository;
         private readonly IRepositoryBase<ProductReview> _productReviewRepository;
@@ -31,6 +34,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
         private readonly IRepositoryBase<ProductSize> _productSizeRepository;
         private readonly IRepositoryBase<ProductColor> _productColorRepository;
         private readonly IRepositoryBase<ProductImage> _productImageRepository;
+
 
         public ProductService(
             IMapper mapper,
@@ -41,7 +45,8 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             IRepositoryBase<ProductCategory> productCategoryRepository,
             IRepositoryBase<ProductSize> productSizeRepository,
             IRepositoryBase<ProductColor> productColorRepository,
-            IRepositoryBase<ProductImage> productImageRepository)
+            IRepositoryBase<ProductImage> productImageRepository,
+            ICacheService cacheService)
         {
             _mapper = mapper;
             _productRepository = productRepository;
@@ -52,6 +57,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             _productSizeRepository = productSizeRepository;
             _productColorRepository = productColorRepository;
             _productImageRepository = productImageRepository;
+            _cacheService = cacheService;
         }
 
         public async Task<ApiResponse<ProductResponse>> Create(CreateProductRequest request)
@@ -233,9 +239,12 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
 
         public async Task<ApiResponse<List<ProductResponse>>> GetAll()
         {
-            var alls = await _productRepository.GetAllAsync();
-            var response = _mapper.Map<List<ProductResponse>>(alls);
-            return ApiResponse<List<ProductResponse>>.Success(response);
+            return await _cacheService.GetOrSetAsync("getproducts", async () =>
+            {
+                var alls = await _productRepository.GetAllAsync();
+                var response = _mapper.Map<List<ProductResponse>>(alls);
+                return ApiResponse<List<ProductResponse>>.Success(response);
+            }); 
         }
 
         public async Task<ApiResponse<ProductResponse>> GetById(Guid id)
@@ -307,50 +316,6 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
                 }
             }
 
-            ////Add product sizes
-            //foreach (int sizeId in request.Sizes)
-            //{
-            //    ProductSize productSize = new ProductSize
-            //    {
-            //        Id = Guid.NewGuid(),
-            //        SizeId = sizeId,
-            //        ProductId = product.Id,
-            //    };
-            //    _productSizeRepository.Add(productSize);
-            //}
-
-            ////Add product colors
-            //foreach (int colorId in request.Colors)
-            //{
-            //    ProductColor productColor = new ProductColor
-            //    {
-            //        Id = Guid.NewGuid(),
-            //        ColorId = colorId,
-            //        ProductId = product.Id,
-            //    };
-            //    _productColorRepository.Add(productColor);
-            //}
-
-            ////Add product details
-            //foreach (int colorId in request.Colors)
-            //{
-            //    foreach (int sizeId in request.Sizes)
-            //    {
-
-            //        ProductDetail productDetail = new ProductDetail
-            //        {
-            //            Id = Guid.NewGuid(),
-            //            SizeId = sizeId,
-            //            ColorId = colorId,
-            //            ProductId = product.Id,
-            //            InStock = 0,
-            //        };
-            //        _productDetailRepository.Add(productDetail);
-            //    }
-            //}
-
-
-
             _productRepository.Update(product);
 
             if (await _productRepository.SaveAsync())
@@ -363,5 +328,17 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
                 throw new BadRequestException(Common.UpdateFailure);
             }
         }
+
+
+        //private string GetInstanceId()
+        //{
+        //    var instanceId = HttpContext.Session.GetString("InstanceId");
+        //    if (string.IsNullOrEmpty(instanceId))
+        //    {
+        //        instanceId = Guid.NewGuid().ToString();
+        //        HttpContext.Session.SetString("InstanceId", instanceId);
+        //    }
+        //    return instanceId;
+        //}
     }
 }
