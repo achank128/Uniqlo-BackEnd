@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -30,7 +31,17 @@ namespace Uniqlo.BusinessLogic.Shared.CacheService
             return result;
         }
 
-        public async Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> factory) where T : class
+        public async Task<string> GetStringAsync(string cacheKey)
+        {
+            string? cachedValue = await _distributedCache.GetStringAsync(cacheKey);
+            if (string.IsNullOrEmpty(cachedValue))
+            {
+                return null;
+            }
+            return cachedValue;
+        }
+
+        public async Task<T?> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> factory) where T : class
         {
             T? cachedValue = await GetAsync<T>(cacheKey);
             if (cachedValue != null)
@@ -63,20 +74,32 @@ namespace Uniqlo.BusinessLogic.Shared.CacheService
 
         public async Task RemoveByPrefixAsync(string prefixKey)
         {
-            foreach (var key in CacheKeys.Keys)
-            {
-                if (key.StartsWith(prefixKey))
-                {
-                    await RemoveAsync(key);
-                }
-            }
+            //foreach (var key in CacheKeys.Keys)
+            //{
+            //    if (key.StartsWith(prefixKey))
+            //    {
+            //        await RemoveAsync(key);
+            //    }
+            //}
 
-            //IEnumerable<Task> task = CacheKeys.Keys
-            //    .Where(x => x.StartsWith(prefixKey))
-            //    .Select(k => RemoveAsync(k));
-            //await Task.WhenAll(task);
+            IEnumerable<Task> task = CacheKeys.Keys
+                .Where(x => x.StartsWith(prefixKey))
+                .Select(k => RemoveAsync(k));
+            await Task.WhenAll(task);
         }
 
-     
+        public async Task SetStringAsync<T>(string cacheKey, T value, TimeSpan cacheDuration) where T : class
+        {
+            var options = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = cacheDuration,
+                SlidingExpiration = cacheDuration
+            };
+            string cacheValue = JsonConvert.SerializeObject(value, new JsonSerializerSettings {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
+            await _distributedCache.SetStringAsync(cacheKey, cacheValue, options);
+            CacheKeys.TryAdd(cacheKey, false);
+        }
     }
 }

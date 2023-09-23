@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Uniqlo.Attributes;
 using Uniqlo.BusinessLogic.Services.WishListService;
 using Uniqlo.BusinessLogic.Shared.ClaimService;
 using Uniqlo.Models.Models;
@@ -24,6 +25,7 @@ namespace Uniqlo.Controllers
         }
 
         [HttpGet]
+        [Cache(120)]
         public async Task<IActionResult> GetAll()
         {
             var response = await _wishListService.GetAll();

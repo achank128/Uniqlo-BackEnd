@@ -44,7 +44,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
-    options.InstanceName = "UniqloInstance";
+    //options.InstanceName = "Uniqlo";
 });
 
 //HttpContext Access

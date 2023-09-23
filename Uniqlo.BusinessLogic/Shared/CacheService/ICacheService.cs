@@ -10,8 +10,10 @@ namespace Uniqlo.BusinessLogic.Shared.CacheService
     public interface ICacheService
     {
         Task<T?> GetAsync<T>(string cacheKey) where T : class;
+        Task<string> GetStringAsync(string cacheKey);
         Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> factory) where T : class;
         Task SetAsync<T>(string cacheKey, T value, TimeSpan cacheDuration) where T : class;
+        Task SetStringAsync<T>(string cacheKey, T value, TimeSpan cacheDuration) where T : class;
         Task RemoveAsync(string cacheKey);
         Task RemoveByPrefixAsync(string prefixKey);
     }

@@ -239,7 +239,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
 
         public async Task<ApiResponse<List<ProductResponse>>> GetAll()
         {
-            return await _cacheService.GetOrSetAsync("getproducts", async () =>
+            return await _cacheService.GetOrSetAsync("/products", async () =>
             {
                 var alls = await _productRepository.GetAllAsync();
                 var response = _mapper.Map<List<ProductResponse>>(alls);
