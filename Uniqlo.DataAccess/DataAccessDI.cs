@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Uniqlo.DataAccess.Repositories.Cached;
 using Uniqlo.DataAccess.Repositories.Implements;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.Context;
+using Scrutor;
 
 namespace Uniqlo.DataAccess
 {
@@ -30,6 +32,7 @@ namespace Uniqlo.DataAccess
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICouponRepository, CouponRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.Decorate<IProductRepository, CachedProductRepository>();  //Scrutor
             services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
@@ -38,6 +41,7 @@ namespace Uniqlo.DataAccess
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<ICollectionRepository, CollectionRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
         }
 
         private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

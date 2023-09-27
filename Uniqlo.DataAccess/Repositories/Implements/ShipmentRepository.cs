@@ -23,9 +23,10 @@ namespace Uniqlo.DataAccess.Repositories.Implements
 
         public IQueryable<Shipment> FilterShipments(FilterShipmentRequest filter)
         {
-            var shipments = from o in _context.Shipments
-                         where (filter.ShipmentStatus == null || o.Status == filter.ShipmentStatus)
-                         select o;
+            var shipments = from s in _context.Shipments
+                            where (filter.ShipmentStatus == null || s.Status == filter.ShipmentStatus)
+                            orderby s.CreatedDate descending
+                            select s;
 
             _context.ChangeTracker.LazyLoadingEnabled = false;
             _context.ChangeTracker.AutoDetectChangesEnabled = false;

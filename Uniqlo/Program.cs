@@ -3,12 +3,16 @@ using Uniqlo.DataAccess;
 using Uniqlo.BusinessLogic;
 using Uniqlo;
 using Microsoft.Extensions.FileProviders;
+using System.Text.Json.Serialization;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -33,6 +37,16 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.Al
 //Memory caching
 builder.Services.AddMemoryCache();
 
+//Distributed caching
+//builder.Services.AddDistributedMemoryCache();
+
+//Redis
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    //options.InstanceName = "Uniqlo";
+});
+
 //HttpContext Access
 builder.Services.AddHttpContextAccessor();
 
@@ -48,12 +62,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors();
 
-app.UseStaticFiles();
-app.UseStaticFiles(new StaticFileOptions()
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
-    RequestPath = new PathString("/Resources")
-});
+//app.UseStaticFiles();
+//app.UseStaticFiles(new StaticFileOptions()
+//{
+//    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+//    RequestPath = new PathString("/Resources")
+//});
 
 app.UseHttpsRedirection();
 

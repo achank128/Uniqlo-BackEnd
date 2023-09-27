@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="JsonConverter.Abstractions" Version="0.4.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Scrutor" Version="4.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Uniqlo.Core\Uniqlo.Core.csproj" />
     <ProjectReference Include="..\Uniqlo.Models\Uniqlo.Models.csproj" />
   </ItemGroup>

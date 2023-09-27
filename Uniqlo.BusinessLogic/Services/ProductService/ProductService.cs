@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Uniqlo.BusinessLogic.Exceptions;
+using Uniqlo.BusinessLogic.Shared.CacheService;
 using Uniqlo.Core.Keywords;
-using Uniqlo.DataAccess.Repositories.Implements;
 using Uniqlo.DataAccess.Repositories.Interfaces;
 using Uniqlo.DataAccess.RepositoryBase;
 using Uniqlo.Models.EntityModels;
@@ -22,6 +25,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
     public class ProductService : IProductService
     {
         private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
         private readonly IProductRepository _productRepository;
         private readonly IProductDetailRepository _productDetailRepository;
         private readonly IRepositoryBase<ProductReview> _productReviewRepository;
@@ -31,6 +35,7 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
         private readonly IRepositoryBase<ProductColor> _productColorRepository;
         private readonly IRepositoryBase<ProductImage> _productImageRepository;
 
+
         public ProductService(
             IMapper mapper,
             IProductRepository productRepository,
@@ -39,7 +44,9 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             IRepositoryBase<ProductPrice> productPriceRepository,
             IRepositoryBase<ProductCategory> productCategoryRepository,
             IRepositoryBase<ProductSize> productSizeRepository,
-            IRepositoryBase<ProductColor> productColorRepository)
+            IRepositoryBase<ProductColor> productColorRepository,
+            IRepositoryBase<ProductImage> productImageRepository,
+            ICacheService cacheService)
         {
             _mapper = mapper;
             _productRepository = productRepository;
@@ -49,6 +56,8 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             _productCategoryRepository = productCategoryRepository;
             _productSizeRepository = productSizeRepository;
             _productColorRepository = productColorRepository;
+            _productImageRepository = productImageRepository;
+            _cacheService = cacheService;
         }
 
         public async Task<ApiResponse<ProductResponse>> Create(CreateProductRequest request)
@@ -230,9 +239,12 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
 
         public async Task<ApiResponse<List<ProductResponse>>> GetAll()
         {
-            var alls = await _productRepository.GetAllAsync();
-            var response = _mapper.Map<List<ProductResponse>>(alls);
-            return ApiResponse<List<ProductResponse>>.Success(response);
+            return await _cacheService.GetOrSetAsync("/products", async () =>
+            {
+                var alls = await _productRepository.GetAllAsync();
+                var response = _mapper.Map<List<ProductResponse>>(alls);
+                return ApiResponse<List<ProductResponse>>.Success(response);
+            }); 
         }
 
         public async Task<ApiResponse<ProductResponse>> GetById(Guid id)
@@ -259,6 +271,74 @@ namespace Uniqlo.BusinessLogic.Services.ProductService
             }
         }
 
+        public async Task<ApiResponse<ProductResponse>> UpdateFull(UpdateProductFullRequest request)
+        {
+            var product = _mapper.Map<Product>(request);
 
+            //Update product price
+            var productPrice = await _productPriceRepository.GetByIdAsync(product.ProductPriceId);
+            productPrice.Price = request.Price;
+            productPrice.PromoPrice = request.PromoPrice;
+            productPrice.ImportPrice = request.ImportPrice;
+            productPrice.VAT = request.VAT;
+            _productPriceRepository.Update(productPrice);
+
+            //Update product categories
+            var productCategories = await _productCategoryRepository.GetBy(c => c.ProductId == product.Id).ToListAsync();
+            _productCategoryRepository.DeleteRange(productCategories);
+            foreach (Guid categoryId in request.Categories)
+            {
+                ProductCategory productCategory = new ProductCategory
+                {
+                    Id = Guid.NewGuid(),
+                    CategoryId = categoryId,
+                    ProductId = product.Id,
+                };
+                _productCategoryRepository.Add(productCategory);
+            }
+
+            //Update product images
+            if(request.ProductImagesUpdate != null)
+            {
+                var productImages = await _productImageRepository.GetBy(i => i.ProductId == product.Id).ToListAsync();
+                _productImageRepository.DeleteRange(productImages);
+                foreach (var item in request.ProductImagesUpdate)
+                {
+                    ProductImage productImage = new ProductImage
+                    {
+                        Id = Guid.NewGuid(),
+                        ProductId = item.ProductId,
+                        Image = item.Image,
+                        ImageUrl = item.ImageUrl,
+                        Type = item.Type,
+                    };
+                    _productImageRepository.Add(productImage);
+                }
+            }
+
+            _productRepository.Update(product);
+
+            if (await _productRepository.SaveAsync())
+            {
+                var response = _mapper.Map<ProductResponse>(product);
+                return ApiResponse<ProductResponse>.Success(Common.UpdateSuccess, response);
+            }
+            else
+            {
+                throw new BadRequestException(Common.UpdateFailure);
+            }
+        }
+
+
+        //private string GetInstanceId()
+        //{
+        //    var instanceId = HttpContext.Session.GetString("InstanceId");
+        //    if (string.IsNullOrEmpty(instanceId))
+        //    {
+        //        instanceId = Guid.NewGuid().ToString();
+        //        HttpContext.Session.SetString("InstanceId", instanceId);
+        //    }
+        //    return instanceId;
+        //}
     }
 }

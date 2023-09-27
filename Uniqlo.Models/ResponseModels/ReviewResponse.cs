@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Uniqlo.Models.EntityModels;
 
 namespace Uniqlo.Models.ResponseModels
 {
@@ -19,6 +20,8 @@ namespace Uniqlo.Models.ResponseModels
         public DateTime? CreatedDate { get; set; } 
         public DateTime? UpdatedDate { get; set; }
 
+        public virtual ProductResponse Product { get; set; }
+        public virtual UserResponse User { get; set; }
         public virtual SizeResponse Size { get; set; }
     }
 }

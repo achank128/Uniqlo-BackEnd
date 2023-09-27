@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Uniqlo.Attributes;
 using Uniqlo.BusinessLogic.Services.CartService;
 using Uniqlo.BusinessLogic.Shared.ClaimService;
 using Uniqlo.Models.Models;
@@ -27,6 +28,7 @@ namespace Uniqlo.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Cache(120)]
         public async Task<IActionResult> GetAll()
         {
             var response = await _cartService.GetAll();

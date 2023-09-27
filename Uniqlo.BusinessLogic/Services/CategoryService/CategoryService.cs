@@ -61,8 +61,12 @@ namespace Uniqlo.BusinessLogic.Services.CategoryService
         public async Task<PagedResponse<CategoryResponse>> Filter(FilterBaseRequest request)
         {
             var categories = _categoryRepository.GetQueryable();
-            categories = categories.Where(p => (string.IsNullOrEmpty(request.KeyWord) || p.Name.Contains(request.KeyWord) || p.NameEn!.Contains(request.KeyWord) || p.NameVi!.Contains(request.KeyWord)));
-                
+            categories = categories.Where(p =>
+            (string.IsNullOrEmpty(request.KeyWord)
+            || p.Name.Contains(request.KeyWord)
+            || p.NameEn!.Contains(request.KeyWord)
+            || p.NameVi!.Contains(request.KeyWord)));
+            categories = categories.Include(c => c.GenderType);
             var paged = await PagedResponse<Category>.CreateAsync(categories, request.PageIndex, request.PageSize);
             var response = _mapper.Map<PagedResponse<CategoryResponse>>(paged);
             return response;
@@ -82,6 +86,13 @@ namespace Uniqlo.BusinessLogic.Services.CategoryService
 
             var response = _mapper.Map<CategoryResponse>(category);
             return ApiResponse<CategoryResponse>.Success(response);
+        }
+
+        public async Task<ApiResponse<List<CategoryResponse>>> GetByProduct(Guid productId)
+        {
+            var categories = await _categoryRepository.GetCategoriesByProduct(productId);
+            var response = _mapper.Map<List<CategoryResponse>>(categories);
+            return ApiResponse<List<CategoryResponse>>.Success(response);
         }
 
         public async Task<ApiResponse<List<CategoryResponse>>> GetDisplayByGendeType(int genderTypeId)
